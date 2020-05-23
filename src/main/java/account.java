@@ -54,8 +54,26 @@ public class account {
         double sum = money * accountCurrency.getValue();
         return sum;
     }
-    public static account createAccount(currency cur) {
+    public static account createAccount() {
         Scanner sc = new Scanner(System.in);
+        System.out.println("Enter account currency (UAH, USD, EUR):");
+        currency cur = new currency();
+        switch (sc.nextLine().toLowerCase()) {
+            case "uah" :
+                cur = currency.UAH;
+                break;
+            case "usd" :
+                cur = currency.USD;
+                break;
+
+            case "eur" :
+                cur = currency.EUR;
+                break;
+
+            default:
+                System.out.println("Unknown currency, set to default currency (UAH)!");
+                cur = currency.UAH;
+        }
         user user1 = user.createUser();
         System.out.println("Enter new id:");
         account Cr = new account();

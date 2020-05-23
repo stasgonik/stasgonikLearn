@@ -34,6 +34,10 @@ public class currency {
         this.name = name;
         this.value = value;
     }
+
+    public currency() {
+    }
+
     public static currency UAH = new currency(1, "Grind", 1);
     public static currency USD = new currency(2, "Dollar", 28);
     public static currency EUR = new currency(3, "Euro", 35);
