@@ -15,7 +15,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
@@ -36,11 +36,11 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
   </component>
   <component name="RunManager">
-    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="epam.Gonyk.Test" />
+    <configuration name="application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="application" />
       <module name="stasgonikLearn" />
       <extension name="coverage">
         <pattern>
@@ -54,7 +54,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Test" />
+        <item itemvalue="Application.application" />
       </list>
     </recent_temporary>
   </component>
@@ -93,25 +93,37 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="552" y="184" key="#Project_Structure/0.0.1920.1050@0.0.1920.1050" timestamp="1590232371315" />
-    <state width="1340" height="282" key="GridCell.Tab.0.bottom" timestamp="1590232786963">
+    <state x="701" y="178" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1590233714446">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1340" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1050@0.0.1920.1050" timestamp="1590232786963" />
-    <state width="1340" height="282" key="GridCell.Tab.0.center" timestamp="1590232786963">
+    <state x="701" y="178" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1590233714446" />
+    <state x="765" y="241" key="#com.intellij.ide.util.MemberChooser" timestamp="1590235086777">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1340" height="282" key="GridCell.Tab.0.center/0.0.1920.1050@0.0.1920.1050" timestamp="1590232786963" />
-    <state width="1340" height="282" key="GridCell.Tab.0.left" timestamp="1590232786962">
+    <state x="765" y="241" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1050@0.0.1920.1050" timestamp="1590235086777" />
+    <state x="976" y="307" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1590233712197">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1340" height="282" key="GridCell.Tab.0.left/0.0.1920.1050@0.0.1920.1050" timestamp="1590232786962" />
-    <state width="1340" height="282" key="GridCell.Tab.0.right" timestamp="1590232786963">
+    <state x="976" y="307" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1590233712197" />
+    <state width="1340" height="282" key="GridCell.Tab.0.bottom" timestamp="1590235472514">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1340" height="282" key="GridCell.Tab.0.right/0.0.1920.1050@0.0.1920.1050" timestamp="1590232786963" />
-    <state x="440" y="100" key="SettingsEditor" timestamp="1590232577656">
+    <state width="1340" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1050@0.0.1920.1050" timestamp="1590235472514" />
+    <state width="1340" height="282" key="GridCell.Tab.0.center" timestamp="1590235472514">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state x="440" y="100" key="SettingsEditor/0.0.1920.1050@0.0.1920.1050" timestamp="1590232577656" />
+    <state width="1340" height="282" key="GridCell.Tab.0.center/0.0.1920.1050@0.0.1920.1050" timestamp="1590235472514" />
+    <state width="1340" height="282" key="GridCell.Tab.0.left" timestamp="1590235472514">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1340" height="282" key="GridCell.Tab.0.left/0.0.1920.1050@0.0.1920.1050" timestamp="1590235472514" />
+    <state width="1340" height="282" key="GridCell.Tab.0.right" timestamp="1590235472514">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1340" height="282" key="GridCell.Tab.0.right/0.0.1920.1050@0.0.1920.1050" timestamp="1590235472514" />
+    <state x="440" y="100" key="SettingsEditor" timestamp="1590233164851">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="440" y="100" key="SettingsEditor/0.0.1920.1050@0.0.1920.1050" timestamp="1590233164851" />
   </component>
 </project>
