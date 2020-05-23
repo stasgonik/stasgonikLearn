@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class user {
     private String firstName;
     private String secondName;
@@ -7,6 +9,9 @@ public class user {
         this.firstName = firstName;
         this.secondName = secondName;
         this.familyName = familyName;
+    }
+
+    public user() {
     }
 
     public String getFirstName() {
@@ -32,13 +37,21 @@ public class user {
     public void setFamilyName(String familyName) {
         this.familyName = familyName;
     }
+    public static user createUser() {
+        Scanner sc = new Scanner(System.in);
+        user us = new user();
+        System.out.println("Enter first name:");
+        us.setFirstName(sc.nextLine());
+        System.out.println("Enter second name:");
+        us.setSecondName(sc.nextLine());
+        System.out.println("Enter family name:");
+        us.setFamilyName(sc.nextLine());
+        return us;
+    }
 
     @Override
     public String toString() {
-        return "user{" +
-                "firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
-                ", familyName='" + familyName + '\'' +
-                '}';
+        return familyName + " " + firstName + " " + secondName
+                ;
     }
 }

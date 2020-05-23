@@ -34,16 +34,15 @@ public class currency {
         this.name = name;
         this.value = value;
     }
-    public static currency UAH = new currency(1, "Hrivna", 1);
+    public static currency UAH = new currency(1, "Grind", 1);
     public static currency USD = new currency(2, "Dollar", 28);
     public static currency EUR = new currency(3, "Euro", 35);
 
     @Override
     public String toString() {
-        return "currency{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", value=" + value +
-                '}';
+        return  name + " (" +
+                "id of currency is " + id +
+                ", value of this currency is " + value +
+                ")";
     }
 }

@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class account {
 
     private int id;
@@ -43,19 +45,37 @@ public class account {
         this.accountCurrency = accountCurrency;
         this.money = money;
     }
+
+
+    public account() {
+    }
+
     public double currentSum() {
         double sum = money * accountCurrency.getValue();
         return sum;
     }
+    public static account createAccount(currency cur) {
+        Scanner sc = new Scanner(System.in);
+        user user1 = user.createUser();
+        System.out.println("Enter new id:");
+        account Cr = new account();
+        Cr.setId(sc.nextInt());
+        Cr.setAccountCurrency(cur);
+        Cr.setMaster(user1);
+        System.out.println("Enter number of money:");
+        Cr.setMoney(sc.nextDouble());
+        return Cr;
+    }
 
     @Override
     public String toString() {
-        return "account{" +
-                "id=" + id +
-                ", master=" + master.toString() +
-                ", accountCurrency=" + accountCurrency.toString() +
-                ", money=" + money + accountCurrency.getName() +
-                ", sum=" + this.currentSum() +
-                '}';
+        return
+                "Id of account is " + id +
+                ", master of account " + master.toString() +
+                ", currency of account is " + accountCurrency.toString() +
+                ", number of money on account is " + money + " " + accountCurrency.getName() +
+                ", sum in UAH is " + this.currentSum() + " UAH"
+                ;
     }
+
 }
