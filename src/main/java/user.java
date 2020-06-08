@@ -40,12 +40,17 @@ public class user {
     public static user createUser() {
         Scanner sc = new Scanner(System.in);
         user us = new user();
-        System.out.println("Enter first name:");
-        us.setFirstName(sc.nextLine());
-        System.out.println("Enter second name:");
-        us.setSecondName(sc.nextLine());
-        System.out.println("Enter family name:");
-        us.setFamilyName(sc.nextLine());
+        try {
+            System.out.println("Enter first name:");
+            us.setFirstName(sc.nextLine());
+            System.out.println("Enter second name:");
+            us.setSecondName(sc.nextLine());
+            System.out.println("Enter family name:");
+            us.setFamilyName(sc.nextLine());
+        }
+        catch (Exception ex) {
+            ex.getMessage();
+        }
         return us;
     }
 

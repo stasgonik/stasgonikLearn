@@ -57,31 +57,37 @@ public class account {
     public static account createAccount() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter account currency (UAH, USD, EUR):");
-        currency cur = new currency();
-        switch (sc.nextLine().toLowerCase()) {
-            case "uah" :
-                cur = currency.UAH;
-                break;
-            case "usd" :
-                cur = currency.USD;
-                break;
-
-            case "eur" :
-                cur = currency.EUR;
-                break;
-
-            default:
-                System.out.println("Unknown currency, set to default currency (UAH)!");
-                cur = currency.UAH;
-        }
-        user user1 = user.createUser();
-        System.out.println("Enter new id:");
         account Cr = new account();
-        Cr.setId(sc.nextInt());
-        Cr.setAccountCurrency(cur);
-        Cr.setMaster(user1);
-        System.out.println("Enter number of money:");
-        Cr.setMoney(sc.nextDouble());
+        try {
+            currency cur = new currency();
+            switch (sc.nextLine().toLowerCase()) {
+                case "uah" :
+                    cur = currency.UAH;
+                    break;
+                case "usd" :
+                    cur = currency.USD;
+                    break;
+
+                case "eur" :
+                    cur = currency.EUR;
+                    break;
+
+                default:
+                    System.out.println("Unknown currency, set to default currency (UAH)!");
+                    cur = currency.UAH;
+            }
+            user user1 = user.createUser();
+            System.out.println("Enter new id:");
+            Cr.setId(sc.nextInt());
+            Cr.setAccountCurrency(cur);
+            Cr.setMaster(user1);
+            System.out.println("Enter number of money:");
+            Cr.setMoney(sc.nextDouble());
+        }
+        catch (Exception ex) {
+            ex.getMessage();
+        }
+
         return Cr;
     }
 
