@@ -1,9 +1,13 @@
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class user {
     private String firstName;
     private String secondName;
     private String familyName;
+
 
     public user(String firstName, String secondName, String familyName) {
         this.firstName = firstName;
@@ -40,13 +44,46 @@ public class user {
     public static user createUser() {
         Scanner sc = new Scanner(System.in);
         user us = new user();
+        userValidator validator = new userValidator();
+        int i = 0;
         try {
-            System.out.println("Enter first name:");
-            us.setFirstName(sc.nextLine());
-            System.out.println("Enter second name:");
-            us.setSecondName(sc.nextLine());
-            System.out.println("Enter family name:");
-            us.setFamilyName(sc.nextLine());
+            do {
+                System.out.println("Enter first name:");
+                String temp = sc.nextLine();
+                if (validator.validate(temp)) {
+                    us.setFirstName(temp);
+                    i++;
+                }
+                else {
+                    System.out.println("Incorrect name format. Use only latin letters or {-} !");
+                }
+            }
+            while (i==0);
+            do {
+                System.out.println("Enter second name:");
+                String temp = sc.nextLine();
+                if (validator.validate(temp)) {
+                    us.setSecondName(temp);
+                    i++;
+                }
+                else {
+                    System.out.println("Incorrect name format. Use only latin letters or {-} !");
+                }
+            }
+            while (i==1);
+            do {
+                System.out.println("Enter family name:");
+                String temp = sc.nextLine();
+                if (validator.validate(temp)) {
+                    us.setFamilyName(temp);
+                    i++;
+                }
+                else {
+                    System.out.println("Incorrect name format. Use only latin letters or {-} !");
+                }
+            }
+            while (i==2);
+
         }
         catch (Exception ex) {
             ex.getMessage();
@@ -58,5 +95,20 @@ public class user {
     public String toString() {
         return familyName + " " + firstName + " " + secondName
                 ;
+    }
+}
+class userValidator {
+    private Pattern pattern;
+    private Matcher matcher;
+
+    private static final String NAMES_PATTERN =
+            "^[_A-Za-z-\\+]+$";
+    public userValidator() {
+        pattern = Pattern.compile(NAMES_PATTERN);
+    }
+    public boolean validate(final String hex) {
+        matcher = pattern.matcher(hex);
+
+        return matcher.matches();
     }
 }

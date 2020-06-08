@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class account {
 
@@ -61,12 +63,37 @@ public class account {
         try {
             currency cur = currency.chooseCurrency();
             user user1 = user.createUser();
-            System.out.println("Enter new id:");
-            Cr.setId(sc.nextInt());
+            numberValidator validator = new numberValidator();
+            int i =0;
+            do {
+                System.out.println("Enter new id:");
+                String temp = sc.nextLine();
+                if (validator.validate(temp)) {
+                    int tempInt = Integer.parseInt (temp);
+                    Cr.setId(tempInt);
+                    i++;
+                }
+                else {
+                    System.out.println("Incorrect id format. Use only numbers!");
+                }
+            }
+            while (i==0);
+            do {
+                System.out.println("Enter sum of money for test account:");
+                String temp = sc.nextLine();
+                if (validator.validate(temp)) {
+                    int tempInt = Integer.parseInt (temp);
+                    Cr.setMoney(tempInt);
+                    i++;
+                }
+                else {
+                    System.out.println("Incorrect sum format. Use only numbers!");
+                }
+            }
+            while (i==1);
             Cr.setAccountCurrency(cur);
             Cr.setMaster(user1);
-            System.out.println("Enter number of money:");
-            Cr.setMoney(sc.nextDouble());
+
         }
         catch (Exception ex) {
             ex.getMessage();
@@ -86,4 +113,19 @@ public class account {
                 ;
     }
 
+}
+class numberValidator {
+    private Pattern pattern;
+    private Matcher matcher;
+
+    private static final String NAMES_PATTERN =
+            "^[_0-9\\+]+$";
+    public numberValidator() {
+        pattern = Pattern.compile(NAMES_PATTERN);
+    }
+    public boolean validate(final String hex) {
+        matcher = pattern.matcher(hex);
+
+        return matcher.matches();
+    }
 }

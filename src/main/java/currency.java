@@ -45,24 +45,31 @@ public class currency {
     public static currency chooseCurrency() {
         Scanner sc = new Scanner(System.in);
         currency cur = new currency();
+        int i = 0;
         try {
-            switch (sc.nextLine().toLowerCase()) {
-                case "uah" :
-                    cur = currency.UAH;
-                    break;
-                case "usd" :
-                    cur = currency.USD;
-                    break;
+            do {
+                switch (sc.nextLine().toLowerCase()) {
+                    case "uah" :
+                        cur = currency.UAH;
+                        i++;
+                        break;
+                    case "usd" :
+                        cur = currency.USD;
+                        i++;
+                        break;
 
-                case "eur" :
-                    cur = currency.EUR;
-                    break;
+                    case "eur" :
+                        cur = currency.EUR;
+                        i++;
+                        break;
 
-                default:
-                    System.out.println("Unknown currency, set to default currency (UAH)!");
-                    cur = currency.UAH;
-                    break;
+                    default:
+                        System.out.println("Unknown currency. Please, try again.");
+                        break;
+                }
             }
+            while (i==0);
+
         }
         catch (Exception ex) {
             ex.getMessage();
