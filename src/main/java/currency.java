@@ -1,4 +1,4 @@
-import java.util.Currency;
+import java.util.Scanner;
 
 public class currency {
     private int id;
@@ -41,6 +41,34 @@ public class currency {
     public static currency UAH = new currency(1, "Grind", 1);
     public static currency USD = new currency(2, "Dollar", 28);
     public static currency EUR = new currency(3, "Euro", 35);
+
+    public static currency chooseCurrency() {
+        Scanner sc = new Scanner(System.in);
+        currency cur = new currency();
+        try {
+            switch (sc.nextLine().toLowerCase()) {
+                case "uah" :
+                    cur = currency.UAH;
+                    break;
+                case "usd" :
+                    cur = currency.USD;
+                    break;
+
+                case "eur" :
+                    cur = currency.EUR;
+                    break;
+
+                default:
+                    System.out.println("Unknown currency, set to default currency (UAH)!");
+                    cur = currency.UAH;
+                    break;
+            }
+        }
+        catch (Exception ex) {
+            ex.getMessage();
+        }
+        return cur;
+    }
 
     @Override
     public String toString() {

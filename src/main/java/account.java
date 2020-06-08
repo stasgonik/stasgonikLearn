@@ -59,23 +59,7 @@ public class account {
         System.out.println("Enter account currency (UAH, USD, EUR):");
         account Cr = new account();
         try {
-            currency cur = new currency();
-            switch (sc.nextLine().toLowerCase()) {
-                case "uah" :
-                    cur = currency.UAH;
-                    break;
-                case "usd" :
-                    cur = currency.USD;
-                    break;
-
-                case "eur" :
-                    cur = currency.EUR;
-                    break;
-
-                default:
-                    System.out.println("Unknown currency, set to default currency (UAH)!");
-                    cur = currency.UAH;
-            }
+            currency cur = currency.chooseCurrency();
             user user1 = user.createUser();
             System.out.println("Enter new id:");
             Cr.setId(sc.nextInt());
