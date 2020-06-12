@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 public class account {
 
-    private int id;
+
     private user master;
     private currency accountCurrency;
     private double money;
@@ -17,13 +17,7 @@ public class account {
         this.money = money;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public user getMaster() {
         return master;
@@ -41,8 +35,8 @@ public class account {
         this.accountCurrency = accountCurrency;
     }
 
-    public account(int id, user master, currency accountCurrency, double money) {
-        this.id = id;
+    public account(user master, currency accountCurrency, double money) {
+
         this.master = master;
         this.accountCurrency = accountCurrency;
         this.money = money;
@@ -66,19 +60,6 @@ public class account {
             numberValidator validator = new numberValidator();
             int i =0;
             do {
-                System.out.println("Enter new id:");
-                String temp = sc.nextLine();
-                if (validator.validate(temp)) {
-                    int tempInt = Integer.parseInt (temp);
-                    Cr.setId(tempInt);
-                    i++;
-                }
-                else {
-                    System.out.println("Incorrect id format. Use only numbers!");
-                }
-            }
-            while (i==0);
-            do {
                 System.out.println("Enter sum of money for test account:");
                 String temp = sc.nextLine();
                 if (validator.validate(temp)) {
@@ -90,7 +71,7 @@ public class account {
                     System.out.println("Incorrect sum format. Use only numbers!");
                 }
             }
-            while (i==1);
+            while (i==0);
             Cr.setAccountCurrency(cur);
             Cr.setMaster(user1);
 
@@ -104,15 +85,12 @@ public class account {
 
     @Override
     public String toString() {
-        return
-                "Id of account is " + id +
-                ", master of account " + master.toString() +
-                ", currency of account is " + accountCurrency.toString() +
-                ", number of money on account is " + money + " " + accountCurrency.getName() +
-                ", sum in UAH is " + this.currentSum() + " UAH"
-                ;
+        return "Master of account:" + master +
+                ", accountCurrency is " + accountCurrency +
+                ", sum of money  on account=" + money + ""
+                + accountCurrency.getName() + " ( In UAH : " +
+                currentSum() + " )";
     }
-
 }
 class numberValidator {
     private Pattern pattern;

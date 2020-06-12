@@ -7,12 +7,14 @@ public class user {
     private String firstName;
     private String secondName;
     private String familyName;
+    private int age;
 
 
-    public user(String firstName, String secondName, String familyName) {
+    public user(String firstName, String secondName, String familyName, int age) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.familyName = familyName;
+        this.age = age;
     }
 
     public user() {
@@ -41,10 +43,21 @@ public class user {
     public void setFamilyName(String familyName) {
         this.familyName = familyName;
     }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
     public static user createUser() {
         Scanner sc = new Scanner(System.in);
         user us = new user();
-        userValidator validator = new userValidator();
+        userValidatorName validator = new userValidatorName();
+        userNumberValidator validator2 = new userNumberValidator();
+
         int i = 0;
         try {
             do {
@@ -83,6 +96,19 @@ public class user {
                 }
             }
             while (i==2);
+            do {
+                System.out.println("Enter your age:");
+                String temp = sc.nextLine();
+                if (validator2.validate(temp)) {
+                    int tempInt = Integer.parseInt (temp);
+                    us.setAge(tempInt);
+                    i++;
+                }
+                else {
+                    System.out.println("Incorrect age format. Use only numbers!");
+                }
+            }
+            while (i==3);
 
         }
         catch (Exception ex) {
@@ -93,17 +119,32 @@ public class user {
 
     @Override
     public String toString() {
-        return familyName + " " + firstName + " " + secondName
+        return familyName + " " + firstName + " " + secondName + " , age: " + age
                 ;
     }
 }
-class userValidator {
+class userValidatorName {
     private Pattern pattern;
     private Matcher matcher;
 
     private static final String NAMES_PATTERN =
             "^[_A-Za-z-\\+]+$";
-    public userValidator() {
+    public userValidatorName() {
+        pattern = Pattern.compile(NAMES_PATTERN);
+    }
+    public boolean validate(final String hex) {
+        matcher = pattern.matcher(hex);
+
+        return matcher.matches();
+    }
+}
+class userNumberValidator {
+    private Pattern pattern;
+    private Matcher matcher;
+
+    private static final String NAMES_PATTERN =
+            "^[_0-9\\+]+$";
+    public userNumberValidator() {
         pattern = Pattern.compile(NAMES_PATTERN);
     }
     public boolean validate(final String hex) {
