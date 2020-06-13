@@ -51,8 +51,8 @@ public class account {
 
     }
     public static account createAccount() {
+        System.out.println("Starting creation of new account.");
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter account currency (UAH, USD, EUR):");
         account Cr = new account();
         try {
             currency cur = currency.chooseCurrency();

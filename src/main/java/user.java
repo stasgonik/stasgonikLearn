@@ -167,6 +167,7 @@ class userDB {
     static void userToDB(user newUser) {
         Connection conn = null;
         PreparedStatement st1 = null;
+        System.out.println("Start saving user ot DB!");
 
         try{
             // STEP 1: Register JDBC driver
@@ -214,7 +215,7 @@ class userDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Goodbye!");
+        System.out.println("Attempt end!");
 
     }
 }

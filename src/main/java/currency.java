@@ -43,6 +43,7 @@ public class currency {
     public static currency EUR = new currency(3, "Euro", 35);
 
     public static currency chooseCurrency() {
+        System.out.println("Enter account currency (UAH, USD, EUR):");
         Scanner sc = new Scanner(System.in);
         currency cur = new currency();
         int i = 0;
