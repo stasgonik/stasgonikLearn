@@ -150,7 +150,7 @@ public class user {
         catch (Exception ex) {
             ex.getMessage();
         }
-        //userDB.userToDB(us);
+        userDB.userToDB(us);
         return us;
     }
 
@@ -229,15 +229,15 @@ class userDB {
 
             // STEP 3: Execute a query
 
-            String sql = "INSERT INTO USERS (FIRST_NAME, SECOND_NAME, LAST_NAME, AGE) " +
-                    "VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO USERS (FIRST_NAME, SECOND_NAME, LAST_NAME, AGE, NUMBER) " +
+                    "VALUES (?, ?, ?, ?, ?)";
 
             st1 = conn.prepareStatement(sql);
             st1.setString(1, newUser.getFirstName());
             st1.setString(2, newUser.getSecondName());
             st1.setString(3, newUser.getFamilyName());
             st1.setInt(4, newUser.getAge());
-
+            st1.setDouble(5, newUser.getNumber());
             st1.execute();
 
 
