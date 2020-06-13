@@ -85,9 +85,9 @@ public class account {
 
     @Override
     public String toString() {
-        return "Master of account:" + master +
-                ", accountCurrency is " + accountCurrency +
-                ", sum of money  on account=" + money + ""
+        return "Master of account: "  + master +
+                ", currency of account is " + accountCurrency +
+                ", sum of money on account = " + money + ""
                 + accountCurrency.getName() + " ( In UAH : " +
                 currentSum() + " )";
     }
