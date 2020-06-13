@@ -10,13 +10,15 @@ public class user {
     private String secondName;
     private String familyName;
     private int age;
+    private double number;
 
 
-    public user(String firstName, String secondName, String familyName, int age) {
+    public user(String firstName, String secondName, String familyName, int age, int number) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.familyName = familyName;
         this.age = age;
+        this.number = number;
     }
 
     public user() {
@@ -54,11 +56,20 @@ public class user {
         this.age = age;
     }
 
+    public double getNumber() {
+        return number;
+    }
+
+    public void setNumber(double number) {
+        this.number = number;
+    }
+
     public static user createUser() {
         Scanner sc = new Scanner(System.in);
         user us = new user();
         userValidatorName validator = new userValidatorName();
         userNumberValidator validator2 = new userNumberValidator();
+        userPhoneValidator validator3 = new userPhoneValidator();
 
         int i = 0;
         try {
@@ -111,19 +122,42 @@ public class user {
                 }
             }
             while (i==3);
+            do {
+                System.out.println("Enter your phone number (Format: 3806788888888):");
+                String temp = sc.nextLine();
+                if (validator3.validate(temp)) {
+                    double tempInt = Double.parseDouble (temp);
+                    double check = 1000000000;
+                    if (tempInt/100 < check) {
+                        System.out.println("Need your Ukrainian number in 12 digit format!");
+                    }
+                    else if (tempInt/1000 > check) {
+                        System.out.println("Need your Ukrainian number in 12 digit format!");
+                    }
+                    else {
+                        us.setNumber(tempInt);
+                        i++;
+                    }
+
+                }
+                else {
+                    System.out.println("Incorrect number format. Use only numbers!");
+                }
+            }
+            while (i==4);
 
         }
         catch (Exception ex) {
             ex.getMessage();
         }
-        userDB.userToDB(us);
+        //userDB.userToDB(us);
         return us;
     }
 
     @Override
     public String toString() {
-        return familyName + " " + firstName + " " + secondName + " , age: " + age
-                ;
+        return familyName + " " + firstName + " " + secondName + " , age: " + age +
+             ", phone number: " + number ;
     }
 }
 class userValidatorName {
@@ -148,6 +182,21 @@ class userNumberValidator {
     private static final String NAMES_PATTERN =
             "^[_0-9\\+]+$";
     public userNumberValidator() {
+        pattern = Pattern.compile(NAMES_PATTERN);
+    }
+    public boolean validate(final String hex) {
+        matcher = pattern.matcher(hex);
+
+        return matcher.matches();
+    }
+}
+class userPhoneValidator {
+    private Pattern pattern;
+    private Matcher matcher;
+
+    private static final String NAMES_PATTERN =
+            "^[_0-9\\+}]+$";
+    public userPhoneValidator() {
         pattern = Pattern.compile(NAMES_PATTERN);
     }
     public boolean validate(final String hex) {
