@@ -47,8 +47,8 @@ public class account {
     }
 
     public double currentSum() {
-        double sum = money * accountCurrency.getValue();
-        return sum;
+        return money * accountCurrency.getValue();
+
     }
     public static account createAccount() {
         Scanner sc = new Scanner(System.in);
