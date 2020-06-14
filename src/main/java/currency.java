@@ -38,9 +38,9 @@ public class currency {
     public currency() {
     }
 
-    public static currency UAH = new currency(1, "Grind", 1);
-    public static currency USD = new currency(2, "Dollar", 28);
-    public static currency EUR = new currency(3, "Euro", 35);
+    public static currency UAH = new currency(1, "UAH", 1);
+    public static currency USD = new currency(2, "USD", 28);
+    public static currency EUR = new currency(3, "EUR", 35);
 
     public static currency chooseCurrency() {
         System.out.println("Enter account currency (UAH, USD, EUR):");

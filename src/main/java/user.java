@@ -127,11 +127,11 @@ public class user {
                 String temp = sc.nextLine();
                 if (validator3.validate(temp)) {
                     double tempInt = Double.parseDouble (temp);
-                    double check = 1000000000;
-                    if (tempInt/100 < check) {
+                    double check = 100000000000L;
+                    if (tempInt < check) {
                         System.out.println("Need your Ukrainian number in 12 digit format!");
                     }
-                    else if (tempInt/1000 > check) {
+                    else if (tempInt/10 > check) {
                         System.out.println("Need your Ukrainian number in 12 digit format!");
                     }
                     else {
