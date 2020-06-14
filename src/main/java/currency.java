@@ -132,7 +132,7 @@ class currencyDB {
             String sql = "UPDATE CURRENCY " + "SET VALUE=? WHERE id=?";
 
             st1 = conn.prepareStatement(sql);
-            st1.setString(1, cur.getName());
+            st1.setDouble(1, cur.getValue());
             st1.setInt(2, cur.getId());
             st1.executeUpdate();
 
