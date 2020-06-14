@@ -137,7 +137,7 @@ class accountDB {
                     "VALUES (?, ?, ?, ?)";
             String sqlSearch1 = "SELECT ID FROM USERS WHERE FIRST_NAME=? AND SECOND_NAME=? AND LAST_NAME=?" +
                     " AND AGE=?";
-            String sqlSearch2 = "SELECT ID FROM CURRENCY WHERE NAME=? AND VALUE=?";
+            String sqlSearch2 = "SELECT ID FROM CURRENCY WHERE NAME=?";
 
             st1 = conn.prepareStatement(sql);
 
@@ -159,7 +159,7 @@ class accountDB {
             st2 = conn.prepareStatement(sqlSearch2);
 
             st2.setString(1, newAccount.getAccountCurrency().getName());
-            st2.setDouble(2, newAccount.getAccountCurrency().getValue());
+
             ResultSet rs2 = st2.executeQuery();
             int CRID = 0;
             while (rs2.next()) {

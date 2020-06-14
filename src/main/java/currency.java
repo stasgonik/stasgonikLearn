@@ -1,13 +1,8 @@
-import java.awt.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 
 public class currency {
@@ -49,14 +44,15 @@ public class currency {
     }
 
     static currency UAH = new currency(1, "UAH", 1);
-    static currency USD = new currency(2, "USD", 27);
-    static currency EUR = new currency(3, "EUR", 30);
-    static currency GBP = new currency(4, "GBP", 35);
+    static currency USD = new currency(2, "USD", 26);
+    static currency EUR = new currency(3, "EUR", 29);
+    static currency GBP = new currency(4, "GBP", 34);
+
 
 
 
     public static currency chooseCurrency() {
-        System.out.println("Enter account currency (UAH, USD, EUR, GBP):");
+        System.out.println("Enter currency (UAH, USD, EUR, GBP):");
         Scanner sc = new Scanner(System.in);
         currency cur = new currency();
         int i = 0;

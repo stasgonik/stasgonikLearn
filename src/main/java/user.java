@@ -216,7 +216,7 @@ class userDB {
     static void userToDB(user newUser) {
         Connection conn = null;
         PreparedStatement st1 = null;
-        System.out.println("Start saving user ot DB!");
+        System.out.println("Start saving user to DB!");
 
         try{
             // STEP 1: Register JDBC driver
