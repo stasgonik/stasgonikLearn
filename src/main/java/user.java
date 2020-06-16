@@ -13,7 +13,7 @@ public class user {
     private double number;
 
 
-    public user(String firstName, String secondName, String familyName, int age, int number) {
+    public user(String firstName, String secondName, String familyName, int age, double number) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.familyName = familyName;
@@ -233,15 +233,14 @@ class userDB {
                     "VALUES (?, ?, ?, ?, ?)";
 
             st1 = conn.prepareStatement(sql);
+
             st1.setString(1, newUser.getFirstName());
             st1.setString(2, newUser.getSecondName());
             st1.setString(3, newUser.getFamilyName());
             st1.setInt(4, newUser.getAge());
             st1.setDouble(5, newUser.getNumber());
+
             st1.execute();
-
-
-
 
             // STEP 4: Clean-up environment
             st1.close();
@@ -265,6 +264,5 @@ class userDB {
             } // end finally try
         } // end try
         System.out.println("Attempt end!");
-
     }
 }

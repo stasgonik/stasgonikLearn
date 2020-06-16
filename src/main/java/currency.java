@@ -132,11 +132,6 @@ class currencyDB {
             st1.setInt(2, cur.getId());
             st1.executeUpdate();
 
-
-
-
-
-
             // STEP 4: Clean-up environment
             st1.close();
             conn.close();
@@ -159,7 +154,6 @@ class currencyDB {
             } // end finally try
         } // end try
         System.out.println("Attempt end!");
-
     }
 }
 
