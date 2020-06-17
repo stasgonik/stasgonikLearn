@@ -1,7 +1,4 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
 
@@ -154,6 +151,73 @@ class currencyDB {
             } // end finally try
         } // end try
         System.out.println("Attempt end!");
+    }
+    static currency currencyFromDB (int crid) {
+        currency cur = new currency();
+        Connection conn = null;
+        PreparedStatement st1 = null;
+
+        //Statement stmt = null;
+        try {
+            // STEP 1: Register JDBC driver
+            Class.forName(JDBC_DRIVER);
+
+            // STEP 2: Open a connection
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            // STEP 3: Execute a query
+            System.out.println("Connected database successfully...");
+            String sql = "SELECT NAME, VALUE FROM CURRENCY WHERE ID=?";
+            //stmt = conn.createStatement();
+            //ResultSet rs = stmt.executeQuery(sql);
+            st1 = conn.prepareStatement(sql);
+            st1.setInt(1, crid);
+            ResultSet rs = st1.executeQuery();
+
+
+            String[] stringsTemp = new String[1];
+            double[] doublesTemp = new double[1];
+
+            // STEP 4: Extract data from result set
+            while(rs.next()) {
+                // Retrieve by column name
+
+                String curName = rs.getString("NAME");
+                stringsTemp[0] = curName;
+                double value = rs.getDouble("VALUE");
+                doublesTemp[0] = value;
+
+            }
+            rs.close();
+            cur.setId(crid);
+            cur.setName(stringsTemp[0]);
+            cur.setValue(doublesTemp[0]);
+            // STEP 5: Clean-up environment
+
+
+
+
+        } catch(SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch(Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            // finally block used to close resources
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            } // end finally try
+        } // end try
+        System.out.println("Goodbye!");
+        return cur;
     }
 }
 

@@ -265,4 +265,75 @@ class userDB {
         } // end try
         System.out.println("Attempt end!");
     }
+    static user userFromDB (int usid) {
+        user sUser = new user();
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        //Statement stmt = null;
+        try {
+            // STEP 1: Register JDBC driver
+            Class.forName(JDBC_DRIVER);
+
+            // STEP 2: Open a connection
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            // STEP 3: Execute a query
+            System.out.println("Connected database successfully...");
+            String sql = "SELECT FIRST_NAME, SECOND_NAME, LAST_NAME, AGE, NUMBER FROM USERS WHERE ID=?";
+            st1 = conn.prepareStatement(sql);
+            st1.setInt(1, usid);
+            ResultSet rs = st1.executeQuery();
+
+
+            String[] stringsTemp = new String[3];
+            int[] intsTemp = new int[1];
+            double[] doublesTemp = new double[1];
+
+            // STEP 4: Extract data from result set
+
+            while (rs.next()) {
+                String fName = rs.getString("FIRST_NAME");
+                stringsTemp[0] = fName;
+                String sName = rs.getString("SECOND_NAME");
+                stringsTemp[1] = sName;
+                String lName = rs.getString("LAST_NAME");
+                stringsTemp[2] = lName;
+                int age = rs.getInt("AGE");
+                intsTemp[0] = age;
+                double number = rs.getDouble("NUMBER");
+                doublesTemp[0] = number;
+            }
+            sUser.setAge(intsTemp[0]);
+            sUser.setFamilyName(stringsTemp[2]);
+            sUser.setFirstName(stringsTemp[0]);
+            sUser.setSecondName(stringsTemp[1]);
+            sUser.setNumber(doublesTemp[0]);
+
+            // STEP 5: Clean-up environment
+
+
+            rs.close();
+
+        } catch(SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch(Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            // finally block used to close resources
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            } // end finally try
+        } // end try
+        System.out.println("Goodbye!");
+        return sUser;
+    }
 }
