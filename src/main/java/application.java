@@ -29,8 +29,7 @@ public class application {
 
                     case "3" :
                         System.out.println("Set new ID for search:");
-                        account search = accountDB.accountFromDB(sc.nextInt());
-                        search.toString();
+                        accountDB.accountFromDB(sc.nextInt());
                         break;
 
                     case "q" :

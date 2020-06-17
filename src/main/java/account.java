@@ -1,4 +1,7 @@
+import java.awt.*;
+import java.lang.reflect.Array;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -198,14 +201,15 @@ class accountDB {
         } // end try
         System.out.println("Attempt end!");
     }
-    static account accountFromDB (int acid) {
-        account search =new account();
-        user uSearch = new user();
-        currency cSearch = new currency();
+    static void accountFromDB (int acid) {
+        //account search =new account();
+        //user uSearch = new user();
+        //currency cSearch = new currency();
         Connection conn = null;
         PreparedStatement st1 = null;
         PreparedStatement st2 = null;
         PreparedStatement st3 = null;
+        //Statement stmt = null;
         try {
             // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
@@ -216,52 +220,70 @@ class accountDB {
 
             // STEP 3: Execute a query
             System.out.println("Connected database successfully...");
-            String sql = "SELECT ID, USID, CRID, MONEY FROM ACCOUNT WHERE ID=?";
-
+            String sql = "SELECT USID, CRID, MONEY FROM ACCOUNT WHERE ID=?";
+            //stmt = conn.createStatement();
+            //ResultSet rs = stmt.executeQuery(sql);
             st1 = conn.prepareStatement(sql);
             st1.setInt(1, acid);
             ResultSet rs = st1.executeQuery();
 
+            
+
             // STEP 4: Extract data from result set
             while(rs.next()) {
                 // Retrieve by column name
-                int id  = rs.getInt("ID");
+
                 int usid = rs.getInt("USID");
                 int crid = rs.getInt("CRID");
                 double money = rs.getDouble("MONEY");
-
-                String sqlCurrency = "SELECT NAME, VALUE FROM CURRENCY WHERE ID=?";
-                st2 = conn.prepareStatement(sqlCurrency);
-                st2.setInt(1, usid);
-                ResultSet rsC = st2.executeQuery();
-                String curName = null;
-                double value = 0;
-                while (rsC.next()) {
-                    curName = rsC.getString("NAME");
-                    value = rsC.getDouble("VALUE");
-                }
 
                 String sqlUser = "SELECT FIRST_NAME, SECOND_NAME, LAST_NAME, AGE, NUMBER FROM USERS WHERE ID=?";
                 st3 = conn.prepareStatement(sqlUser);
                 st3.setInt(1, crid);
                 ResultSet rsU = st3.executeQuery();
-                String fName = null;
-                String sName = null;
-                String lName = null;
-                int age = 0;
-                double number = 0;
+                //String fName = null;
+                //String sName = null;
+                //String lName = null;
+                //int age = 0;
+                //double number = 0;
                 while (rsU.next()) {
-                    fName = rsU.getString("FIRST_NAME");
-                    sName = rsU.getString("SECOND_NAME");
-                    lName = rsU.getString("LAST_NAME");
-                    age = rsU.getInt("AGE");
-                    number = rsC.getDouble("NUMBER");
+                    String fName = rsU.getString("FIRST_NAME");
+                    String sName = rsU.getString("SECOND_NAME");
+                    String lName = rsU.getString("LAST_NAME");
+                    int age = rsU.getInt("AGE");
+                    double number = rsU.getDouble("NUMBER");
+
+                    System.out.println("Master of account: "  + lName + " " + fName + " " + sName + " , age: " + age +
+                            ", phone number: " + number);
+
+
                 }
-                search.setMoney(money);
-                cSearch = new currency(crid, curName, value);
-                search.setAccountCurrency(cSearch);
-                uSearch = new user(fName, sName, lName, age, number);
-                search.setMaster(uSearch);
+
+
+                String sqlCurrency = "SELECT NAME, VALUE FROM CURRENCY WHERE ID=?";
+                st2 = conn.prepareStatement(sqlCurrency);
+                st2.setInt(1, usid);
+                ResultSet rsC = st2.executeQuery();
+                //String curName = null;
+                //double value = 0;
+                while (rsC.next()) {
+                    String curName = rsC.getString("NAME");
+                    double value = rsC.getDouble("VALUE");
+                    double currentSum = value* money;
+                    System.out.println(", currency of account is " + curName + " (" +
+                            "id of currency is " + crid + ", value of this currency is " + value + ")" +
+                            ", sum of money on account = " + money + "" + curName + " ( In UAH : " + currentSum + " )");
+                }
+
+
+                //search.setMoney(money);
+                //cSearch = new currency(crid, curName, value);
+                //search.setAccountCurrency(cSearch);
+                //uSearch = new user(fName, sName, lName, age, number);
+                //search.setMaster(uSearch);
+                //double currentSum = money * value;
+
+                //search.toString();
                 rsC.close();
                 rsU.close();
             }
@@ -289,7 +311,5 @@ class accountDB {
             } // end finally try
         } // end try
         System.out.println("Goodbye!");
-
-        return search;
     }
 }
