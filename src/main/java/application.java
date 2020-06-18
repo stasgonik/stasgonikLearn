@@ -14,7 +14,8 @@ public class application {
                 System.out.println("12. Change currency value.");
                 System.out.println("13. Update account detail.");
                 System.out.println("14. Delete account.");
-                System.out.println("15. Test view.");
+                System.out.println("15. Add new currency to DB.");
+                System.out.println("16. View all currencies.");
                 System.out.println("1Q. Exit.");
                 switch (sc.nextLine().toLowerCase()) {
                     case "11" :
@@ -102,6 +103,13 @@ public class application {
                         break;
 
                     case "15" :
+                        System.out.println("List of currencies in DB:");
+                        currencyDB.viewCurrency();
+                        System.out.println("Set new currency!");
+                        currency.createCurrency();
+                        break;
+                    case "16" :
+                        System.out.println("List of currencies in DB:");
                         currencyDB.viewCurrency();
                         break;
                     case "1q" :

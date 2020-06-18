@@ -120,16 +120,13 @@ class accountDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         PreparedStatement st2 = null;
-        System.out.println("Start saving account to DB!");
 
         try {
             // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to a selected database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("Connected database successfully...");
 
             // STEP 3: Execute a query
 
@@ -195,7 +192,6 @@ class accountDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Attempt end!");
     }
     static account accountFromDB (int acid) {
         account search =new account();
@@ -206,11 +202,9 @@ class accountDB {
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             // STEP 3: Execute a query
-            System.out.println("Connected database successfully...");
             String sql = "SELECT USID, CRID, MONEY FROM ACCOUNT WHERE ID=?";
             st1 = conn.prepareStatement(sql);
             st1.setInt(1, acid);
@@ -258,7 +252,6 @@ class accountDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Goodbye!");
         return search;
     }
     static int usidFromDB (int acid) {
@@ -270,11 +263,9 @@ class accountDB {
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             // STEP 3: Execute a query
-            System.out.println("Connected database successfully...");
             String sql = "SELECT USID FROM ACCOUNT WHERE ID=?";
             st1 = conn.prepareStatement(sql);
             st1.setInt(1, acid);
@@ -317,22 +308,18 @@ class accountDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Goodbye!");
         return usid;
     }
     static void updateMoney (int acid, double newM) {
         Connection conn = null;
         PreparedStatement st1 = null;
-        System.out.println("Starting update of money value to DB!");
 
         try{
             // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to a selected database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-            System.out.println("Connected database successfully...");
 
             // STEP 3: Execute a query
 
@@ -364,7 +351,6 @@ class accountDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Attempt end!");
     }
     static void viewAccounts () {
         Connection conn = null;
@@ -374,11 +360,9 @@ class accountDB {
         Class.forName(JDBC_DRIVER);
 
         // STEP 2: Open a connection
-        System.out.println("Connecting to database...");
         conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
         // STEP 3: Execute a query
-        System.out.println("Connected database successfully...");
         stmt = conn.createStatement();
         String sql = "SELECT ID, USID, CRID, MONEY FROM ACCOUNT";
         ResultSet rs = stmt.executeQuery(sql);
@@ -423,7 +407,6 @@ class accountDB {
             se.printStackTrace();
         } // end finally try
     } // end try
-        System.out.println("Goodbye!");
 }
     static void deleteAccount (int acid) {
         Connection conn = null;
@@ -433,11 +416,9 @@ class accountDB {
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             // STEP 3: Execute a query
-            System.out.println("Connected database successfully...");
 
 
             String delete = "DELETE FROM ACCOUNT " + "WHERE id = ?";
@@ -464,6 +445,5 @@ class accountDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Goodbye!");
     }
 }

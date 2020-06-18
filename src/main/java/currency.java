@@ -5,17 +5,8 @@ import java.util.regex.Pattern;
 
 
 public class currency {
-    //private int id;
     private String name;
     private double value;
-
-    //public int getId() {
-      //  return id;
-    //}
-
-    //public void setId(int id) {
-    //    this.id = id;
-    //}
 
     public String getName() {
         return name;
@@ -40,11 +31,6 @@ public class currency {
 
     public currency() {
     }
-
-    static currency UAH = new currency( "UAH", 1);
-    static currency USD = new currency( "USD", 26);
-    static currency EUR = new currency( "EUR", 29);
-    static currency GBP = new currency( "GBP", 34);
 
     public static currency createCurrency() {
         Scanner sc = new Scanner(System.in);
@@ -91,44 +77,11 @@ public class currency {
 
 
     public static currency chooseCurrency() {
-        System.out.println("Enter currency (UAH, USD, EUR, GBP):");
+        currencyDB.viewCurrency();
+        System.out.println("Enter currency ID :");
         Scanner sc = new Scanner(System.in);
-        currency cur = new currency();
-        int i = 0;
-        try {
-            do {
-                switch (sc.nextLine().toLowerCase()) {
-                    case "uah" :
-                        cur = currency.UAH;
-                        i++;
-                        break;
-
-                    case "usd" :
-                        cur = currency.USD;
-                        i++;
-                        break;
-
-                    case "eur" :
-                        cur = currency.EUR;
-                        i++;
-                        break;
-
-                    case "gbp" :
-                        cur = currency.GBP;
-                        i++;
-                        break;
-
-                    default:
-                        System.out.println("Unknown currency. Please, try again.");
-                        break;
-                }
-            }
-            while (i==0);
-
-        }
-        catch (Exception ex) {
-            ex.getMessage();
-        }
+        int crid = sc.nextInt();
+        currency cur = currencyDB.currencyFromDB(crid);
         return cur;
     }
 
@@ -148,16 +101,13 @@ class currencyDB {
     static void currencyUpdate(currency cur) {
         Connection conn = null;
         PreparedStatement st1 = null;
-        System.out.println("Starting update of currency to DB!");
 
         try{
             // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to a selected database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-            System.out.println("Connected database successfully...");
 
             // STEP 3: Execute a query
 
@@ -189,7 +139,6 @@ class currencyDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Attempt end!");
     }
     static currency currencyFromDB (int crid) {
         currency cur = new currency();
@@ -202,14 +151,10 @@ class currencyDB {
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            //System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             // STEP 3: Execute a query
-            //System.out.println("Connected database successfully...");
             String sql = "SELECT NAME, VALUE FROM CURRENCY WHERE ID=?";
-            //stmt = conn.createStatement();
-            //ResultSet rs = stmt.executeQuery(sql);
             st1 = conn.prepareStatement(sql);
             st1.setInt(1, crid);
             ResultSet rs = st1.executeQuery();
@@ -254,22 +199,18 @@ class currencyDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        //System.out.println("Goodbye!");
         return cur;
     }
     static void currencyToDB (currency newCurrency) {
         Connection conn = null;
         PreparedStatement st1 = null;
-        System.out.println("Start saving currency to DB!");
 
         try{
             // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to a selected database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-            System.out.println("Connected database successfully...");
 
             // STEP 3: Execute a query
 
@@ -305,7 +246,6 @@ class currencyDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Attempt end!");
     }
     static void viewCurrency () {
         Connection conn = null;
@@ -315,11 +255,9 @@ class currencyDB {
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             // STEP 3: Execute a query
-            System.out.println("Connected database successfully...");
             stmt = conn.createStatement();
             String sql = "SELECT ID, NAME, VALUE FROM CURRENCY";
             ResultSet rs = stmt.executeQuery(sql);
@@ -357,7 +295,6 @@ class currencyDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Goodbye!");
     }
 }
 class currencyNameValidator {
