@@ -14,6 +14,7 @@ public class application {
                 System.out.println("12. Change currency value.");
                 System.out.println("13. Update account detail.");
                 System.out.println("14. Delete account.");
+                System.out.println("15. Test view.");
                 System.out.println("1Q. Exit.");
                 switch (sc.nextLine().toLowerCase()) {
                     case "11" :
@@ -98,6 +99,10 @@ public class application {
                             }
                         }
                         while (k==0);
+                        break;
+
+                    case "15" :
+                        currencyDB.viewCurrency();
                         break;
                     case "1q" :
                         i++;

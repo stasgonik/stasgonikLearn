@@ -112,49 +112,33 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="713" y="219" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1592142501519" />
-    <state width="1340" height="282" key="GridCell.Tab.0.bottom" timestamp="1592485465929">
+    <state width="1340" height="282" key="GridCell.Tab.0.bottom" timestamp="1592485546083">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1340" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1050@0.0.1920.1050" timestamp="1592485465929" />
-    <state width="1340" height="282" key="GridCell.Tab.0.center" timestamp="1592485465929">
+    <state width="1340" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1050@0.0.1920.1050" timestamp="1592485546083" />
+    <state width="1340" height="282" key="GridCell.Tab.0.center" timestamp="1592485546083">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1340" height="282" key="GridCell.Tab.0.center/0.0.1920.1050@0.0.1920.1050" timestamp="1592485465929" />
-    <state width="1340" height="282" key="GridCell.Tab.0.left" timestamp="1592485465929">
+    <state width="1340" height="282" key="GridCell.Tab.0.center/0.0.1920.1050@0.0.1920.1050" timestamp="1592485546083" />
+    <state width="1340" height="282" key="GridCell.Tab.0.left" timestamp="1592485546083">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1340" height="282" key="GridCell.Tab.0.left/0.0.1920.1050@0.0.1920.1050" timestamp="1592485465929" />
-    <state width="1340" height="282" key="GridCell.Tab.0.right" timestamp="1592485465929">
+    <state width="1340" height="282" key="GridCell.Tab.0.left/0.0.1920.1050@0.0.1920.1050" timestamp="1592485546083" />
+    <state width="1340" height="282" key="GridCell.Tab.0.right" timestamp="1592485546083">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1340" height="282" key="GridCell.Tab.0.right/0.0.1920.1050@0.0.1920.1050" timestamp="1592485465929" />
+    <state width="1340" height="282" key="GridCell.Tab.0.right/0.0.1920.1050@0.0.1920.1050" timestamp="1592485546083" />
     <state x="440" y="100" key="SettingsEditor" timestamp="1592143388983">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="440" y="100" key="SettingsEditor/0.0.1920.1050@0.0.1920.1050" timestamp="1592143388983" />
-    <state x="655" y="349" key="com.intellij.ide.util.TipDialog" timestamp="1592479032679">
+    <state x="655" y="349" key="com.intellij.ide.util.TipDialog" timestamp="1592496361509">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state x="655" y="349" key="com.intellij.ide.util.TipDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1592479032679" />
+    <state x="655" y="349" key="com.intellij.ide.util.TipDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1592496361509" />
     <state x="674" y="240" width="672" height="678" key="search.everywhere.popup" timestamp="1592059292470">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="674" y="240" width="672" height="678" key="search.everywhere.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1592059292470" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/user.java</url>
-          <line>216</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/currency.java</url>
-          <line>100</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
