@@ -336,4 +336,234 @@ class userDB {
         System.out.println("Goodbye!");
         return sUser;
     }
+    static void updateFName (int usid, String fName) {
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        System.out.println("Starting update of first name to DB!");
+
+        try{
+            // STEP 1: Register JDBC driver
+            Class.forName(JDBC_DRIVER);
+
+            // STEP 2: Open a connection
+            System.out.println("Connecting to a selected database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            System.out.println("Connected database successfully...");
+
+            // STEP 3: Execute a query
+
+            String sql = "UPDATE USERS " + "SET FIRST_NAME=? WHERE id=?";
+
+            st1 = conn.prepareStatement(sql);
+            st1.setString(1, fName);
+            st1.setInt(2, usid);
+            st1.executeUpdate();
+
+            // STEP 4: Clean-up environment
+            st1.close();
+            conn.close();
+        } catch(SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch(Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            // finally block used to close resources
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            } // end finally try
+        } // end try
+        System.out.println("Attempt end!");
+    }
+    static void updateSName (int usid, String sName) {
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        System.out.println("Starting update of second name to DB!");
+
+        try{
+            // STEP 1: Register JDBC driver
+            Class.forName(JDBC_DRIVER);
+
+            // STEP 2: Open a connection
+            System.out.println("Connecting to a selected database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            System.out.println("Connected database successfully...");
+
+            // STEP 3: Execute a query
+
+            String sql = "UPDATE USERS " + "SET SECOND_NAME=? WHERE id=?";
+
+            st1 = conn.prepareStatement(sql);
+            st1.setString(1, sName);
+            st1.setInt(2, usid);
+            st1.executeUpdate();
+
+            // STEP 4: Clean-up environment
+            st1.close();
+            conn.close();
+        } catch(SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch(Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            // finally block used to close resources
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            } // end finally try
+        } // end try
+        System.out.println("Attempt end!");
+    }
+    static void updateLName (int usid, String lName) {
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        System.out.println("Starting update of last name to DB!");
+
+        try{
+            // STEP 1: Register JDBC driver
+            Class.forName(JDBC_DRIVER);
+
+            // STEP 2: Open a connection
+            System.out.println("Connecting to a selected database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            System.out.println("Connected database successfully...");
+
+            // STEP 3: Execute a query
+
+            String sql = "UPDATE USERS " + "SET LAST_NAME=? WHERE id=?";
+
+            st1 = conn.prepareStatement(sql);
+            st1.setString(1, lName);
+            st1.setInt(2, usid);
+            st1.executeUpdate();
+
+            // STEP 4: Clean-up environment
+            st1.close();
+            conn.close();
+        } catch(SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch(Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            // finally block used to close resources
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            } // end finally try
+        } // end try
+        System.out.println("Attempt end!");
+    }
+    static void updateAge (int usid, int age) {
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        System.out.println("Starting update of age to DB!");
+
+        try{
+            // STEP 1: Register JDBC driver
+            Class.forName(JDBC_DRIVER);
+
+            // STEP 2: Open a connection
+            System.out.println("Connecting to a selected database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            System.out.println("Connected database successfully...");
+
+            // STEP 3: Execute a query
+
+            String sql = "UPDATE USERS " + "SET AGE=? WHERE id=?";
+
+            st1 = conn.prepareStatement(sql);
+            st1.setInt(1, age);
+            st1.setInt(2, usid);
+            st1.executeUpdate();
+
+            // STEP 4: Clean-up environment
+            st1.close();
+            conn.close();
+        } catch(SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch(Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            // finally block used to close resources
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            } // end finally try
+        } // end try
+        System.out.println("Attempt end!");
+    }
+    static void updateNumber (int usid, double number) {
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        System.out.println("Starting update of phone number to DB!");
+
+        try{
+            // STEP 1: Register JDBC driver
+            Class.forName(JDBC_DRIVER);
+
+            // STEP 2: Open a connection
+            System.out.println("Connecting to a selected database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            System.out.println("Connected database successfully...");
+
+            // STEP 3: Execute a query
+
+            String sql = "UPDATE USERS " + "SET NUMBER=? WHERE id=?";
+
+            st1 = conn.prepareStatement(sql);
+            st1.setDouble(1, number);
+            st1.setInt(2, usid);
+            st1.executeUpdate();
+
+            // STEP 4: Clean-up environment
+            st1.close();
+            conn.close();
+        } catch(SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch(Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            // finally block used to close resources
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            } // end finally try
+        } // end try
+        System.out.println("Attempt end!");
+    }
 }

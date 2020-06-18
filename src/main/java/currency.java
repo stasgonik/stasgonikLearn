@@ -152,6 +152,7 @@ class currencyDB {
         } // end try
         System.out.println("Attempt end!");
     }
+
     static currency currencyFromDB (int crid) {
         currency cur = new currency();
         Connection conn = null;
