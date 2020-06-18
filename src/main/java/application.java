@@ -1,4 +1,3 @@
-import java.sql.*;
 import java.util.*;
 
 
@@ -16,7 +15,7 @@ public class application {
                 System.out.println("3. Search account by ID.");
                 System.out.println("4. Update account detail.");
                 System.out.println("Q. Exit.");
-                switch (sc.nextLine()) {
+                switch (sc.nextLine().toLowerCase()) {
                     case "1" :
                         account newAccount = account.createAccount();
                         System.out.println(newAccount.toString());
@@ -53,7 +52,7 @@ public class application {
                             System.out.println("5. Phone number.");
                             System.out.println("6. Money.");
                             System.out.println("Q. Exit.");
-                            switch (sc.nextLine()) {
+                            switch (sc.nextLine().toLowerCase()) {
                                 case "1" :
                                     System.out.println("Set new first name:");
                                     userDB.updateFName(usid, sc.nextLine());

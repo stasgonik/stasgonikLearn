@@ -1,7 +1,4 @@
-import java.awt.*;
-import java.lang.reflect.Array;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
