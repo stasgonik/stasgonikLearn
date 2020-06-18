@@ -216,16 +216,13 @@ class userDB {
     static void userToDB(user newUser) {
         Connection conn = null;
         PreparedStatement st1 = null;
-        System.out.println("Start saving user to DB!");
 
         try{
             // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to a selected database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-            System.out.println("Connected database successfully...");
 
             // STEP 3: Execute a query
 
@@ -263,23 +260,19 @@ class userDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Attempt end!");
     }
     static user userFromDB (int usid) {
         user sUser = new user();
         Connection conn = null;
         PreparedStatement st1 = null;
-        //Statement stmt = null;
         try {
             // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            //System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             // STEP 3: Execute a query
-            //System.out.println("Connected database successfully...");
             String sql = "SELECT FIRST_NAME, SECOND_NAME, LAST_NAME, AGE, NUMBER FROM USERS WHERE ID=?";
             st1 = conn.prepareStatement(sql);
             st1.setInt(1, usid);
@@ -333,22 +326,18 @@ class userDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        //System.out.println("Goodbye!");
         return sUser;
     }
     static void updateFName (int usid, String fName) {
         Connection conn = null;
         PreparedStatement st1 = null;
-        System.out.println("Starting update of first name to DB!");
 
         try{
             // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to a selected database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-            System.out.println("Connected database successfully...");
 
             // STEP 3: Execute a query
 
@@ -380,21 +369,17 @@ class userDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Attempt end!");
     }
     static void updateSName (int usid, String sName) {
         Connection conn = null;
         PreparedStatement st1 = null;
-        System.out.println("Starting update of second name to DB!");
 
         try{
             // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to a selected database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-            System.out.println("Connected database successfully...");
 
             // STEP 3: Execute a query
 
@@ -426,21 +411,21 @@ class userDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Attempt end!");
+
     }
     static void updateLName (int usid, String lName) {
         Connection conn = null;
         PreparedStatement st1 = null;
-        System.out.println("Starting update of last name to DB!");
+
 
         try{
             // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to a selected database...");
+
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-            System.out.println("Connected database successfully...");
+
 
             // STEP 3: Execute a query
 
@@ -472,21 +457,19 @@ class userDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Attempt end!");
+
     }
     static void updateAge (int usid, int age) {
         Connection conn = null;
         PreparedStatement st1 = null;
-        System.out.println("Starting update of age to DB!");
+
 
         try{
             // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to a selected database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-            System.out.println("Connected database successfully...");
 
             // STEP 3: Execute a query
 
@@ -518,21 +501,17 @@ class userDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Attempt end!");
     }
     static void updateNumber (int usid, double number) {
         Connection conn = null;
         PreparedStatement st1 = null;
-        System.out.println("Starting update of phone number to DB!");
 
         try{
             // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to a selected database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-            System.out.println("Connected database successfully...");
 
             // STEP 3: Execute a query
 
@@ -564,7 +543,6 @@ class userDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Attempt end!");
     }
     static void deleteUser (int usid) {
         Connection conn = null;
@@ -574,7 +552,6 @@ class userDB {
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             // STEP 3: Execute a query
@@ -603,6 +580,5 @@ class userDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Goodbye!");
     }
 }
