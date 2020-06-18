@@ -275,11 +275,11 @@ class userDB {
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to database...");
+            //System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             // STEP 3: Execute a query
-            System.out.println("Connected database successfully...");
+            //System.out.println("Connected database successfully...");
             String sql = "SELECT FIRST_NAME, SECOND_NAME, LAST_NAME, AGE, NUMBER FROM USERS WHERE ID=?";
             st1 = conn.prepareStatement(sql);
             st1.setInt(1, usid);
@@ -333,7 +333,7 @@ class userDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Goodbye!");
+        //System.out.println("Goodbye!");
         return sUser;
     }
     static void updateFName (int usid, String fName) {
@@ -565,5 +565,44 @@ class userDB {
             } // end finally try
         } // end try
         System.out.println("Attempt end!");
+    }
+    static void deleteUser (int usid) {
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        try {
+            // STEP 1: Register JDBC driver
+            Class.forName(JDBC_DRIVER);
+
+            // STEP 2: Open a connection
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            // STEP 3: Execute a query
+
+            String delete = "DELETE FROM USERS " + "WHERE ID = ?";
+            st1 = conn.prepareStatement(delete);
+            st1.setInt(1, usid);
+            st1.executeUpdate();
+            // STEP 5: Clean-up environment
+
+        } catch(SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch(Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            // finally block used to close resources
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            } // end finally try
+        } // end try
+        System.out.println("Goodbye!");
     }
 }

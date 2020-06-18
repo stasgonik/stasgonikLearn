@@ -133,8 +133,8 @@ class accountDB {
 
             // STEP 3: Execute a query
 
-            String sql = "INSERT INTO ACCOUNT (USID, CRID, MONEY, SUM) " +
-                    "VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO ACCOUNT (USID, CRID, MONEY) " +
+                    "VALUES (?, ?, ?)";
             String sqlSearch1 = "SELECT ID FROM USERS WHERE FIRST_NAME=? AND SECOND_NAME=? AND LAST_NAME=?" +
                     " AND AGE=?";
             String sqlSearch2 = "SELECT ID FROM CURRENCY WHERE NAME=?";
@@ -169,7 +169,6 @@ class accountDB {
             st1.setInt(2, CRID);
 
             st1.setDouble(3, newAccount.getMoney());
-            st1.setDouble(4, newAccount.currentSum());
 
             st1.execute();
 
@@ -366,5 +365,105 @@ class accountDB {
             } // end finally try
         } // end try
         System.out.println("Attempt end!");
+    }
+    static void viewAccounts () {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+        // STEP 1: Register JDBC driver
+        Class.forName(JDBC_DRIVER);
+
+        // STEP 2: Open a connection
+        System.out.println("Connecting to database...");
+        conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+        // STEP 3: Execute a query
+        System.out.println("Connected database successfully...");
+        stmt = conn.createStatement();
+        String sql = "SELECT ID, USID, CRID, MONEY FROM ACCOUNT";
+        ResultSet rs = stmt.executeQuery(sql);
+
+        // STEP 4: Extract data from result set
+        while(rs.next()) {
+            // Retrieve by column name
+            int id  = rs.getInt("ID");
+            int usid = rs.getInt("USID");
+            user usV = userDB.userFromDB(usid);
+            int crid = rs.getInt("CRID");
+            currency curV = currencyDB.currencyFromDB(crid);
+            double money = rs.getDouble("MONEY");
+
+            // Display values
+            System.out.print("AccountID: " + id);
+            System.out.print(", First name: " + usV.getFirstName());
+            System.out.print(", Second name: " + usV.getSecondName());
+            System.out.print(", Last name: " + usV.getFamilyName());
+            System.out.print(", Age: " + usV.getAge());
+            System.out.print(", Phone number: " + usV.getNumber());
+            System.out.print(", CurrencyName: " + curV.getName());
+            System.out.println(", Money: " + money);
+        }
+        // STEP 5: Clean-up environment
+        rs.close();
+    } catch(SQLException se) {
+        // Handle errors for JDBC
+        se.printStackTrace();
+    } catch(Exception e) {
+        // Handle errors for Class.forName
+        e.printStackTrace();
+    } finally {
+        // finally block used to close resources
+        try {
+            if(stmt!=null) stmt.close();
+        } catch(SQLException se2) {
+        } // nothing we can do
+        try {
+            if(conn!=null) conn.close();
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } // end finally try
+    } // end try
+        System.out.println("Goodbye!");
+}
+    static void deleteAccount (int acid) {
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        try {
+            // STEP 1: Register JDBC driver
+            Class.forName(JDBC_DRIVER);
+
+            // STEP 2: Open a connection
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            // STEP 3: Execute a query
+            System.out.println("Connected database successfully...");
+
+
+            String delete = "DELETE FROM ACCOUNT " + "WHERE id = ?";
+            st1 = conn.prepareStatement(delete);
+            st1.setInt(1, acid);
+            st1.executeUpdate();
+            // STEP 5: Clean-up environment
+
+        } catch(SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch(Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            // finally block used to close resources
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            } // end finally try
+        } // end try
+        System.out.println("Goodbye!");
     }
 }

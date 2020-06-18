@@ -163,11 +163,11 @@ class currencyDB {
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
-            System.out.println("Connecting to database...");
+            //System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             // STEP 3: Execute a query
-            System.out.println("Connected database successfully...");
+            //System.out.println("Connected database successfully...");
             String sql = "SELECT NAME, VALUE FROM CURRENCY WHERE ID=?";
             //stmt = conn.createStatement();
             //ResultSet rs = stmt.executeQuery(sql);
@@ -216,7 +216,7 @@ class currencyDB {
                 se.printStackTrace();
             } // end finally try
         } // end try
-        System.out.println("Goodbye!");
+        //System.out.println("Goodbye!");
         return cur;
     }
 }
