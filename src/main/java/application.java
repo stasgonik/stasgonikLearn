@@ -13,9 +13,10 @@ public class application {
                 System.out.println("11. Create new account.");
                 System.out.println("12. Change currency value.");
                 System.out.println("13. Update account detail.");
-                System.out.println("14. Delete account.");
+                System.out.println("14. Delete account and user.");
                 System.out.println("15. Add new currency to DB.");
                 System.out.println("16. View all currencies.");
+                System.out.println("17. Delete currency.");
                 System.out.println("1Q. Exit.");
                 switch (sc.nextLine().toLowerCase()) {
                     case "11" :
@@ -105,12 +106,38 @@ public class application {
                     case "15" :
                         System.out.println("List of currencies in DB:");
                         currencyDB.viewCurrency();
-                        System.out.println("Set new currency!");
-                        currency.createCurrency();
+                        System.out.println("Are you want to create new currency (Y/N)");
+                        String choice = sc.nextLine().toLowerCase();
+                        if (choice.equals("y") || choice.equals("yes")) {
+                            System.out.println("Set new currency!");
+                            currency.createCurrency();
+                        }
+                        else if (choice.equals("n") || choice.equals("no")) {
+                            System.out.println("OK.");
+                        }
+                        else {
+                            System.out.println("We will count this as No.");
+                        }
                         break;
                     case "16" :
                         System.out.println("List of currencies in DB:");
                         currencyDB.viewCurrency();
+                        break;
+                    case  "17" :
+                        currencyDB.viewCurrency();
+                        System.out.println("Are you sure, that you want to delete currency? (Y/N)");
+                        choice = sc.nextLine().toLowerCase();
+                        if (choice.equals("y") || choice.equals("yes")) {
+                            System.out.println("Set ID of account to delete:");
+                            int crid = sc.nextInt();
+                            currencyDB.deleteCurrency(crid);
+                        }
+                        else if (choice.equals("n") || choice.equals("no")) {
+                            System.out.println("OK.");
+                        }
+                        else {
+                            System.out.println("We will count this as No.");
+                        }
                         break;
                     case "1q" :
                         i++;
