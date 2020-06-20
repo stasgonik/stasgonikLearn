@@ -92,6 +92,38 @@ public class account {
                 + accountCurrency.getName() + " ( In UAH : " +
                 currentSum() + " )";
     }
+    public static void transferMoney (double trMoney, int acidFrom, int acidTo) {
+        account transferFrom = accountDB.accountFromDB(acidFrom);
+        account transferTo = accountDB.accountFromDB(acidTo);
+        //Integer check = null;
+        if (transferFrom.getMoney() < trMoney) {
+            System.out.println("Insufficient sum on account.");
+        }
+        else  if (trMoney == 0) {
+            System.out.println("Restricted operation : Transfer '0'.");
+        }
+        else if (trMoney < 0) {
+            System.out.println("Restricted operation : Transfer negative sum.");
+        }
+        else if (acidFrom == acidTo) {
+            System.out.println("Restricted operation : Transfer to self.");
+        }
+        //else if (transferFrom.getMoney() == check) {
+        //    System.out.println("Restricted operation : Sending account do not exist.");
+        //}
+        //else if (transferTo.getMoney() == check) {
+        //    System.out.println("Restricted operation : Transfer account do not exist.");
+        //}
+        else {
+            double trSum = trMoney * transferFrom.getAccountCurrency().getValue();
+            double outMoney = trSum / transferTo.getAccountCurrency().getValue();
+            transferTo.setMoney(transferTo.getMoney() + outMoney);
+            transferFrom.setMoney(transferFrom.getMoney() - trMoney);
+            accountDB.updateMoney(acidFrom, transferFrom.getMoney());
+            accountDB.updateMoney(acidTo, transferTo.getMoney());
+        }
+
+    }
 }
 class numberValidator {
     private Pattern pattern;
