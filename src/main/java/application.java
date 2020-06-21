@@ -11,24 +11,24 @@ public class application {
         try {
             do {
                 System.out.println("Please choose Your next action(type number):");
-                System.out.println("11. Create new account.");
-                System.out.println("12. Change currency value.");
-                System.out.println("13. Update account detail.");
-                System.out.println("14. Delete account and user.");
-                System.out.println("15. Add new currency to DB.");
-                System.out.println("16. View all currencies.");
-                System.out.println("17. Delete currency.");
-                System.out.println("18. Transfer money.");
+                System.out.println("1. Create new account.");
+                System.out.println("2. Change currency value.");
+                System.out.println("3. Update account detail.");
+                System.out.println("4. Delete account and user.");
+                System.out.println("5. Add new currency to DB.");
+                System.out.println("6. View all currencies.");
+                System.out.println("7. Delete currency.");
+                System.out.println("8. Transfer money.");
+                System.out.println("9. Take credit.");
                 System.out.println("1Q. Exit.");
                 switch (sc.nextLine().toLowerCase()) {
-                    case "11" :
+                    case "1" :
                         account newAccount = account.createAccount();
-                        System.out.println(newAccount.toString());
-                        System.out.println("Type anything to out.");
-                        String await = sc.nextLine();
+                        System.out.printf(newAccount.toString());
+
                         break;
 
-                    case "12" :
+                    case "2" :
                         currency cur = currency.chooseCurrency();
                         //if (cur.getValue() == check) {
                         //    System.out.println("Currency do not exist.");
@@ -43,13 +43,11 @@ public class application {
                                 cur.setValue(newValue);
                                 currencyDB.currencyUpdate(cur);
                                 currencyDB.viewCurrency();
-                                System.out.println("Type anything to out.");
-                                await = sc.nextLine();
                             }
                         //}
                         break;
 
-                    case "13" :
+                    case "3" :
                         accountDB.viewAccounts();
                         System.out.println("Set ID for update:");
                         int acid = sc.nextInt();
@@ -61,7 +59,7 @@ public class application {
                             int usid = accountDB.usidFromDB(acid);
                             do {
                                 account changed = accountDB.accountFromDB(acid);
-                                System.out.println(changed.toString());
+                                System.out.printf(changed.toString());
                                 System.out.println("What do you want to change(type number):");
                                 System.out.println("131. First name.");
                                 System.out.println("132. Second name.");
@@ -107,7 +105,7 @@ public class application {
                             while (k==0);
                         //}
                         break;
-                    case "14" :
+                    case "4" :
                         k = 0;
                         do {
                             accountDB.viewAccounts();
@@ -125,15 +123,14 @@ public class application {
                                 accountDB.deleteAccount(acid);
                                 userDB.deleteUser(usidDel);
                                 accountDB.viewAccounts();
-                                System.out.println("Type anything to out.");
-                                await = sc.nextLine();
+
 
                             }
                         }
                         while (k==0);
                         break;
 
-                    case "15" :
+                    case "5" :
                         System.out.println("List of currencies in DB:");
                         currencyDB.viewCurrency();
                         System.out.println("Are you want to create new currency (Y/N)");
@@ -149,13 +146,12 @@ public class application {
                             System.out.println("We will count this as No.");
                         }
                         break;
-                    case "16" :
+                    case "6" :
                         System.out.println("List of currencies in DB:");
                         currencyDB.viewCurrency();
-                        System.out.println("Type anything to out.");
-                        await = sc.nextLine();
+
                         break;
-                    case  "17" :
+                    case  "7" :
                         currencyDB.viewCurrency();
                         System.out.println("Are you sure, that you want to delete currency? (Y/N)");
                         choice = sc.nextLine().toLowerCase();
@@ -171,7 +167,7 @@ public class application {
                             System.out.println("We will count this as No.");
                         }
                         break;
-                    case "18" :
+                    case "8" :
                         accountDB.viewAccounts();
                         System.out.println("Set id of initial account:");
                         int acidFrom = sc.nextInt();
@@ -179,16 +175,28 @@ public class application {
                         System.out.println("Set id of destination account:");
                         int acidTo = sc.nextInt();
                         System.out.println("Initial account:");
-                        System.out.println(accountDB.accountFromDB(acidFrom).toString());
+                        System.out.printf(accountDB.accountFromDB(acidFrom).toString());
                         System.out.println("Destination account:");
-                        System.out.println(accountDB.accountFromDB(acidTo).toString());
+                        System.out.printf(accountDB.accountFromDB(acidTo).toString());
                         System.out.println("Set sum of money (in initial currency), which you want to send:");
                         double trMoney = sc.nextDouble();
                         account.transferMoney(trMoney, acidFrom, acidTo);
                         accountDB.viewAccounts();
-                        System.out.println("Type anything to out.");
-                        await = sc.nextLine();
+
                         break;
+                    case "9" :
+                        accountDB.viewAccounts();
+                        System.out.println("Set ID for credited account:");
+                        acid = sc.nextInt();
+                        account credited = accountDB.accountFromDB(acid);
+                        System.out.printf(credited.toString());
+                        System.out.println("Set credit sum (in account currency)");
+                        double credit = sc.nextDouble();
+                        account.takeCredit(acid, credit);
+                        credited = accountDB.accountFromDB(acid);
+                        System.out.printf(credited.toString());
+
+
                     case "1q" :
                         i++;
                         break;
