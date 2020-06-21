@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 
 public class account {
 
-
     private user master;
     private currency accountCurrency;
     private double money;
@@ -55,7 +54,6 @@ public class account {
 
     public double currentSum() {
         return money * accountCurrency.getValue();
-
     }
     public  double loanUAH() {
         return loan * accountCurrency.getValue();
@@ -156,6 +154,32 @@ public class account {
            double newMoney = credited.getMoney() + endLoan;
            accountDB.updateMoney(acid, newMoney);
            accountDB.updateLoan(acid, endLoan);
+        }
+    }
+    public static void payCredit (int acid, double payment) {
+        account credited = accountDB.accountFromDB(acid);
+        if (credited.getLoan() <= 0) {
+            System.out.println("Attention user! You don`t have loan in Our bank. Payment not required.");
+            System.out.println("Operation terminated.");
+        }
+        else  if (payment > credited.getMoney()) {
+            System.out.println("Warning user! Your payment is larger than sum of money on your account.");
+            System.out.println("Operation terminated.");
+        }
+        else if(credited.getLoan() < payment) {
+            System.out.println("Warning user! Your payment is larger than sum of Your loan.");
+            System.out.println("Surplus money will be transferred back to your account.");
+            double nPayment = credited.getLoan();
+            credited.setLoan(0);
+            credited.setMoney(credited.getMoney() - nPayment);
+            accountDB.updateLoan(acid, credited.getLoan());
+            accountDB.updateMoney(acid, credited.getMoney());
+        }
+        else {
+            credited.setMoney(credited.getMoney() - payment);
+            credited.setLoan(credited.getLoan() - payment);
+            accountDB.updateLoan(acid, credited.getLoan());
+            accountDB.updateMoney(acid, credited.getMoney());
         }
     }
 }

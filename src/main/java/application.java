@@ -20,6 +20,7 @@ public class application {
                 System.out.println("7. Delete currency.");
                 System.out.println("8. Transfer money.");
                 System.out.println("9. Take credit.");
+                System.out.println("10. Pay credit.");
                 System.out.println("1Q. Exit.");
                 switch (sc.nextLine().toLowerCase()) {
                     case "1" :
@@ -182,8 +183,8 @@ public class application {
                         double trMoney = sc.nextDouble();
                         account.transferMoney(trMoney, acidFrom, acidTo);
                         accountDB.viewAccounts();
-
                         break;
+
                     case "9" :
                         accountDB.viewAccounts();
                         System.out.println("Set ID for credited account:");
@@ -195,7 +196,20 @@ public class application {
                         account.takeCredit(acid, credit);
                         credited = accountDB.accountFromDB(acid);
                         System.out.printf(credited.toString());
+                        break;
 
+                    case "10" :
+                        accountDB.viewAccounts();
+                        System.out.println("Set ID for credited account:");
+                        acid = sc.nextInt();
+                        credited = accountDB.accountFromDB(acid);
+                        System.out.printf(credited.toString());
+                        System.out.println("Set payment sum (in account currency)");
+                        double payment = sc.nextDouble();
+                        account.payCredit(acid, payment);
+                        credited = accountDB.accountFromDB(acid);
+                        System.out.printf(credited.toString());
+                        break;
 
                     case "1q" :
                         i++;

@@ -12,7 +12,6 @@ public class user {
     private int age;
     private double number;
 
-
     public user(String firstName, String secondName, String familyName, int age, double number) {
         this.firstName = firstName;
         this.secondName = secondName;
