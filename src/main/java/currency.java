@@ -3,7 +3,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class currency {
     private String name;
     private double value;

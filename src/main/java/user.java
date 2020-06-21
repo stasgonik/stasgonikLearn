@@ -3,8 +3,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.sql.*;
 
-
-
 public class user {
     private String firstName;
     private String secondName;

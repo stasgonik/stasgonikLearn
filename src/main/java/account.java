@@ -55,9 +55,11 @@ public class account {
     public double currentSum() {
         return money * accountCurrency.getValue();
     }
+
     public  double loanUAH() {
         return loan * accountCurrency.getValue();
     }
+
     public static account createAccount() {
         System.out.println("Starting creation of new account.");
         Scanner sc = new Scanner(System.in);
@@ -97,6 +99,7 @@ public class account {
                 currentSum() + " ),%n" + "your loan is " + loan + " " + accountCurrency.getName() + " ( In UAH : " +
                 loanUAH() + " )%n";
     }
+
     public static void transferMoney (double trMoney, int acidFrom, int acidTo) {
         account transferFrom = accountDB.accountFromDB(acidFrom);
         account transferTo = accountDB.accountFromDB(acidTo);
@@ -121,6 +124,7 @@ public class account {
             accountDB.updateMoney(acidTo, transferTo.getMoney());
         }
     }
+
     public static void takeCredit (int acid, double credit) {
         account credited = accountDB.accountFromDB(acid);
         double alreadyLoan = credited.loanUAH();
@@ -147,6 +151,7 @@ public class account {
            accountDB.updateLoan(acid, endLoan);
         }
     }
+
     public static void payCredit (int acid, double payment) {
         account credited = accountDB.accountFromDB(acid);
         if (credited.getLoan() <= 0) {
@@ -170,6 +175,18 @@ public class account {
             credited.setMoney(credited.getMoney() - payment);
             credited.setLoan(credited.getLoan() - payment);
             accountDB.updateLoan(acid, credited.getLoan());
+            accountDB.updateMoney(acid, credited.getMoney());
+        }
+    }
+
+    public static void extractPayment (int acid, double pay) {
+        account credited = accountDB.accountFromDB(acid);
+        if (credited.getMoney() < pay) {
+            System.out.println("Warning user! Your payment is larger than sum of money on your account.");
+            System.out.println("Operation terminated.");
+        }
+        else {
+            credited.setMoney(credited.getMoney() - pay);
             accountDB.updateMoney(acid, credited.getMoney());
         }
     }
