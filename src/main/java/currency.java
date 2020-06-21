@@ -37,7 +37,6 @@ public class currency {
         currency cur = new currency();
         currencyNameValidator validator = new currencyNameValidator();
         currencyNumberValidator validator2 = new currencyNumberValidator();
-
         int i = 0;
         try {
             do {
@@ -65,8 +64,6 @@ public class currency {
                 }
             }
             while (i==1);
-
-
         }
         catch (Exception ex) {
             ex.getMessage();
@@ -74,7 +71,6 @@ public class currency {
         currencyDB.currencyToDB(cur);
         return cur;
     }
-
 
     public static currency chooseCurrency() {
         currencyDB.viewCurrency();
@@ -93,23 +89,15 @@ public class currency {
 class currencyDB {
     static final String JDBC_DRIVER = "org.h2.Driver";
     static final String DB_URL = "jdbc:h2:~/test2";
-
-
     static final String USER = "sa";
     static final String PASS = "";
 
     static void currencyUpdate(currency cur) {
         Connection conn = null;
         PreparedStatement st1 = null;
-
         try{
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-            // STEP 3: Execute a query
 
             String sql = "UPDATE CURRENCY " + "SET VALUE=? WHERE NAME=?";
 
@@ -118,17 +106,13 @@ class currencyDB {
             st1.setString(2, cur.getName());
             st1.executeUpdate();
 
-            // STEP 4: Clean-up environment
             st1.close();
             conn.close();
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
                 if(st1!=null) st1.close();
             } catch(SQLException se2) {
@@ -137,58 +121,40 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
     }
     static currency currencyFromDB (int crid) {
         currency cur = new currency();
         Connection conn = null;
         PreparedStatement st1 = null;
-
-        //Statement stmt = null;
         try {
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
-            // STEP 3: Execute a query
             String sql = "SELECT NAME, VALUE FROM CURRENCY WHERE ID=?";
             st1 = conn.prepareStatement(sql);
             st1.setInt(1, crid);
             ResultSet rs = st1.executeQuery();
 
-
             String[] stringsTemp = new String[1];
             double[] doublesTemp = new double[1];
 
-            // STEP 4: Extract data from result set
             while(rs.next()) {
-                // Retrieve by column name
-
                 String curName = rs.getString("NAME");
                 stringsTemp[0] = curName;
                 double value = rs.getDouble("VALUE");
                 doublesTemp[0] = value;
-
             }
             rs.close();
             cur.setName(stringsTemp[0]);
             cur.setValue(doublesTemp[0]);
-            // STEP 5: Clean-up environment
-
-
-
 
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
                 if(st1!=null) st1.close();
             } catch(SQLException se2) {
@@ -197,45 +163,33 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
         return cur;
     }
     static void currencyToDB (currency newCurrency) {
         Connection conn = null;
         PreparedStatement st1 = null;
-
         try{
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
-            // STEP 3: Execute a query
-
-            String sql = "INSERT INTO CURRENCY (NAME, VALUE) " +
-                    "VALUES (?, ?)";
+            String sql = "INSERT INTO CURRENCY (NAME, VALUE) " + "VALUES (?, ?)";
 
             st1 = conn.prepareStatement(sql);
 
             st1.setString(1, newCurrency.getName());
             st1.setDouble(2, newCurrency.getValue());
 
-
             st1.execute();
 
-            // STEP 4: Clean-up environment
             st1.close();
             conn.close();
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
                 if(st1!=null) st1.close();
             } catch(SQLException se2) {
@@ -244,47 +198,35 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
     }
     static void viewCurrency () {
         Connection conn = null;
         Statement stmt = null;
         try {
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
-            // STEP 3: Execute a query
             stmt = conn.createStatement();
             String sql = "SELECT ID, NAME, VALUE FROM CURRENCY";
             ResultSet rs = stmt.executeQuery(sql);
 
-            // STEP 4: Extract data from result set
             while(rs.next()) {
-                // Retrieve by column name
                 int id  = rs.getInt("ID");
                 String name = rs.getString("NAME");
                 double value = rs.getDouble("VALUE");
 
-
-                // Display values
                 System.out.print("CurrencyID: " + id);
                 System.out.print(", Name: " + name);
                 System.out.println(", Value of currency: " + value);
             }
-            // STEP 5: Clean-up environment
             rs.close();
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
                 if(stmt!=null) stmt.close();
             } catch(SQLException se2) {
@@ -293,35 +235,26 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
     }
     static void deleteCurrency (int crid) {
         Connection conn = null;
         PreparedStatement st1 = null;
         try {
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-            // STEP 3: Execute a query
 
             String delete = "DELETE FROM CURRENCY " + "WHERE ID = ?";
             st1 = conn.prepareStatement(delete);
             st1.setInt(1, crid);
             st1.executeUpdate();
-            // STEP 5: Clean-up environment
 
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
                 if(st1!=null) st1.close();
             } catch(SQLException se2) {
@@ -330,8 +263,8 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
     }
 }
 class currencyNameValidator {

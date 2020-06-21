@@ -137,14 +137,12 @@ public class user {
                         us.setNumber(tempInt);
                         i++;
                     }
-
                 }
                 else {
                     System.out.println("Incorrect number format. Use only numbers!");
                 }
             }
             while (i==4);
-
         }
         catch (Exception ex) {
             ex.getMessage();
@@ -155,8 +153,7 @@ public class user {
 
     @Override
     public String toString() {
-        return familyName + " " + firstName + " " + secondName + " , age: " + age +
-             ", phone number: " + number ;
+        return familyName + " " + firstName + " " + secondName + " , age: " + age + ", phone number: " + number ;
     }
 }
 class userValidatorName {
@@ -207,23 +204,16 @@ class userPhoneValidator {
 class userDB {
     static final String JDBC_DRIVER = "org.h2.Driver";
     static final String DB_URL = "jdbc:h2:~/test2";
-
-
     static final String USER = "sa";
     static final String PASS = "";
 
     static void userToDB(user newUser) {
         Connection conn = null;
         PreparedStatement st1 = null;
-
         try{
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-            // STEP 3: Execute a query
 
             String sql = "INSERT INTO USERS (FIRST_NAME, SECOND_NAME, LAST_NAME, AGE, NUMBER) " +
                     "VALUES (?, ?, ?, ?, ?)";
@@ -238,17 +228,13 @@ class userDB {
 
             st1.execute();
 
-            // STEP 4: Clean-up environment
             st1.close();
             conn.close();
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
                 if(st1!=null) st1.close();
             } catch(SQLException se2) {
@@ -257,32 +243,25 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
     }
     static user userFromDB (int usid) {
         user sUser = new user();
         Connection conn = null;
         PreparedStatement st1 = null;
         try {
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
-            // STEP 3: Execute a query
             String sql = "SELECT FIRST_NAME, SECOND_NAME, LAST_NAME, AGE, NUMBER FROM USERS WHERE ID=?";
             st1 = conn.prepareStatement(sql);
             st1.setInt(1, usid);
             ResultSet rs = st1.executeQuery();
 
-
             String[] stringsTemp = new String[3];
             int[] intsTemp = new int[1];
             double[] doublesTemp = new double[1];
-
-            // STEP 4: Extract data from result set
 
             while (rs.next()) {
                 String fName = rs.getString("FIRST_NAME");
@@ -302,19 +281,13 @@ class userDB {
             sUser.setSecondName(stringsTemp[1]);
             sUser.setNumber(doublesTemp[0]);
 
-            // STEP 5: Clean-up environment
-
-
             rs.close();
 
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
                 if(st1!=null) st1.close();
             } catch(SQLException se2) {
@@ -323,22 +296,16 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
         return sUser;
     }
     static void updateFName (int usid, String fName) {
         Connection conn = null;
         PreparedStatement st1 = null;
-
         try{
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-            // STEP 3: Execute a query
 
             String sql = "UPDATE USERS " + "SET FIRST_NAME=? WHERE id=?";
 
@@ -347,17 +314,13 @@ class userDB {
             st1.setInt(2, usid);
             st1.executeUpdate();
 
-            // STEP 4: Clean-up environment
             st1.close();
             conn.close();
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
                 if(st1!=null) st1.close();
             } catch(SQLException se2) {
@@ -366,21 +329,15 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
     }
     static void updateSName (int usid, String sName) {
         Connection conn = null;
         PreparedStatement st1 = null;
-
         try{
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-            // STEP 3: Execute a query
 
             String sql = "UPDATE USERS " + "SET SECOND_NAME=? WHERE id=?";
 
@@ -389,17 +346,14 @@ class userDB {
             st1.setInt(2, usid);
             st1.executeUpdate();
 
-            // STEP 4: Clean-up environment
             st1.close();
             conn.close();
+
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
                 if(st1!=null) st1.close();
             } catch(SQLException se2) {
@@ -408,25 +362,15 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
-
+            }
+        }
     }
     static void updateLName (int usid, String lName) {
         Connection conn = null;
         PreparedStatement st1 = null;
-
-
         try{
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
-
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-
-            // STEP 3: Execute a query
 
             String sql = "UPDATE USERS " + "SET LAST_NAME=? WHERE id=?";
 
@@ -435,42 +379,30 @@ class userDB {
             st1.setInt(2, usid);
             st1.executeUpdate();
 
-            // STEP 4: Clean-up environment
             st1.close();
             conn.close();
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if (st1 != null) st1.close();
+            } catch (SQLException se2) {
             } // nothing we can do
             try {
-                if(conn!=null) conn.close();
-            } catch(SQLException se) {
+                if (conn != null) conn.close();
+            } catch (SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
-
+            }
+        }
     }
     static void updateAge (int usid, int age) {
         Connection conn = null;
         PreparedStatement st1 = null;
-
-
         try{
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-            // STEP 3: Execute a query
 
             String sql = "UPDATE USERS " + "SET AGE=? WHERE id=?";
 
@@ -479,14 +411,12 @@ class userDB {
             st1.setInt(2, usid);
             st1.executeUpdate();
 
-            // STEP 4: Clean-up environment
             st1.close();
             conn.close();
+
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
             // finally block used to close resources
@@ -498,21 +428,15 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
     }
     static void updateNumber (int usid, double number) {
         Connection conn = null;
         PreparedStatement st1 = null;
-
         try{
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-            // STEP 3: Execute a query
 
             String sql = "UPDATE USERS " + "SET NUMBER=? WHERE id=?";
 
@@ -521,54 +445,42 @@ class userDB {
             st1.setInt(2, usid);
             st1.executeUpdate();
 
-            // STEP 4: Clean-up environment
             st1.close();
             conn.close();
+
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if (st1 != null) st1.close();
+            } catch (SQLException se2) {
             } // nothing we can do
             try {
-                if(conn!=null) conn.close();
-            } catch(SQLException se) {
+                if (conn != null) conn.close();
+            } catch (SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
     }
     static void deleteUser (int usid) {
         Connection conn = null;
         PreparedStatement st1 = null;
         try {
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-            // STEP 3: Execute a query
 
             String delete = "DELETE FROM USERS " + "WHERE ID = ?";
             st1 = conn.prepareStatement(delete);
             st1.setInt(1, usid);
             st1.executeUpdate();
-            // STEP 5: Clean-up environment
 
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
                 if(st1!=null) st1.close();
             } catch(SQLException se2) {
@@ -577,7 +489,7 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
     }
 }

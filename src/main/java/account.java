@@ -87,7 +87,6 @@ public class account {
         catch (Exception ex) {
             ex.getMessage();
         }
-
         return Cr;
     }
 
@@ -101,7 +100,6 @@ public class account {
     public static void transferMoney (double trMoney, int acidFrom, int acidTo) {
         account transferFrom = accountDB.accountFromDB(acidFrom);
         account transferTo = accountDB.accountFromDB(acidTo);
-        //Integer check = null;
         if (transferFrom.getMoney() < trMoney) {
             System.out.println("Insufficient sum on account.");
         }
@@ -114,12 +112,6 @@ public class account {
         else if (acidFrom == acidTo) {
             System.out.println("Restricted operation : Transfer to self.");
         }
-        //else if (transferFrom.getMoney() == check) {
-        //    System.out.println("Restricted operation : Sending account do not exist.");
-        //}
-        //else if (transferTo.getMoney() == check) {
-        //    System.out.println("Restricted operation : Transfer account do not exist.");
-        //}
         else {
             double trSum = trMoney * transferFrom.getAccountCurrency().getValue();
             double outMoney = trSum / transferTo.getAccountCurrency().getValue();
@@ -128,7 +120,6 @@ public class account {
             accountDB.updateMoney(acidFrom, transferFrom.getMoney());
             accountDB.updateMoney(acidTo, transferTo.getMoney());
         }
-
     }
     public static void takeCredit (int acid, double credit) {
         account credited = accountDB.accountFromDB(acid);
@@ -201,8 +192,6 @@ class numberValidator {
 class accountDB {
     static final String JDBC_DRIVER = "org.h2.Driver";
     static final String DB_URL = "jdbc:h2:~/test2";
-
-
     static final String USER = "sa";
     static final String PASS = "";
 
@@ -210,15 +199,9 @@ class accountDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         PreparedStatement st2 = null;
-
         try {
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            // STEP 3: Execute a query
 
             String sql = "INSERT INTO ACCOUNT (USID, CRID, MONEY, LOAN) " +
                     "VALUES (?, ?, ?, ?)";
@@ -252,7 +235,6 @@ class accountDB {
             while (rs2.next()) {
                 CRID = rs2.getInt("id");
             }
-
             st1.setInt(2, CRID);
 
             st1.setDouble(3, newAccount.getMoney());
@@ -260,18 +242,14 @@ class accountDB {
 
             st1.execute();
 
-            // STEP 4: Clean-up environment
             st1.close();
             st2.close();
             conn.close();
         } catch (SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch (Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
                 if (st1 != null) st1.close();
                 if (st2 != null) st2.close();
@@ -281,21 +259,17 @@ class accountDB {
                 if (conn != null) conn.close();
             } catch (SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
     }
     static account accountFromDB (int acid) {
         account search =new account();
         Connection conn = null;
         PreparedStatement st1 = null;
         try {
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
-            // STEP 3: Execute a query
             String sql = "SELECT USID, CRID, MONEY, LOAN FROM ACCOUNT WHERE ID=?";
             st1 = conn.prepareStatement(sql);
             st1.setInt(1, acid);
@@ -304,10 +278,7 @@ class accountDB {
             int[] intsTemp = new int[2];
             double[] doublesTemp = new double[2];
 
-            // STEP 4: Extract data from result set
             while(rs.next()) {
-                // Retrieve by column name
-
                 int usid = rs.getInt("USID");
                 intsTemp[0] = usid;
                 int crid = rs.getInt("CRID");
@@ -316,26 +287,19 @@ class accountDB {
                 doublesTemp[0] = money;
                 double loan = rs.getDouble("LOAN");
                 doublesTemp[1] = loan;
-
             }
             search.setMoney(doublesTemp[0]);
             search.setLoan(doublesTemp[1]);
             search.setMaster(userDB.userFromDB(intsTemp[0]));
             search.setAccountCurrency(currencyDB.currencyFromDB(intsTemp[1]));
 
-            // STEP 5: Clean-up environment
-
-
             rs.close();
 
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
                 if(st1!=null) st1.close();
             } catch(SQLException se2) {
@@ -344,8 +308,8 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
         return search;
     }
     static int usidFromDB (int acid) {
@@ -353,13 +317,9 @@ class accountDB {
         PreparedStatement st1 = null;
         int usid = 0;
         try {
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
-            // STEP 3: Execute a query
             String sql = "SELECT USID FROM ACCOUNT WHERE ID=?";
             st1 = conn.prepareStatement(sql);
             st1.setInt(1, acid);
@@ -367,31 +327,18 @@ class accountDB {
 
             int[] intsTemp = new int[1];
 
-
-            // STEP 4: Extract data from result set
             while(rs.next()) {
-                // Retrieve by column name
-
                 usid = rs.getInt("USID");
                 intsTemp[0] = usid;
-
-
             }
             usid = intsTemp[0];
-
-            // STEP 5: Clean-up environment
-
-
             rs.close();
 
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
                 if(st1!=null) st1.close();
             } catch(SQLException se2) {
@@ -400,22 +347,16 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
         return usid;
     }
     static void updateMoney (int acid, double newMoney) {
         Connection conn = null;
         PreparedStatement st1 = null;
-
         try{
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-            // STEP 3: Execute a query
 
             String sql = "UPDATE ACCOUNT " + "SET MONEY=? WHERE id=?";
 
@@ -424,17 +365,13 @@ class accountDB {
             st1.setInt(2, acid);
             st1.executeUpdate();
 
-            // STEP 4: Clean-up environment
             st1.close();
             conn.close();
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
                 if(st1!=null) st1.close();
             } catch(SQLException se2) {
@@ -443,27 +380,21 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
     }
     static void viewAccounts () {
         Connection conn = null;
         Statement stmt = null;
         try {
-        // STEP 1: Register JDBC driver
         Class.forName(JDBC_DRIVER);
-
-        // STEP 2: Open a connection
         conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
-        // STEP 3: Execute a query
         stmt = conn.createStatement();
         String sql = "SELECT ID, USID, CRID, MONEY FROM ACCOUNT";
         ResultSet rs = stmt.executeQuery(sql);
 
-        // STEP 4: Extract data from result set
         while(rs.next()) {
-            // Retrieve by column name
             int id  = rs.getInt("ID");
             int usid = rs.getInt("USID");
             user usV = userDB.userFromDB(usid);
@@ -471,7 +402,6 @@ class accountDB {
             currency curV = currencyDB.currencyFromDB(crid);
             double money = rs.getDouble("MONEY");
 
-            // Display values
             System.out.print("AccountID: " + id);
             System.out.print(", First name: " + usV.getFirstName());
             System.out.print(", Second name: " + usV.getSecondName());
@@ -481,16 +411,12 @@ class accountDB {
             System.out.print(", CurrencyName: " + curV.getName());
             System.out.println(", Money: " + money);
         }
-        // STEP 5: Clean-up environment
         rs.close();
     } catch(SQLException se) {
-        // Handle errors for JDBC
         se.printStackTrace();
     } catch(Exception e) {
-        // Handle errors for Class.forName
         e.printStackTrace();
     } finally {
-        // finally block used to close resources
         try {
             if(stmt!=null) stmt.close();
         } catch(SQLException se2) {
@@ -499,36 +425,26 @@ class accountDB {
             if(conn!=null) conn.close();
         } catch(SQLException se) {
             se.printStackTrace();
-        } // end finally try
-    } // end try
+        }
+    }
 }
     static void deleteAccount (int acid) {
         Connection conn = null;
         PreparedStatement st1 = null;
         try {
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-            // STEP 3: Execute a query
-
 
             String delete = "DELETE FROM ACCOUNT " + "WHERE id = ?";
             st1 = conn.prepareStatement(delete);
             st1.setInt(1, acid);
             st1.executeUpdate();
-            // STEP 5: Clean-up environment
 
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
                 if(st1!=null) st1.close();
             } catch(SQLException se2) {
@@ -537,21 +453,15 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
     }
     static void updateLoan (int acid, double newLoan) {
         Connection conn = null;
         PreparedStatement st1 = null;
-
         try{
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-            // STEP 3: Execute a query
 
             String sql = "UPDATE ACCOUNT " + "SET LOAN=? WHERE id=?";
 
@@ -560,17 +470,13 @@ class accountDB {
             st1.setInt(2, acid);
             st1.executeUpdate();
 
-            // STEP 4: Clean-up environment
             st1.close();
             conn.close();
         } catch(SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
         } catch(Exception e) {
-            // Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
                 if(st1!=null) st1.close();
             } catch(SQLException se2) {
@@ -579,8 +485,7 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-            } // end finally try
-        } // end try
+            }
+        }
     }
-
 }

@@ -7,7 +7,6 @@ public class application {
 
         Scanner sc = new Scanner(System.in);
         int i = 0;
-        //Integer check = null;
         try {
             do {
                 System.out.println("Please choose Your next action(type number):");
@@ -26,15 +25,10 @@ public class application {
                     case "1" :
                         account newAccount = account.createAccount();
                         System.out.printf(newAccount.toString());
-
                         break;
 
                     case "2" :
                         currency cur = currency.chooseCurrency();
-                        //if (cur.getValue() == check) {
-                        //    System.out.println("Currency do not exist.");
-                        //}
-                        //else {
                             System.out.println("Set new value for this currency:");
                             double newValue = sc.nextDouble();
                             if (newValue < 0) {
@@ -45,17 +39,12 @@ public class application {
                                 currencyDB.currencyUpdate(cur);
                                 currencyDB.viewCurrency();
                             }
-                        //}
                         break;
 
                     case "3" :
                         accountDB.viewAccounts();
                         System.out.println("Set ID for update:");
                         int acid = sc.nextInt();
-                        //if (accountDB.accountFromDB(acid).getMoney() == check) {
-                        //    System.out.println("Account do not exist.");
-                        //}
-                        //else {
                             int k = 0;
                             int usid = accountDB.usidFromDB(acid);
                             do {
@@ -104,7 +93,6 @@ public class application {
                                 }
                             }
                             while (k==0);
-                        //}
                         break;
                     case "4" :
                         k = 0;
@@ -150,7 +138,6 @@ public class application {
                     case "6" :
                         System.out.println("List of currencies in DB:");
                         currencyDB.viewCurrency();
-
                         break;
                     case  "7" :
                         currencyDB.viewCurrency();
@@ -168,6 +155,7 @@ public class application {
                             System.out.println("We will count this as No.");
                         }
                         break;
+
                     case "8" :
                         accountDB.viewAccounts();
                         System.out.println("Set id of initial account:");
@@ -221,13 +209,10 @@ public class application {
                 }
             }
             while (i==0);
-
         }
         catch (Exception ex) {
             ex.getMessage();
         }
-
     }
-
-    }
+}
 
