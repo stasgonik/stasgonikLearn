@@ -67,7 +67,7 @@ public class account {
         try {
             currency cur = currency.chooseCurrency();
             user user1 = user.createUser();
-            numberValidator validator = new numberValidator();
+            validators.NumberValidator validator = new validators.NumberValidator();
             int i =0;
             do {
                 System.out.println("Enter sum of money for test account:");
@@ -191,7 +191,7 @@ public class account {
         }
     }
 }
-class numberValidator {
+/*class numberValidator {
     private Pattern pattern;
     private Matcher matcher;
 
@@ -205,7 +205,7 @@ class numberValidator {
 
         return matcher.matches();
     }
-}
+}*/
 class accountDB {
     static final String JDBC_DRIVER = "org.h2.Driver";
     static final String DB_URL = "jdbc:h2:~/test2";
@@ -400,7 +400,7 @@ class accountDB {
             }
         }
     }
-    static void viewAccounts () {
+    /*static void viewAccounts () {
         Connection conn = null;
         Statement stmt = null;
         try {
@@ -444,7 +444,7 @@ class accountDB {
             se.printStackTrace();
         }
     }
-}
+}*/
     static void deleteAccount (int acid) {
         Connection conn = null;
         PreparedStatement st1 = null;
@@ -496,6 +496,64 @@ class accountDB {
         } finally {
             try {
                 if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+    static void viewAccounts () {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            stmt = conn.createStatement();
+            String sql = "SELECT ID, LAST_NAME, FIRST_NAME, SECOND_NAME, AGE," +
+                    " NUMBER, MONEY, LOAN, NAME, VALUE, CURRENT_SUM FROM ACC_VIEW";
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while(rs.next()) {
+                int id  = rs.getInt("ID");
+                String last = rs.getString("LAST_NAME");
+                String first = rs.getString("FIRST_NAME");
+                String second = rs.getString("SECOND_NAME");
+                int age = rs.getInt("AGE");
+                double number = rs.getDouble("NUMBER");
+                double money = rs.getDouble("MONEY");
+                double loan = rs.getDouble("LOAN");
+                String curName = rs.getString("NAME");
+                double value = rs.getDouble("VALUE");
+                double sumUAH = rs.getDouble("CURRENT_SUM");
+
+                System.out.println("");
+                System.out.println("                                              | _---_ |");
+                System.out.print("AccountID: " + id);
+                System.out.print(", Last name: " + last);
+                System.out.print(", First name: " + first);
+                System.out.print(", Second name: " + second);
+                System.out.print(", Age: " + age);
+                System.out.println(", Phone number: " + number);
+                System.out.print("     Money: " + money);
+                System.out.print(", Loan: " + loan);
+                System.out.print(", Currency name: " + curName);
+                System.out.print(", Currency value: " + value);
+                System.out.println(", Sum in UAH: " + sumUAH);
+
+
+            }
+            rs.close();
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(stmt!=null) stmt.close();
             } catch(SQLException se2) {
             } // nothing we can do
             try {

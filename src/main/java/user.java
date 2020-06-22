@@ -64,9 +64,8 @@ public class user {
     public static user createUser() {
         Scanner sc = new Scanner(System.in);
         user us = new user();
-        userValidatorName validator = new userValidatorName();
-        userNumberValidator validator2 = new userNumberValidator();
-        userPhoneValidator validator3 = new userPhoneValidator();
+        validators.NameValidator validator = new validators.NameValidator();
+        validators.NumberValidator validator2 = new validators.NumberValidator();
 
         int i = 0;
         try {
@@ -122,17 +121,17 @@ public class user {
             do {
                 System.out.println("Enter your phone number (Format: 3806788888888):");
                 String temp = sc.nextLine();
-                if (validator3.validate(temp)) {
-                    double tempInt = Double.parseDouble (temp);
+                if (validator2.validate(temp)) {
+                    double tempDouble = Double.parseDouble (temp);
                     double check = 100000000000L;
-                    if (tempInt < check) {
+                    if (tempDouble < check) {
                         System.out.println("Need your Ukrainian number in 12 digit format!");
                     }
-                    else if (tempInt/10 > check) {
+                    else if (tempDouble/10 > check) {
                         System.out.println("Need your Ukrainian number in 12 digit format!");
                     }
                     else {
-                        us.setNumber(tempInt);
+                        us.setNumber(tempDouble);
                         i++;
                     }
                 }
@@ -154,7 +153,7 @@ public class user {
         return familyName + " " + firstName + " " + secondName + " , age: " + age + ", phone number: " + number ;
     }
 }
-class userValidatorName {
+/*class userValidatorName {
     private Pattern pattern;
     private Matcher matcher;
 
@@ -198,7 +197,7 @@ class userPhoneValidator {
 
         return matcher.matches();
     }
-}
+}*/
 class userDB {
     static final String JDBC_DRIVER = "org.h2.Driver";
     static final String DB_URL = "jdbc:h2:~/test2";

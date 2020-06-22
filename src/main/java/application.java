@@ -28,22 +28,50 @@ public class application {
 
                     case "2" :
                         currency cur = currency.chooseCurrency();
+                        validators.NumberValidator validatorN = new validators.NumberValidator();
+                        double newValue = 0;
+                        int m = 0;
+                        do {
                             System.out.println("Set new value for this currency:");
-                            double newValue = sc.nextDouble();
-                            if (newValue < 0) {
-                                System.out.println("Restricted operation : Negative or 0 value currency.");
+                            String temp = sc.nextLine();
+                            if (validatorN.validate(temp)) {
+                                newValue = Double.parseDouble(temp);
+                                m++;
                             }
                             else {
-                                cur.setValue(newValue);
-                                currencyDB.currencyUpdate(cur);
-                                currencyDB.viewCurrency();
+                                System.out.println("Incorrect currency value format. Use only numbers!");
                             }
+                        }
+                        while (m==0);
+                        if (newValue < 0) {
+                            System.out.println("Restricted operation : Negative or 0 value currency.");
+                        }
+                        else {
+                            cur.setValue(newValue);
+                            currencyDB.currencyUpdate(cur);
+                            currencyDB.viewCurrency();
+                        }
                         break;
 
                     case "3" :
                         accountDB.viewAccounts();
-                        System.out.println("Set ID for update:");
-                        int acid = sc.nextInt();
+                        int acid = 0;
+                        validatorN = new validators.NumberValidator();
+                        validators.NameValidator validatorW = new validators.NameValidator();
+                        m = 0;
+                        do {
+                            System.out.println("Set ID for update:");
+                            String temp = sc.nextLine();
+                            if (validatorN.validate(temp)) {
+                                acid = Integer.parseInt (temp);
+                                m++;
+                            }
+                            else {
+                                System.out.println("Incorrect ID format. Use only numbers!");
+                            }
+                        }
+                        while (m==0);
+
                             int k = 0;
                             int usid = accountDB.usidFromDB(acid);
                             do {
@@ -59,24 +87,97 @@ public class application {
                                 System.out.println("13Q. Exit.");
                                 switch (sc.nextLine().toLowerCase()) {
                                     case "131" :
-                                        System.out.println("Set new first name:");
-                                        userDB.updateFName(usid, sc.nextLine());
+                                        m = 0;
+                                        do {
+                                            System.out.println("Set new first name:");
+                                            String temp = sc.nextLine();
+                                            if (validatorW.validate(temp)) {
+                                                userDB.updateFName(usid, temp);
+                                                m++;
+                                            }
+                                            else {
+                                                System.out.println("Incorrect name format." +
+                                                        " Use only latin letters or {-} !");
+                                            }
+                                        }
+                                        while (m==0);
                                         break;
                                     case "132" :
-                                        System.out.println("Set new second name:");
-                                        userDB.updateSName(usid, sc.nextLine());
+                                        m = 0;
+                                        do {
+                                            System.out.println("Set new second name:");
+                                            String temp = sc.nextLine();
+                                            if (validatorW.validate(temp)) {
+                                                userDB.updateSName(usid, temp);
+                                                m++;
+                                            }
+                                            else {
+                                                System.out.println("Incorrect name format." +
+                                                        " Use only latin letters or {-} !");
+                                            }
+                                        }
+                                        while (m==0);
                                         break;
                                     case "133" :
-                                        System.out.println("Set new last name:");
-                                        userDB.updateLName(usid, sc.nextLine());
+                                        m = 0;
+                                        do {
+                                            System.out.println("Set new last name:");
+                                            String temp = sc.nextLine();
+                                            if (validatorW.validate(temp)) {
+                                                userDB.updateLName(usid, temp);
+                                                m++;
+                                            }
+                                            else {
+                                                System.out.println("Incorrect name format." +
+                                                        " Use only latin letters or {-} !");
+                                            }
+                                        }
+                                        while (m==0);
                                         break;
                                     case "134" :
-                                        System.out.println("Set new age:");
-                                        userDB.updateAge(usid, sc.nextInt());
+                                        m = 0;
+                                        do {
+                                            System.out.println("Set new age:");
+                                            String temp = sc.nextLine();
+                                            if (validatorN.validate(temp)) {
+                                                int tempInt = Integer.parseInt (temp);
+                                                userDB.updateAge(usid, tempInt);
+                                                m++;
+                                            }
+                                            else {
+                                                System.out.println("Incorrect age format. Use only numbers!");
+                                            }
+                                        }
+                                        while (m==0);
                                         break;
                                     case "135" :
-                                        System.out.println("Set new phone number:");
-                                        userDB.updateNumber(usid, sc.nextDouble());
+                                        m = 0;
+                                        do {
+                                            System.out.println("Set new phone number:");
+                                            String temp = sc.nextLine();
+                                            if (validatorN.validate(temp)) {
+                                                double tempDouble = Double.parseDouble (temp);
+                                                double check = 100000000000L;
+                                                if (tempDouble < check) {
+                                                    System.out.println("Need your Ukrainian" +
+                                                            " number in 12 digit format!");
+                                                }
+                                                else if (tempDouble/10 > check) {
+                                                    System.out.println("Need your Ukrainian" +
+                                                            " number in 12 digit format!");
+                                                }
+                                                else {
+                                                    userDB.updateNumber(usid, tempDouble);
+                                                    i++;
+                                                }
+                                                m++;
+                                            }
+                                            else {
+                                                System.out.println("Incorrect phone number format." +
+                                                        " Must be 12-digit number!");
+                                            }
+                                        }
+                                        while (m==0);
                                         break;
                                     //case "136" :
                                         //System.out.println("Set new money value:");
@@ -95,24 +196,31 @@ public class application {
                         break;
                     case "4" :
                         k = 0;
+                        acid = 0;
+                        validatorN = new validators.NumberValidator();
                         do {
                             accountDB.viewAccounts();
-                            System.out.println("Set ID of account to delete (or type 0 to quit):");
-                            acid = sc.nextInt();
-                            if (acid == 0) {
+                            m = 0;
+                            do {
+                                System.out.println("Set ID of account to delete (or type 0 to quit):");
+                                String temp = sc.nextLine();
+                                if (validatorN.validate(temp)) {
+                                    acid = Integer.parseInt(temp);
+                                    m++;
+                                }
+                                else {
+                                    System.out.println("Incorrect ID format. Use only numbers!");
+                                }
+                            }
+                            while (m==0);
+                            if (acid < 0) {
                                 k++;
                             }
-                            //else if (accountDB.accountFromDB(acid).getMoney() == check) {
-                            //    System.out.println("This account already do no exist.");
-                            //    k++;
-                            //}
                             else {
                                 int usidDel = accountDB.usidFromDB(acid);
                                 accountDB.deleteAccount(acid);
                                 userDB.deleteUser(usidDel);
                                 accountDB.viewAccounts();
-
-
                             }
                         }
                         while (k==0);
@@ -143,8 +251,22 @@ public class application {
                         System.out.println("Are you sure, that you want to delete currency? (Y/N)");
                         choice = sc.nextLine().toLowerCase();
                         if (choice.equals("y") || choice.equals("yes")) {
+                            validatorN = new validators.NumberValidator();
                             System.out.println("Set ID of account to delete:");
-                            int crid = sc.nextInt();
+                            int crid = 0;
+                            m = 0;
+                            do {
+                                System.out.println("Set ID of account to delete:");
+                                String temp = sc.nextLine();
+                                if (validatorN.validate(temp)) {
+                                    crid = Integer.parseInt (temp);
+                                    m++;
+                                }
+                                else {
+                                    System.out.println("Incorrect ID format. Use only numbers!");
+                                }
+                            }
+                            while (m==0);
                             currencyDB.deleteCurrency(crid);
                         }
                         else if (choice.equals("n") || choice.equals("no")) {

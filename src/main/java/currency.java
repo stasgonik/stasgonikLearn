@@ -34,8 +34,8 @@ public class currency {
     public static currency createCurrency() {
         Scanner sc = new Scanner(System.in);
         currency cur = new currency();
-        currencyNameValidator validator = new currencyNameValidator();
-        currencyNumberValidator validator2 = new currencyNumberValidator();
+        validators.NameValidator validator = new validators.NameValidator();
+        validators.NumberValidator validator2 = new validators.NumberValidator();
         int i = 0;
         try {
             do {
@@ -72,10 +72,32 @@ public class currency {
     }
 
     public static currency chooseCurrency() {
-        currencyDB.viewCurrency();
-        System.out.println("Enter currency ID :");
-        Scanner sc = new Scanner(System.in);
-        int crid = sc.nextInt();
+        int crid = 0;
+        try {
+            currencyDB.viewCurrency();
+            System.out.println("Enter currency ID :");
+            Scanner sc = new Scanner(System.in);
+            validators.NumberValidator validator = new validators.NumberValidator();
+            int i = 0;
+            do {
+                System.out.println("Enter value of currency:");
+                String temp = sc.nextLine();
+                if (validator.validate(temp)) {
+                    int tempInt = Integer.parseInt (temp);
+                    crid = tempInt;
+                    i++;
+                }
+                else {
+                    System.out.println("Incorrect ID format. Use only numbers!");
+                }
+            }
+            while (i==0);
+
+
+        }
+        catch (Exception ex) {
+            ex.getMessage();
+        }
         currency cur = currencyDB.currencyFromDB(crid);
         return cur;
     }
@@ -266,7 +288,7 @@ class currencyDB {
         }
     }
 }
-class currencyNameValidator {
+/*class currencyNameValidator {
     private Pattern pattern;
     private Matcher matcher;
 
@@ -295,7 +317,7 @@ class currencyNumberValidator {
 
         return matcher.matches();
     }
-}
+}*/
 
 
 
