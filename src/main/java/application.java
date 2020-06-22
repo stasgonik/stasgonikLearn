@@ -252,11 +252,10 @@ public class application {
                         choice = sc.nextLine().toLowerCase();
                         if (choice.equals("y") || choice.equals("yes")) {
                             validatorN = new validators.NumberValidator();
-                            System.out.println("Set ID of account to delete:");
                             int crid = 0;
                             m = 0;
                             do {
-                                System.out.println("Set ID of account to delete:");
+                                System.out.println("Set ID of currency to delete:");
                                 String temp = sc.nextLine();
                                 if (validatorN.validate(temp)) {
                                     crid = Integer.parseInt (temp);
@@ -278,9 +277,22 @@ public class application {
                         break;
 
                     case "8" :
+                        validatorN = new validators.NumberValidator();
                         accountDB.viewAccounts();
-                        System.out.println("Set id of initial account:");
-                        int acidFrom = sc.nextInt();
+                        int acidFrom = 0;
+                        m = 0;
+                        do {
+                            System.out.println("Set id of initial account:");
+                            String temp = sc.nextLine();
+                            if (validatorN.validate(temp)) {
+                                acidFrom = Integer.parseInt (temp);
+                                m++;
+                            }
+                            else {
+                                System.out.println("Incorrect ID format. Use only numbers!");
+                            }
+                        }
+                        while (m==0);
                         accountDB.viewAccounts();
                         System.out.println("Set id of destination account:");
                         int acidTo = sc.nextInt();
