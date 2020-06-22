@@ -1,6 +1,5 @@
 import java.util.*;
 
-
 public class application {
 
     public static void main(String[] args) {
@@ -56,7 +55,7 @@ public class application {
                                 System.out.println("133. Last name.");
                                 System.out.println("134. Age.");
                                 System.out.println("135. Phone number.");
-                                System.out.println("136. Money.");
+                                //System.out.println("136. Money.");
                                 System.out.println("13Q. Exit.");
                                 switch (sc.nextLine().toLowerCase()) {
                                     case "131" :
@@ -79,11 +78,11 @@ public class application {
                                         System.out.println("Set new phone number:");
                                         userDB.updateNumber(usid, sc.nextDouble());
                                         break;
-                                    case "136" :
-                                        System.out.println("Set new money value:");
-                                        double newM = sc.nextDouble();
-                                        accountDB.updateMoney(acid, newM);
-                                        break;
+                                    //case "136" :
+                                        //System.out.println("Set new money value:");
+                                        //double newM = sc.nextDouble();
+                                        //accountDB.updateMoney(acid, newM);
+                                        //break;
                                     case "13q" :
                                         k++;
                                         break;

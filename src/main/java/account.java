@@ -146,7 +146,7 @@ public class account {
         else {
            double tempLoan = alreadyLoan + (newLoan * 1.05);
            double endLoan = tempLoan / credited.getAccountCurrency().getValue();
-           double newMoney = credited.getMoney() + endLoan;
+           double newMoney = credited.getMoney() + newLoan;
            accountDB.updateMoney(acid, newMoney);
            accountDB.updateLoan(acid, endLoan);
         }
