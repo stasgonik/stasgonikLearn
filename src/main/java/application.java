@@ -294,39 +294,109 @@ public class application {
                         }
                         while (m==0);
                         accountDB.viewAccounts();
-                        System.out.println("Set id of destination account:");
-                        int acidTo = sc.nextInt();
+                        int acidTo = 0;
+                        do {
+                            System.out.println("Set id of destination account:");
+                            String temp = sc.nextLine();
+                            if (validatorN.validate(temp)) {
+                                acidTo = Integer.parseInt (temp);
+                                m++;
+                            }
+                            else {
+                                System.out.println("Incorrect ID format. Use only numbers!");
+                            }
+                        }
+                        while (m==1);
                         System.out.println("Initial account:");
                         System.out.printf(accountDB.accountFromDB(acidFrom).toString());
                         System.out.println("Destination account:");
                         System.out.printf(accountDB.accountFromDB(acidTo).toString());
-                        System.out.println("Set sum of money (in initial currency), which you want to send:");
-                        double trMoney = sc.nextDouble();
+                        double trMoney = 0;
+                        do {
+                            System.out.println("Set sum of money (in initial currency), which you want to send:");
+                            String temp = sc.nextLine();
+                            if (validatorN.validate(temp)) {
+                                trMoney = Double.parseDouble (temp);
+                                m++;
+                            }
+                            else {
+                                System.out.println("Incorrect money format. Use only numbers!");
+                            }
+                        }
+                        while (m==2);
                         account.transferMoney(trMoney, acidFrom, acidTo);
                         accountDB.viewAccounts();
                         break;
 
                     case "9" :
+                        validatorN = new validators.NumberValidator();
                         accountDB.viewAccounts();
-                        System.out.println("Set ID for credited account:");
-                        acid = sc.nextInt();
+                        acid = 0;
+                        m = 0;
+                        do {
+                            System.out.println("Set ID for credited account:");
+                            String temp = sc.nextLine();
+                            if (validatorN.validate(temp)) {
+                                acid = Integer.parseInt (temp);
+                                m++;
+                            }
+                            else {
+                                System.out.println("Incorrect ID format. Use only numbers!");
+                            }
+                        }
+                        while (m==0);
                         account credited = accountDB.accountFromDB(acid);
                         System.out.printf(credited.toString());
-                        System.out.println("Set credit sum (in account currency)");
-                        double credit = sc.nextDouble();
+                        double credit = 0;
+                        do {
+                            System.out.println("Set credit sum (in account currency)");
+                            String temp = sc.nextLine();
+                            if (validatorN.validate(temp)) {
+                                credit = Double.parseDouble (temp);
+                                m++;
+                            }
+                            else {
+                                System.out.println("Incorrect money format. Use only numbers!");
+                            }
+                        }
+                        while (m==1);
                         account.takeCredit(acid, credit);
                         credited = accountDB.accountFromDB(acid);
                         System.out.printf(credited.toString());
                         break;
 
                     case "10" :
+                        validatorN = new validators.NumberValidator();
                         accountDB.viewAccounts();
-                        System.out.println("Set ID for credited account:");
-                        acid = sc.nextInt();
+                        acid = 0;
+                        m = 0;
+                        do {
+                            System.out.println("Set ID for credited account:");
+                            String temp = sc.nextLine();
+                            if (validatorN.validate(temp)) {
+                                acid = Integer.parseInt (temp);
+                                m++;
+                            }
+                            else {
+                                System.out.println("Incorrect ID format. Use only numbers!");
+                            }
+                        }
+                        while (m==0);
                         credited = accountDB.accountFromDB(acid);
                         System.out.printf(credited.toString());
-                        System.out.println("Set payment sum (in account currency)");
-                        double payment = sc.nextDouble();
+                        double payment = 0;
+                        do {
+                            System.out.println("Set payment sum (in account currency)");
+                            String temp = sc.nextLine();
+                            if (validatorN.validate(temp)) {
+                                payment = Double.parseDouble (temp);
+                                m++;
+                            }
+                            else {
+                                System.out.println("Incorrect money format. Use only numbers!");
+                            }
+                        }
+                        while (m==1);
                         account.payCredit(acid, payment);
                         credited = accountDB.accountFromDB(acid);
                         System.out.printf(credited.toString());
