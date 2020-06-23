@@ -34,14 +34,14 @@ public class currency {
     public static currency createCurrency() {
         Scanner sc = new Scanner(System.in);
         currency cur = new currency();
-        validators.NameValidator validator = new validators.NameValidator();
-        validators.NumberValidator validator2 = new validators.NumberValidator();
+        validators.NameValidator nameValidator = new validators.NameValidator();
+        validators.NumberValidator numberValidator = new validators.NumberValidator();
         int i = 0;
         try {
             do {
                 System.out.println("Enter currency name:");
                 String temp = sc.nextLine();
-                if (validator.validate(temp)) {
+                if (nameValidator.validate(temp)) {
                     cur.setName(temp);
                     i++;
                 }
@@ -53,7 +53,7 @@ public class currency {
             do {
                 System.out.println("Enter value of currency:");
                 String temp = sc.nextLine();
-                if (validator2.validate(temp)) {
+                if (numberValidator.validate(temp)) {
                     double tempInt = Double.parseDouble (temp);
                     cur.setValue(tempInt);
                     i++;
@@ -75,14 +75,13 @@ public class currency {
         int crid = 0;
         try {
             currencyDB.viewCurrency();
-            System.out.println("Enter currency ID :");
             Scanner sc = new Scanner(System.in);
-            validators.NumberValidator validator = new validators.NumberValidator();
+            validators.NumberValidator numberValidator = new validators.NumberValidator();
             int i = 0;
             do {
-                System.out.println("Enter value of currency:");
+                System.out.println("Enter ID of currency:");
                 String temp = sc.nextLine();
-                if (validator.validate(temp)) {
+                if (numberValidator.validate(temp)) {
                     int tempInt = Integer.parseInt (temp);
                     crid = tempInt;
                     i++;

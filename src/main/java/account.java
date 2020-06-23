@@ -67,12 +67,12 @@ public class account {
         try {
             currency cur = currency.chooseCurrency();
             user user1 = user.createUser();
-            validators.NumberValidator validator = new validators.NumberValidator();
+            validators.NumberValidator numberValidator = new validators.NumberValidator();
             int i =0;
             do {
                 System.out.println("Enter sum of money for test account:");
                 String temp = sc.nextLine();
-                if (validator.validate(temp)) {
+                if (numberValidator.validate(temp)) {
                     int tempInt = Integer.parseInt (temp);
                     Cr.setMoney(tempInt);
                     i++;
@@ -523,14 +523,13 @@ class accountDB {
                 String first = rs.getString("FIRST_NAME");
                 String second = rs.getString("SECOND_NAME");
                 int age = rs.getInt("AGE");
-                double number = rs.getDouble("NUMBER");
+                long number = rs.getLong("NUMBER");
                 double money = rs.getDouble("MONEY");
                 double loan = rs.getDouble("LOAN");
                 String curName = rs.getString("NAME");
                 double value = rs.getDouble("VALUE");
                 double sumUAH = rs.getDouble("CURRENT_SUM");
 
-                System.out.println("");
                 System.out.println("                                              | _---_ |");
                 System.out.print("AccountID: " + id);
                 System.out.print(", Last name: " + last);
@@ -543,7 +542,7 @@ class accountDB {
                 System.out.print(", Currency name: " + curName);
                 System.out.print(", Currency value: " + value);
                 System.out.println(", Sum in UAH: " + sumUAH);
-
+                System.out.println("");
 
             }
             rs.close();

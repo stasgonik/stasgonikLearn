@@ -1,6 +1,4 @@
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.sql.*;
 
 public class user {
@@ -8,9 +6,9 @@ public class user {
     private String secondName;
     private String familyName;
     private int age;
-    private double number;
+    private long number;
 
-    public user(String firstName, String secondName, String familyName, int age, double number) {
+    public user(String firstName, String secondName, String familyName, int age, long number) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.familyName = familyName;
@@ -53,26 +51,26 @@ public class user {
         this.age = age;
     }
 
-    public double getNumber() {
+    public long getNumber() {
         return number;
     }
 
-    public void setNumber(double number) {
+    public void setNumber(long number) {
         this.number = number;
     }
 
     public static user createUser() {
         Scanner sc = new Scanner(System.in);
         user us = new user();
-        validators.NameValidator validator = new validators.NameValidator();
-        validators.NumberValidator validator2 = new validators.NumberValidator();
+        validators.NameValidator nameValidator = new validators.NameValidator();
+        validators.NumberValidator numberValidator = new validators.NumberValidator();
 
         int i = 0;
         try {
             do {
                 System.out.println("Enter first name:");
                 String temp = sc.nextLine();
-                if (validator.validate(temp)) {
+                if (nameValidator.validate(temp)) {
                     us.setFirstName(temp);
                     i++;
                 }
@@ -84,7 +82,7 @@ public class user {
             do {
                 System.out.println("Enter second name:");
                 String temp = sc.nextLine();
-                if (validator.validate(temp)) {
+                if (nameValidator.validate(temp)) {
                     us.setSecondName(temp);
                     i++;
                 }
@@ -96,7 +94,7 @@ public class user {
             do {
                 System.out.println("Enter family name:");
                 String temp = sc.nextLine();
-                if (validator.validate(temp)) {
+                if (nameValidator.validate(temp)) {
                     us.setFamilyName(temp);
                     i++;
                 }
@@ -108,7 +106,7 @@ public class user {
             do {
                 System.out.println("Enter your age:");
                 String temp = sc.nextLine();
-                if (validator2.validate(temp)) {
+                if (numberValidator.validate(temp)) {
                     int tempInt = Integer.parseInt (temp);
                     us.setAge(tempInt);
                     i++;
@@ -121,8 +119,8 @@ public class user {
             do {
                 System.out.println("Enter your phone number (Format: 3806788888888):");
                 String temp = sc.nextLine();
-                if (validator2.validate(temp)) {
-                    double tempDouble = Double.parseDouble (temp);
+                if (numberValidator.validate(temp)) {
+                    long tempDouble = Long.parseLong (temp);
                     double check = 100000000000L;
                     if (tempDouble < check) {
                         System.out.println("Need your Ukrainian number in 12 digit format!");
@@ -221,7 +219,7 @@ class userDB {
             st1.setString(2, newUser.getSecondName());
             st1.setString(3, newUser.getFamilyName());
             st1.setInt(4, newUser.getAge());
-            st1.setDouble(5, newUser.getNumber());
+            st1.setLong(5, newUser.getNumber());
 
             st1.execute();
 
@@ -258,7 +256,7 @@ class userDB {
 
             String[] stringsTemp = new String[3];
             int[] intsTemp = new int[1];
-            double[] doublesTemp = new double[1];
+            long[] longsTemp = new long[1];
 
             while (rs.next()) {
                 String fName = rs.getString("FIRST_NAME");
@@ -269,14 +267,14 @@ class userDB {
                 stringsTemp[2] = lName;
                 int age = rs.getInt("AGE");
                 intsTemp[0] = age;
-                double number = rs.getDouble("NUMBER");
-                doublesTemp[0] = number;
+                long number = rs.getLong("NUMBER");
+                longsTemp[0] = number;
             }
             sUser.setAge(intsTemp[0]);
             sUser.setFamilyName(stringsTemp[2]);
             sUser.setFirstName(stringsTemp[0]);
             sUser.setSecondName(stringsTemp[1]);
-            sUser.setNumber(doublesTemp[0]);
+            sUser.setNumber(longsTemp[0]);
 
             rs.close();
 
@@ -428,7 +426,7 @@ class userDB {
             }
         }
     }
-    static void updateNumber (int usid, double number) {
+    static void updateNumber (int usid, long number) {
         Connection conn = null;
         PreparedStatement st1 = null;
         try{
@@ -438,7 +436,7 @@ class userDB {
             String sql = "UPDATE USERS " + "SET NUMBER=? WHERE id=?";
 
             st1 = conn.prepareStatement(sql);
-            st1.setDouble(1, number);
+            st1.setLong(1, number);
             st1.setInt(2, usid);
             st1.executeUpdate();
 

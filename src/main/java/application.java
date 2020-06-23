@@ -28,13 +28,13 @@ public class application {
 
                     case "2" :
                         currency cur = currency.chooseCurrency();
-                        validators.NumberValidator validatorN = new validators.NumberValidator();
+                        validators.NumberValidator numberValidator = new validators.NumberValidator();
                         double newValue = 0;
                         int m = 0;
                         do {
                             System.out.println("Set new value for this currency:");
                             String temp = sc.nextLine();
-                            if (validatorN.validate(temp)) {
+                            if (numberValidator.validate(temp)) {
                                 newValue = Double.parseDouble(temp);
                                 m++;
                             }
@@ -56,13 +56,13 @@ public class application {
                     case "3" :
                         accountDB.viewAccounts();
                         int acid = 0;
-                        validatorN = new validators.NumberValidator();
-                        validators.NameValidator validatorW = new validators.NameValidator();
+                        numberValidator = new validators.NumberValidator();
+                        validators.NameValidator nameValidator = new validators.NameValidator();
                         m = 0;
                         do {
                             System.out.println("Set ID for update:");
                             String temp = sc.nextLine();
-                            if (validatorN.validate(temp)) {
+                            if (numberValidator.validate(temp)) {
                                 acid = Integer.parseInt (temp);
                                 m++;
                             }
@@ -91,7 +91,7 @@ public class application {
                                         do {
                                             System.out.println("Set new first name:");
                                             String temp = sc.nextLine();
-                                            if (validatorW.validate(temp)) {
+                                            if (nameValidator.validate(temp)) {
                                                 userDB.updateFName(usid, temp);
                                                 m++;
                                             }
@@ -107,7 +107,7 @@ public class application {
                                         do {
                                             System.out.println("Set new second name:");
                                             String temp = sc.nextLine();
-                                            if (validatorW.validate(temp)) {
+                                            if (nameValidator.validate(temp)) {
                                                 userDB.updateSName(usid, temp);
                                                 m++;
                                             }
@@ -123,7 +123,7 @@ public class application {
                                         do {
                                             System.out.println("Set new last name:");
                                             String temp = sc.nextLine();
-                                            if (validatorW.validate(temp)) {
+                                            if (nameValidator.validate(temp)) {
                                                 userDB.updateLName(usid, temp);
                                                 m++;
                                             }
@@ -139,7 +139,7 @@ public class application {
                                         do {
                                             System.out.println("Set new age:");
                                             String temp = sc.nextLine();
-                                            if (validatorN.validate(temp)) {
+                                            if (numberValidator.validate(temp)) {
                                                 int tempInt = Integer.parseInt (temp);
                                                 userDB.updateAge(usid, tempInt);
                                                 m++;
@@ -155,19 +155,19 @@ public class application {
                                         do {
                                             System.out.println("Set new phone number:");
                                             String temp = sc.nextLine();
-                                            if (validatorN.validate(temp)) {
-                                                double tempDouble = Double.parseDouble (temp);
+                                            if (numberValidator.validate(temp)) {
+                                                long tempLong = Long.parseLong (temp);
                                                 double check = 100000000000L;
-                                                if (tempDouble < check) {
+                                                if (tempLong < check) {
                                                     System.out.println("Need your Ukrainian" +
                                                             " number in 12 digit format!");
                                                 }
-                                                else if (tempDouble/10 > check) {
+                                                else if (tempLong/10 > check) {
                                                     System.out.println("Need your Ukrainian" +
                                                             " number in 12 digit format!");
                                                 }
                                                 else {
-                                                    userDB.updateNumber(usid, tempDouble);
+                                                    userDB.updateNumber(usid, tempLong);
                                                     i++;
                                                 }
                                                 m++;
@@ -197,14 +197,14 @@ public class application {
                     case "4" :
                         k = 0;
                         acid = 0;
-                        validatorN = new validators.NumberValidator();
+                        numberValidator = new validators.NumberValidator();
                         do {
                             accountDB.viewAccounts();
                             m = 0;
                             do {
                                 System.out.println("Set ID of account to delete (or type 0 to quit):");
                                 String temp = sc.nextLine();
-                                if (validatorN.validate(temp)) {
+                                if (numberValidator.validate(temp)) {
                                     acid = Integer.parseInt(temp);
                                     m++;
                                 }
@@ -251,13 +251,13 @@ public class application {
                         System.out.println("Are you sure, that you want to delete currency? (Y/N)");
                         choice = sc.nextLine().toLowerCase();
                         if (choice.equals("y") || choice.equals("yes")) {
-                            validatorN = new validators.NumberValidator();
+                            numberValidator = new validators.NumberValidator();
                             int crid = 0;
                             m = 0;
                             do {
                                 System.out.println("Set ID of currency to delete:");
                                 String temp = sc.nextLine();
-                                if (validatorN.validate(temp)) {
+                                if (numberValidator.validate(temp)) {
                                     crid = Integer.parseInt (temp);
                                     m++;
                                 }
@@ -277,14 +277,14 @@ public class application {
                         break;
 
                     case "8" :
-                        validatorN = new validators.NumberValidator();
+                        numberValidator = new validators.NumberValidator();
                         accountDB.viewAccounts();
                         int acidFrom = 0;
                         m = 0;
                         do {
                             System.out.println("Set id of initial account:");
                             String temp = sc.nextLine();
-                            if (validatorN.validate(temp)) {
+                            if (numberValidator.validate(temp)) {
                                 acidFrom = Integer.parseInt (temp);
                                 m++;
                             }
@@ -298,7 +298,7 @@ public class application {
                         do {
                             System.out.println("Set id of destination account:");
                             String temp = sc.nextLine();
-                            if (validatorN.validate(temp)) {
+                            if (numberValidator.validate(temp)) {
                                 acidTo = Integer.parseInt (temp);
                                 m++;
                             }
@@ -315,7 +315,7 @@ public class application {
                         do {
                             System.out.println("Set sum of money (in initial currency), which you want to send:");
                             String temp = sc.nextLine();
-                            if (validatorN.validate(temp)) {
+                            if (numberValidator.validate(temp)) {
                                 trMoney = Double.parseDouble (temp);
                                 m++;
                             }
@@ -329,14 +329,14 @@ public class application {
                         break;
 
                     case "9" :
-                        validatorN = new validators.NumberValidator();
+                        numberValidator = new validators.NumberValidator();
                         accountDB.viewAccounts();
                         acid = 0;
                         m = 0;
                         do {
                             System.out.println("Set ID for credited account:");
                             String temp = sc.nextLine();
-                            if (validatorN.validate(temp)) {
+                            if (numberValidator.validate(temp)) {
                                 acid = Integer.parseInt (temp);
                                 m++;
                             }
@@ -351,7 +351,7 @@ public class application {
                         do {
                             System.out.println("Set credit sum (in account currency)");
                             String temp = sc.nextLine();
-                            if (validatorN.validate(temp)) {
+                            if (numberValidator.validate(temp)) {
                                 credit = Double.parseDouble (temp);
                                 m++;
                             }
@@ -366,14 +366,14 @@ public class application {
                         break;
 
                     case "10" :
-                        validatorN = new validators.NumberValidator();
+                        numberValidator = new validators.NumberValidator();
                         accountDB.viewAccounts();
                         acid = 0;
                         m = 0;
                         do {
                             System.out.println("Set ID for credited account:");
                             String temp = sc.nextLine();
-                            if (validatorN.validate(temp)) {
+                            if (numberValidator.validate(temp)) {
                                 acid = Integer.parseInt (temp);
                                 m++;
                             }
@@ -388,7 +388,7 @@ public class application {
                         do {
                             System.out.println("Set payment sum (in account currency)");
                             String temp = sc.nextLine();
-                            if (validatorN.validate(temp)) {
+                            if (numberValidator.validate(temp)) {
                                 payment = Double.parseDouble (temp);
                                 m++;
                             }

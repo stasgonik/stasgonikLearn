@@ -4,7 +4,6 @@ import java.util.regex.Pattern;
 public class validators {
     static class NameValidator {
         private Pattern pattern;
-        private Matcher matcher;
 
         private static final String NAMES_PATTERN =
                 "^[_A-Za-z-\\+]+$";
@@ -12,14 +11,13 @@ public class validators {
             pattern = Pattern.compile(NAMES_PATTERN);
         }
         public boolean validate(final String hex) {
-            matcher = pattern.matcher(hex);
+            Matcher matcher = pattern.matcher(hex);
 
             return matcher.matches();
         }
     }
     static class NumberValidator {
         private Pattern pattern;
-        private Matcher matcher;
 
         private static final String NAMES_PATTERN =
                 "^[_,.0-9\\+]+$";
@@ -27,7 +25,7 @@ public class validators {
             pattern = Pattern.compile(NAMES_PATTERN);
         }
         public boolean validate(final String hex) {
-            matcher = pattern.matcher(hex);
+            Matcher matcher = pattern.matcher(hex);
 
             return matcher.matches();
         }
