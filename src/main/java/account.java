@@ -96,15 +96,24 @@ public class account {
     @Override
     public String toString() {
         return "Master of account: "  + master + ",%n" + "currency of account is " + accountCurrency +
-                ",%n" + "sum of money on account = " + money + " " + accountCurrency.getName() + " ( In UAH : " +
-                currentSum() + " ),%n" + "your loan is " + loan + " " + accountCurrency.getName() + " ( In UAH : " +
-                loanUAH() + " )%n";
+                ",%n" + "sum of money on account = %10.2f" + " " + accountCurrency.getName() + " ( In UAH : %10.2f" +
+                " ),%n" + "your loan is %10.2f" + " " + accountCurrency.getName() + " ( In UAH : %10.2f" + " )%n";
+    }
+    public void printToConsole() {
+        System.out.printf(this.toString(), money, currentSum(), loan, loanUAH());
+    }
+
+    public static void commission (double com) {
+        account bank = accountDB.accountFromDB(42);
+        bank.setMoney(bank.getMoney() + com);
+        accountDB.updateMoney(42 ,bank.getMoney());
     }
 
     public static void transferMoney (double trMoney, int acidFrom, int acidTo) {
+        double commit = 2;
         account transferFrom = accountDB.accountFromDB(acidFrom);
         account transferTo = accountDB.accountFromDB(acidTo);
-        if (transferFrom.getMoney() + 1 < trMoney) {
+        if (transferFrom.getMoney() < trMoney + commit) {
             System.out.println("Insufficient sum on account.");
         }
         else  if (trMoney == 0) {
@@ -116,6 +125,9 @@ public class account {
         else if (acidFrom == acidTo) {
             System.out.println("Restricted operation : Transfer to self.");
         }
+        else if (acidFrom <= 0 || acidTo <= 0) {
+            System.out.println("Restricted operation : Transfer by not existing accounts.");
+        }
         else if (acidTo == 42 || acidFrom == 42) {
             System.out.println("Restricted operation : Administration account involved.");
         }
@@ -123,13 +135,16 @@ public class account {
             double trSum = trMoney * transferFrom.getAccountCurrency().getValue();
             double outMoney = trSum / transferTo.getAccountCurrency().getValue();
             transferTo.setMoney(transferTo.getMoney() + outMoney);
-            transferFrom.setMoney(transferFrom.getMoney() - trMoney - 1);
+            transferFrom.setMoney(transferFrom.getMoney() - trMoney - commit);
+            commission(commit);
             accountDB.updateMoney(acidFrom, transferFrom.getMoney());
             accountDB.updateMoney(acidTo, transferTo.getMoney());
+
         }
     }
 
     public static void takeCredit (int acid, double credit) {
+        account bank = accountDB.accountFromDB(42);
         account credited = accountDB.accountFromDB(acid);
         double alreadyLoan = credited.loanUAH();
         double newLoan = credit*credited.getAccountCurrency().getValue();
@@ -150,12 +165,19 @@ public class account {
         else if (acid == 42) {
             System.out.println("Restricted operation : Administration account involved.");
         }
+        else if (bank.getMoney() < 2000000) {
+            System.out.println("Attention user! Our bank credit line unavailable.");
+            System.out.println("We will contact You when its will be available.");
+            System.out.println("Operation restricted. For more details, please, contact our support line.");
+        }
         else {
            double tempLoan = alreadyLoan + (newLoan * 1.05);
            double endLoan = tempLoan / credited.getAccountCurrency().getValue();
            double newMoney = credited.getMoney() + credit;
            accountDB.updateMoney(acid, newMoney);
            accountDB.updateLoan(acid, endLoan);
+           bank.setMoney(bank.getMoney() - newLoan);
+           accountDB.updateMoney(42, bank.getMoney());
         }
     }
 
@@ -545,16 +567,16 @@ class accountDB {
 
                 System.out.println("                                              | _---_ |");
                 System.out.print("AccountID: " + id);
-                System.out.print(", Last name: " + last);
-                System.out.print(", First name: " + first);
-                System.out.print(", Second name: " + second);
-                System.out.print(", Age: " + age);
-                System.out.println(", Phone number: " + number);
-                System.out.print("     Money: " + money);
-                System.out.print(", Loan: " + loan);
-                System.out.print(", Currency name: " + curName);
-                System.out.print(", Currency value: " + value);
-                System.out.println(", Sum in UAH: " + sumUAH);
+                System.out.print("; Last name: " + last);
+                System.out.print("; First name: " + first);
+                System.out.print("; Second name: " + second);
+                System.out.print("; Age: " + age);
+                System.out.println("; Phone number: " + number);
+                System.out.printf("     Money: %10.2f" , money);
+                System.out.printf("; Loan:  %10.2f", loan);
+                System.out.print("; Currency name: " + curName);
+                System.out.printf("; Currency value: %6.2f", value);
+                System.out.printf("; Sum in UAH: %10.2f%n", sumUAH);
                 System.out.println("");
 
             }

@@ -23,7 +23,7 @@ public class application {
                 switch (sc.nextLine().toLowerCase()) {
                     case "1" :
                         account newAccount = account.createAccount();
-                        System.out.printf(newAccount.toString());
+                        newAccount.printToConsole();
                         break;
 
                     case "2" :
@@ -102,7 +102,7 @@ public class application {
                             int usid = accountDB.usidFromDB(acid);
                             do {
                                 account changed = accountDB.accountFromDB(acid);
-                                System.out.printf(changed.toString());
+                                changed.printToConsole();
                                 System.out.println("What do you want to change(type number):");
                                 System.out.println("131. First name.");
                                 System.out.println("132. Second name.");
@@ -357,9 +357,9 @@ public class application {
                         }
                         while (m==1);
                         System.out.println("Initial account:");
-                        System.out.printf(accountDB.accountFromDB(acidFrom).toString());
+                        accountDB.accountFromDB(acidFrom).printToConsole();
                         System.out.println("Destination account:");
-                        System.out.printf(accountDB.accountFromDB(acidTo).toString());
+                        accountDB.accountFromDB(acidTo).printToConsole();
                         double trMoney = 0;
                         do {
                             System.out.println("Set sum of money (in initial currency), which you want to send:");
@@ -408,7 +408,7 @@ public class application {
                         }
                         while (m==0);
                         account credited = accountDB.accountFromDB(acid);
-                        System.out.printf(credited.toString());
+                        credited.printToConsole();
                         double credit = 0;
                         do {
                             System.out.println("Set credit sum (in account currency)");
@@ -429,7 +429,7 @@ public class application {
                         while (m==1);
                         account.takeCredit(acid, credit);
                         credited = accountDB.accountFromDB(acid);
-                        System.out.printf(credited.toString());
+                        credited.printToConsole();
                         break;
 
                     case "10" :
@@ -458,7 +458,7 @@ public class application {
                         }
                         while (m==0);
                         credited = accountDB.accountFromDB(acid);
-                        System.out.printf(credited.toString());
+                        credited.printToConsole();
                         double payment = 0;
                         do {
                             System.out.println("Set payment sum (in account currency)");
@@ -479,7 +479,7 @@ public class application {
                         while (m==1);
                         account.payCredit(acid, payment);
                         credited = accountDB.accountFromDB(acid);
-                        System.out.printf(credited.toString());
+                        credited.printToConsole();
                         break;
 
                     case "1q" :
