@@ -19,6 +19,7 @@ public class application {
                 System.out.println("8. Transfer money.");
                 System.out.println("9. Take credit.");
                 System.out.println("10. Pay credit.");
+                System.out.println("11. Change currency name.");
                 System.out.println("1Q. Exit.");
                 switch (sc.nextLine().toLowerCase()) {
                     case "1" :
@@ -43,7 +44,6 @@ public class application {
                             }
                         }
                         while (m==0);
-                        currency cur = currencyDB.currencyFromDB(crid);
                         validators.NumberValidator numberValidator = new validators.NumberValidator();
                         double newValue = 0;
                         do {
@@ -64,14 +64,13 @@ public class application {
                             }
                         }
                         while (m==1);
-                        cur.setValue(newValue);
-                        currencyDB.currencyUpdate(cur);
+                        currencyDB.currencyUpdateValue(crid, newValue);
                         currencyDB.viewCurrency();
                         break;
 
                     case "3" :
-                        accountDB.viewAccounts();
-                        int acid = 0;
+                        userDB.viewUsers();
+                        int usid = 0;
                         numberValidator = new validators.NumberValidator();
                         validators.NameValidator nameValidator = new validators.NameValidator();
                         m = 0;
@@ -79,11 +78,11 @@ public class application {
                             System.out.println("Set ID for update:");
                             String temp = sc.nextLine();
                             if (numberValidator.validate(temp)) {
-                                acid = Integer.parseInt (temp);
-                                if (acid == 42) {
+                                usid = Integer.parseInt (temp);
+                                if (usid == 42) {
                                     System.out.println("Restricted operation : Restricted access to account.");
                                 }
-                                else if (acid <= 0) {
+                                else if (usid <= 0) {
                                     System.out.println("There is no users with negative or 0 ID." +
                                             " Please, repeat your set.");
                                 }
@@ -97,12 +96,10 @@ public class application {
                             }
                         }
                         while (m==0);
-
                             int k = 0;
-                            int usid = accountDB.usidFromDB(acid);
                             do {
-                                account changed = accountDB.accountFromDB(acid);
-                                changed.printToConsole();
+                                user changed = userDB.userFromDB(usid);
+                                System.out.println(changed.toString());
                                 System.out.println("What do you want to change(type number):");
                                 System.out.println("131. First name.");
                                 System.out.println("132. Second name.");
@@ -220,7 +217,7 @@ public class application {
                             while (k==0);
                         break;
                     case "4" :
-                        acid = 0;
+                        int acid = 0;
                         numberValidator = new validators.NumberValidator();
                         accountDB.viewAccounts();
                         m = 0;
@@ -480,6 +477,38 @@ public class application {
                         account.payCredit(acid, payment);
                         credited = accountDB.accountFromDB(acid);
                         credited.printToConsole();
+                        break;
+
+                    case "11" :
+                        crid = 0;
+                        m = 0;
+                        do {
+                            crid = currency.chooseCurrency();
+                            if (crid <= 0) {
+                                System.out.println("Currency ID 0 or Negative: Currency do not exist." +
+                                        " Please repeat your set.");
+                            }
+                            else {
+                                m++;
+                            }
+                        }
+                        while (m==0);
+                        nameValidator = new validators.NameValidator();
+                        String newName = "";
+                        do {
+                            System.out.println("Set new value for this currency:");
+                            String temp = sc.nextLine();
+                            if (nameValidator.validate(temp)) {
+                                newName = temp ;
+                                m++;
+                            }
+                            else {
+                                System.out.println("Incorrect name format. Use only latin letters or {-} !");
+                            }
+                        }
+                        while (m==1);
+                        currencyDB.currencyUpdateName(crid, newName);
+                        currencyDB.viewCurrency();
                         break;
 
                     case "1q" :

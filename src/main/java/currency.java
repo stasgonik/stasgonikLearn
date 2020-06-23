@@ -1,7 +1,6 @@
 import java.sql.*;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 public class currency {
     private String name;
@@ -86,8 +85,7 @@ public class currency {
                 System.out.println("Enter ID of currency:");
                 String temp = sc.nextLine();
                 if (numberValidator.validate(temp)) {
-                    int tempInt = Integer.parseInt (temp);
-                    crid = tempInt;
+                    crid = Integer.parseInt (temp);
                     if (crid <= 0){
                         System.out.println("There is no currency with negative ID. Please, repeat your set.");
                     }
@@ -118,18 +116,18 @@ class currencyDB {
     static final String USER = "sa";
     static final String PASS = "";
 
-    static void currencyUpdate(currency cur) {
+    static void currencyUpdateValue(int crid, double newValue) {
         Connection conn = null;
         PreparedStatement st1 = null;
         try{
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
-            String sql = "UPDATE CURRENCY " + "SET VALUE=? WHERE NAME=?";
+            String sql = "UPDATE CURRENCY " + "SET VALUE=? WHERE ID=?";
 
             st1 = conn.prepareStatement(sql);
-            st1.setDouble(1, cur.getValue());
-            st1.setString(2, cur.getName());
+            st1.setDouble(1, newValue);
+            st1.setInt(2, crid);
             st1.executeUpdate();
 
             st1.close();
@@ -276,6 +274,38 @@ class currencyDB {
             st1.setInt(1, crid);
             st1.executeUpdate();
 
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+    static void currencyUpdateName (int crid, String newName) {
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        try{
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            String sql = "UPDATE CURRENCY " + "SET NAME=? WHERE ID=?";
+
+            st1 = conn.prepareStatement(sql);
+            st1.setString(1, newName);
+            st1.setInt(2, crid);
+            st1.executeUpdate();
+
+            st1.close();
+            conn.close();
         } catch(SQLException se) {
             se.printStackTrace();
         } catch(Exception e) {

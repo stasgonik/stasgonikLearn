@@ -1,7 +1,5 @@
 import java.sql.*;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class account {
 
@@ -56,7 +54,7 @@ public class account {
         return money * accountCurrency.getValue();
     }
 
-    public  double loanUAH() {
+    public  double loanBase() {
         return loan * accountCurrency.getValue();
     }
 
@@ -96,23 +94,38 @@ public class account {
     @Override
     public String toString() {
         return "Master of account: "  + master + ",%n" + "currency of account is " + accountCurrency +
-                ",%n" + "sum of money on account = %10.2f" + " " + accountCurrency.getName() + " ( In UAH : %10.2f" +
-                " ),%n" + "your loan is %10.2f" + " " + accountCurrency.getName() + " ( In UAH : %10.2f" + " )%n";
+                ",%n" + "sum of money on account = %10.2f" + " " + accountCurrency.getName() +
+                " ( In " + currencyDB.currencyFromDB(1).getName() +" : %10.2f" +
+                " ),%n" + "your loan is %10.2f" + " " + accountCurrency.getName() +
+                " ( In " + currencyDB.currencyFromDB(1).getName() + " : %10.2f" + " )%n";
     }
     public void printToConsole() {
-        System.out.printf(this.toString(), money, currentSum(), loan, loanUAH());
+        System.out.printf(this.toString(), money, currentSum(), loan, loanBase());
     }
 
     public static void commission (double com) {
         account bank = accountDB.accountFromDB(42);
         bank.setMoney(bank.getMoney() + com);
-        accountDB.updateMoney(42 ,bank.getMoney());
+        accountDB.updateMoney(42 , bank.getMoney());
     }
 
     public static void transferMoney (double trMoney, int acidFrom, int acidTo) {
-        double commit = 2;
         account transferFrom = accountDB.accountFromDB(acidFrom);
         account transferTo = accountDB.accountFromDB(acidTo);
+        double trSum = trMoney * transferFrom.getAccountCurrency().getValue();
+        double commit = 2;
+        if (trSum < 10000){
+            commit = 2 + trSum * 0.009;
+        }
+        else if(trSum >= 10000 && trSum < 100000) {
+            commit = 2 + trSum * 0.007;
+        }
+        else if(trSum >= 100000 && trSum < 500000){
+            commit = 2 + trSum * 0.005;
+        }
+        else if( trSum >= 500000){
+            commit = 2 + trSum * 0.004;
+        }
         if (transferFrom.getMoney() < trMoney + commit) {
             System.out.println("Insufficient sum on account.");
         }
@@ -132,10 +145,10 @@ public class account {
             System.out.println("Restricted operation : Administration account involved.");
         }
         else {
-            double trSum = trMoney * transferFrom.getAccountCurrency().getValue();
             double outMoney = trSum / transferTo.getAccountCurrency().getValue();
             transferTo.setMoney(transferTo.getMoney() + outMoney);
-            transferFrom.setMoney(transferFrom.getMoney() - trMoney - commit);
+            transferFrom.setMoney(transferFrom.getMoney() -
+                    trMoney - commit / transferFrom.getAccountCurrency().getValue());
             commission(commit);
             accountDB.updateMoney(acidFrom, transferFrom.getMoney());
             accountDB.updateMoney(acidTo, transferTo.getMoney());
@@ -146,7 +159,7 @@ public class account {
     public static void takeCredit (int acid, double credit) {
         account bank = accountDB.accountFromDB(42);
         account credited = accountDB.accountFromDB(acid);
-        double alreadyLoan = credited.loanUAH();
+        double alreadyLoan = credited.loanBase();
         double newLoan = credit*credited.getAccountCurrency().getValue();
         if (alreadyLoan > 600000) {
             System.out.println("Attention user! Your loan to Our bank are already over limit 600000 UAH.");
@@ -169,6 +182,9 @@ public class account {
             System.out.println("Attention user! Our bank credit line unavailable.");
             System.out.println("We will contact You when its will be available.");
             System.out.println("Operation restricted. For more details, please, contact our support line.");
+        }
+        else  if (acid <= 0) {
+            System.out.println("Restricted operation : Account with negative or 0 ID do not exist.");
         }
         else {
            double tempLoan = alreadyLoan + (newLoan * 1.05);
@@ -194,16 +210,23 @@ public class account {
         else if(credited.getLoan() < payment) {
             System.out.println("Warning user! Your payment is larger than sum of Your loan.");
             System.out.println("Surplus money will be transferred back to your account.");
-            double nPayment = credited.getLoan();
+            double fullPayment = credited.getLoan();
+            double fullToBank = fullPayment * credited.getAccountCurrency().getValue();
+            commission(fullToBank);
             credited.setLoan(0);
-            credited.setMoney(credited.getMoney() - nPayment);
+            credited.setMoney(credited.getMoney() - fullPayment);
             accountDB.updateLoan(acid, credited.getLoan());
             accountDB.updateMoney(acid, credited.getMoney());
         }
         else if (acid == 42) {
             System.out.println("Restricted operation : Administration account involved.");
         }
+        else if (acid <= 0) {
+            System.out.println("Restricted operation : Account with negative or 0 ID do not exist.");
+        }
         else {
+            double toBank = payment * credited.getAccountCurrency().getValue();
+            commission(toBank);
             credited.setMoney(credited.getMoney() - payment);
             credited.setLoan(credited.getLoan() - payment);
             accountDB.updateLoan(acid, credited.getLoan());
@@ -212,17 +235,32 @@ public class account {
     }
 
     public static void extractPayment (int acid, double pay) {
-        account credited = accountDB.accountFromDB(acid);
-        if (credited.getMoney() < pay) {
+        account sender = accountDB.accountFromDB(acid);
+        double payUAH = pay * sender.getAccountCurrency().getValue();
+        double commit = 0;
+        if (payUAH < 5000) {
+            commit = 5;
+        }
+        else if (payUAH >= 5000 && payUAH < 100000) {
+            commit = 10;
+        }
+        else if (payUAH >= 100000) {
+            commit = 20;
+        }
+        if (sender.getMoney() < pay + commit / sender.getAccountCurrency().getValue()) {
             System.out.println("Warning user! Your payment is larger than sum of money on your account.");
             System.out.println("Operation terminated.");
         }
         else if (acid == 42) {
             System.out.println("Restricted operation : Administration account involved.");
         }
+        else if (acid <= 0) {
+            System.out.println("Restricted operation : Account with negative or 0 ID do not exist.");
+        }
         else {
-            credited.setMoney(credited.getMoney() - pay);
-            accountDB.updateMoney(acid, credited.getMoney());
+            sender.setMoney(sender.getMoney() - pay - commit);
+            commission(commit);
+            accountDB.updateMoney(acid, sender.getMoney());
         }
     }
 }
@@ -267,7 +305,7 @@ class accountDB {
 
             st2.setString(1, newAccount.getMaster().getFirstName());
             st2.setString(2, newAccount.getMaster().getSecondName());
-            st2.setString(3, newAccount.getMaster().getFamilyName());
+            st2.setString(3, newAccount.getMaster().getLastName());
             st2.setInt(4, newAccount.getMaster().getAge());
 
             ResultSet rs1 = st2.executeQuery();
@@ -563,7 +601,7 @@ class accountDB {
                 double loan = rs.getDouble("LOAN");
                 String curName = rs.getString("NAME");
                 double value = rs.getDouble("VALUE");
-                double sumUAH = rs.getDouble("CURRENT_SUM");
+                double sumBase = rs.getDouble("CURRENT_SUM");
 
                 System.out.println("                                              | _---_ |");
                 System.out.print("AccountID: " + id);
@@ -576,7 +614,7 @@ class accountDB {
                 System.out.printf("; Loan:  %10.2f", loan);
                 System.out.print("; Currency name: " + curName);
                 System.out.printf("; Currency value: %6.2f", value);
-                System.out.printf("; Sum in UAH: %10.2f%n", sumUAH);
+                System.out.printf("; Sum in %s: %10.2f%n", currencyDB.currencyFromDB(1).getName() ,sumBase);
                 System.out.println("");
 
             }

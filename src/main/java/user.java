@@ -4,14 +4,14 @@ import java.sql.*;
 public class user {
     private String firstName;
     private String secondName;
-    private String familyName;
+    private String lastName;
     private int age;
     private long number;
 
     public user(String firstName, String secondName, String familyName, int age, long number) {
         this.firstName = firstName;
         this.secondName = secondName;
-        this.familyName = familyName;
+        this.lastName = familyName;
         this.age = age;
         this.number = number;
     }
@@ -35,12 +35,12 @@ public class user {
         this.secondName = secondName;
     }
 
-    public String getFamilyName() {
-        return familyName;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setFamilyName(String familyName) {
-        this.familyName = familyName;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public int getAge() {
@@ -92,10 +92,10 @@ public class user {
             }
             while (i==1);
             do {
-                System.out.println("Enter family name:");
+                System.out.println("Enter last name:");
                 String temp = sc.nextLine();
                 if (nameValidator.validate(temp)) {
-                    us.setFamilyName(temp);
+                    us.setLastName(temp);
                     i++;
                 }
                 else {
@@ -148,7 +148,7 @@ public class user {
 
     @Override
     public String toString() {
-        return familyName + " " + firstName + " " + secondName + " , age: " + age + ", phone number: " + number ;
+        return lastName + " " + firstName + " " + secondName + " , age: " + age + ", phone number: " + number ;
     }
 }
 /*class userValidatorName {
@@ -217,7 +217,7 @@ class userDB {
 
             st1.setString(1, newUser.getFirstName());
             st1.setString(2, newUser.getSecondName());
-            st1.setString(3, newUser.getFamilyName());
+            st1.setString(3, newUser.getLastName());
             st1.setInt(4, newUser.getAge());
             st1.setLong(5, newUser.getNumber());
 
@@ -272,7 +272,7 @@ class userDB {
                 longsTemp[0] = number;
             }
             sUser.setAge(intsTemp[0]);
-            sUser.setFamilyName(stringsTemp[2]);
+            sUser.setLastName(stringsTemp[2]);
             sUser.setFirstName(stringsTemp[0]);
             sUser.setSecondName(stringsTemp[1]);
             sUser.setNumber(longsTemp[0]);
@@ -479,6 +479,53 @@ class userDB {
         } finally {
             try {
                 if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+    static void viewUsers () {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            stmt = conn.createStatement();
+            String sql = "SELECT ID, LAST_NAME, FIRST_NAME, SECOND_NAME, AGE, NUMBER FROM ACC_VIEW WHERE NOT ID=42";
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while(rs.next()) {
+                int id  = rs.getInt("ID");
+                String last = rs.getString("LAST_NAME");
+                String first = rs.getString("FIRST_NAME");
+                String second = rs.getString("SECOND_NAME");
+                int age = rs.getInt("AGE");
+                long number = rs.getLong("NUMBER");
+
+
+                System.out.println("                                              | _---_ |");
+                System.out.print("UserID: " + id);
+                System.out.print("; Last name: " + last);
+                System.out.print("; First name: " + first);
+                System.out.print("; Second name: " + second);
+                System.out.print("; Age: " + age);
+                System.out.println("; Phone number: " + number);
+                System.out.println("");
+
+            }
+            rs.close();
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(stmt!=null) stmt.close();
             } catch(SQLException se2) {
             } // nothing we can do
             try {
