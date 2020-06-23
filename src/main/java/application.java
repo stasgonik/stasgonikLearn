@@ -27,30 +27,46 @@ public class application {
                         break;
 
                     case "2" :
-                        currency cur = currency.chooseCurrency();
+                        int crid;
+                        int m = 0;
+                        do {
+                            crid = currency.chooseCurrency();
+                            if (crid == 1) {
+                                System.out.println("Restricted operation: You cannot change value of base currency.");
+                            }
+                            else if (crid <= 0) {
+                                System.out.println("Currency ID 0 or Negative: Currency do not exist." +
+                                        " Please repeat your set.");
+                            }
+                            else {
+                                m++;
+                            }
+                        }
+                        while (m==0);
+                        currency cur = currencyDB.currencyFromDB(crid);
                         validators.NumberValidator numberValidator = new validators.NumberValidator();
                         double newValue = 0;
-                        int m = 0;
                         do {
                             System.out.println("Set new value for this currency:");
                             String temp = sc.nextLine();
                             if (numberValidator.validate(temp)) {
                                 newValue = Double.parseDouble(temp);
-                                m++;
+                                if (newValue <= 0) {
+                                    System.out.println("Restricted operation : Negative or 0 value currency.");
+                                }
+                                else {
+                                    m++;
+                                }
+
                             }
                             else {
                                 System.out.println("Incorrect currency value format. Use only numbers!");
                             }
                         }
-                        while (m==0);
-                        if (newValue < 0) {
-                            System.out.println("Restricted operation : Negative or 0 value currency.");
-                        }
-                        else {
-                            cur.setValue(newValue);
-                            currencyDB.currencyUpdate(cur);
-                            currencyDB.viewCurrency();
-                        }
+                        while (m==1);
+                        cur.setValue(newValue);
+                        currencyDB.currencyUpdate(cur);
+                        currencyDB.viewCurrency();
                         break;
 
                     case "3" :
@@ -64,7 +80,17 @@ public class application {
                             String temp = sc.nextLine();
                             if (numberValidator.validate(temp)) {
                                 acid = Integer.parseInt (temp);
-                                m++;
+                                if (acid == 42) {
+                                    System.out.println("Restricted operation : Restricted access to account.");
+                                }
+                                else if (acid <= 0) {
+                                    System.out.println("There is no users with negative or 0 ID." +
+                                            " Please, repeat your set.");
+                                }
+                                else {
+                                    m++;
+                                }
+
                             }
                             else {
                                 System.out.println("Incorrect ID format. Use only numbers!");
@@ -83,7 +109,6 @@ public class application {
                                 System.out.println("133. Last name.");
                                 System.out.println("134. Age.");
                                 System.out.println("135. Phone number.");
-                                //System.out.println("136. Money.");
                                 System.out.println("13Q. Exit.");
                                 switch (sc.nextLine().toLowerCase()) {
                                     case "131" :
@@ -141,8 +166,13 @@ public class application {
                                             String temp = sc.nextLine();
                                             if (numberValidator.validate(temp)) {
                                                 int tempInt = Integer.parseInt (temp);
-                                                userDB.updateAge(usid, tempInt);
-                                                m++;
+                                                if (tempInt < 0) {
+                                                    System.out.println("Attention user: Negative age is prohibited.");
+                                                }
+                                                else {
+                                                    userDB.updateAge(usid, tempInt);
+                                                    m++;
+                                                }
                                             }
                                             else {
                                                 System.out.println("Incorrect age format. Use only numbers!");
@@ -153,7 +183,7 @@ public class application {
                                     case "135" :
                                         m = 0;
                                         do {
-                                            System.out.println("Set new phone number:");
+                                            System.out.println("Set new phone number (Format: 380971234567):");
                                             String temp = sc.nextLine();
                                             if (numberValidator.validate(temp)) {
                                                 long tempLong = Long.parseLong (temp);
@@ -162,7 +192,7 @@ public class application {
                                                     System.out.println("Need your Ukrainian" +
                                                             " number in 12 digit format!");
                                                 }
-                                                else if (tempLong/10 > check) {
+                                                else if (tempLong > check*10) {
                                                     System.out.println("Need your Ukrainian" +
                                                             " number in 12 digit format!");
                                                 }
@@ -179,11 +209,6 @@ public class application {
                                         }
                                         while (m==0);
                                         break;
-                                    //case "136" :
-                                        //System.out.println("Set new money value:");
-                                        //double newM = sc.nextDouble();
-                                        //accountDB.updateMoney(acid, newM);
-                                        //break;
                                     case "13q" :
                                         k++;
                                         break;
@@ -195,35 +220,35 @@ public class application {
                             while (k==0);
                         break;
                     case "4" :
-                        k = 0;
                         acid = 0;
                         numberValidator = new validators.NumberValidator();
+                        accountDB.viewAccounts();
+                        m = 0;
                         do {
-                            accountDB.viewAccounts();
-                            m = 0;
-                            do {
-                                System.out.println("Set ID of account to delete (or type 0 to quit):");
-                                String temp = sc.nextLine();
-                                if (numberValidator.validate(temp)) {
-                                    acid = Integer.parseInt(temp);
-                                    m++;
+                            System.out.println("Set ID of account to delete (or type 0 to quit):");
+                            String temp = sc.nextLine();
+                            if (numberValidator.validate(temp)) {
+                                acid = Integer.parseInt(temp);
+                                if (acid == 42) {
+                                    System.out.println("Restricted operation : Restricted access.");
+                                }
+                                else if (acid < 0){
+                                    System.out.println("There is no users with negative ID." +
+                                            " Please, repeat your set.");
                                 }
                                 else {
-                                    System.out.println("Incorrect ID format. Use only numbers!");
+                                    m++;
                                 }
                             }
-                            while (m==0);
-                            if (acid < 0) {
-                                k++;
-                            }
                             else {
-                                int usidDel = accountDB.usidFromDB(acid);
-                                accountDB.deleteAccount(acid);
-                                userDB.deleteUser(usidDel);
-                                accountDB.viewAccounts();
+                                System.out.println("Incorrect ID format. Use only numbers!");
                             }
                         }
-                        while (k==0);
+                        while (m==0);
+                        int usidDel = accountDB.usidFromDB(acid);
+                        accountDB.deleteAccount(acid);
+                        userDB.deleteUser(usidDel);
+                        accountDB.viewAccounts();
                         break;
 
                     case "5" :
@@ -252,14 +277,22 @@ public class application {
                         choice = sc.nextLine().toLowerCase();
                         if (choice.equals("y") || choice.equals("yes")) {
                             numberValidator = new validators.NumberValidator();
-                            int crid = 0;
+                            crid = 0;
                             m = 0;
                             do {
                                 System.out.println("Set ID of currency to delete:");
                                 String temp = sc.nextLine();
                                 if (numberValidator.validate(temp)) {
                                     crid = Integer.parseInt (temp);
-                                    m++;
+                                    if (crid == 1) {
+                                        System.out.println("Restricted operation: Prohibited to delete base currency.");
+                                    }
+                                    else if (crid <= 0) {
+                                        System.out.println("Currency with negative or 0 ID do not exist.");
+                                    }
+                                    else {
+                                        m++;
+                                    }
                                 }
                                 else {
                                     System.out.println("Incorrect ID format. Use only numbers!");
@@ -286,7 +319,15 @@ public class application {
                             String temp = sc.nextLine();
                             if (numberValidator.validate(temp)) {
                                 acidFrom = Integer.parseInt (temp);
-                                m++;
+                                if (acidFrom == 42) {
+                                    System.out.println("Restricted operation : Restricted access.");
+                                }
+                                else if (acidFrom <= 0) {
+                                    System.out.println("Account with negative or 0 ID do not exist.");
+                                }
+                                else {
+                                    m++;
+                                }
                             }
                             else {
                                 System.out.println("Incorrect ID format. Use only numbers!");
@@ -300,7 +341,15 @@ public class application {
                             String temp = sc.nextLine();
                             if (numberValidator.validate(temp)) {
                                 acidTo = Integer.parseInt (temp);
-                                m++;
+                                if (acidTo == 42) {
+                                    System.out.println("Restricted operation : Restricted access.");
+                                }
+                                else if (acidTo <= 0) {
+                                    System.out.println("Account with negative or 0 ID do not exist.");
+                                }
+                                else {
+                                    m++;
+                                }
                             }
                             else {
                                 System.out.println("Incorrect ID format. Use only numbers!");
@@ -317,7 +366,12 @@ public class application {
                             String temp = sc.nextLine();
                             if (numberValidator.validate(temp)) {
                                 trMoney = Double.parseDouble (temp);
-                                m++;
+                                if (trMoney < 0) {
+                                    System.out.println("Restricted operation: Negative or 0 sum of money.");
+                                }
+                                else {
+                                    m++;
+                                }
                             }
                             else {
                                 System.out.println("Incorrect money format. Use only numbers!");
@@ -338,7 +392,15 @@ public class application {
                             String temp = sc.nextLine();
                             if (numberValidator.validate(temp)) {
                                 acid = Integer.parseInt (temp);
-                                m++;
+                                if (acid == 42) {
+                                    System.out.println("Restricted operation : Restricted access.");
+                                }
+                                else if (acid <= 0) {
+                                    System.out.println("Account with negative or 0 ID do not exist.");
+                                }
+                                else {
+                                    m++;
+                                }
                             }
                             else {
                                 System.out.println("Incorrect ID format. Use only numbers!");
@@ -353,7 +415,12 @@ public class application {
                             String temp = sc.nextLine();
                             if (numberValidator.validate(temp)) {
                                 credit = Double.parseDouble (temp);
-                                m++;
+                                if (credit <= 0) {
+                                    System.out.println("Restricted operation: Negative or 0 sum of money.");
+                                }
+                                else {
+                                    m++;
+                                }
                             }
                             else {
                                 System.out.println("Incorrect money format. Use only numbers!");
@@ -375,7 +442,15 @@ public class application {
                             String temp = sc.nextLine();
                             if (numberValidator.validate(temp)) {
                                 acid = Integer.parseInt (temp);
-                                m++;
+                                if (acid == 42) {
+                                    System.out.println("Restricted operation : Restricted access.");
+                                }
+                                else if (acid <= 0) {
+                                    System.out.println("Account with negative or 0 ID do not exist.");
+                                }
+                                else {
+                                    m++;
+                                }
                             }
                             else {
                                 System.out.println("Incorrect ID format. Use only numbers!");
@@ -390,7 +465,12 @@ public class application {
                             String temp = sc.nextLine();
                             if (numberValidator.validate(temp)) {
                                 payment = Double.parseDouble (temp);
-                                m++;
+                                if (payment <= 0) {
+                                    System.out.println("Restricted operation: Negative or 0 sum of money.");
+                                }
+                                else {
+                                    m++;
+                                }
                             }
                             else {
                                 System.out.println("Incorrect money format. Use only numbers!");

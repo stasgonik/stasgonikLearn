@@ -65,7 +65,8 @@ public class account {
         Scanner sc = new Scanner(System.in);
         account Cr = new account();
         try {
-            currency cur = currency.chooseCurrency();
+            int crid = currency.chooseCurrency();
+            currency cur = currencyDB.currencyFromDB(crid);
             user user1 = user.createUser();
             validators.NumberValidator numberValidator = new validators.NumberValidator();
             int i =0;
@@ -103,7 +104,7 @@ public class account {
     public static void transferMoney (double trMoney, int acidFrom, int acidTo) {
         account transferFrom = accountDB.accountFromDB(acidFrom);
         account transferTo = accountDB.accountFromDB(acidTo);
-        if (transferFrom.getMoney() < trMoney) {
+        if (transferFrom.getMoney() + 1 < trMoney) {
             System.out.println("Insufficient sum on account.");
         }
         else  if (trMoney == 0) {
@@ -115,11 +116,14 @@ public class account {
         else if (acidFrom == acidTo) {
             System.out.println("Restricted operation : Transfer to self.");
         }
+        else if (acidTo == 42 || acidFrom == 42) {
+            System.out.println("Restricted operation : Administration account involved.");
+        }
         else {
             double trSum = trMoney * transferFrom.getAccountCurrency().getValue();
             double outMoney = trSum / transferTo.getAccountCurrency().getValue();
             transferTo.setMoney(transferTo.getMoney() + outMoney);
-            transferFrom.setMoney(transferFrom.getMoney() - trMoney);
+            transferFrom.setMoney(transferFrom.getMoney() - trMoney - 1);
             accountDB.updateMoney(acidFrom, transferFrom.getMoney());
             accountDB.updateMoney(acidTo, transferTo.getMoney());
         }
@@ -142,6 +146,9 @@ public class account {
             System.out.println("Attention user! Maximum credit capacity in Our internet-bank is 700000 UAH.");
             System.out.printf("Your loan on today is %.2f UAH.%n", alreadyLoan);
             System.out.println("Operation restricted. For more details, please, contact our support line.");
+        }
+        else if (acid == 42) {
+            System.out.println("Restricted operation : Administration account involved.");
         }
         else {
            double tempLoan = alreadyLoan + (newLoan * 1.05);
@@ -171,6 +178,9 @@ public class account {
             accountDB.updateLoan(acid, credited.getLoan());
             accountDB.updateMoney(acid, credited.getMoney());
         }
+        else if (acid == 42) {
+            System.out.println("Restricted operation : Administration account involved.");
+        }
         else {
             credited.setMoney(credited.getMoney() - payment);
             credited.setLoan(credited.getLoan() - payment);
@@ -184,6 +194,9 @@ public class account {
         if (credited.getMoney() < pay) {
             System.out.println("Warning user! Your payment is larger than sum of money on your account.");
             System.out.println("Operation terminated.");
+        }
+        else if (acid == 42) {
+            System.out.println("Restricted operation : Administration account involved.");
         }
         else {
             credited.setMoney(credited.getMoney() - pay);
@@ -375,7 +388,7 @@ class accountDB {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
-            String sql = "UPDATE ACCOUNT " + "SET MONEY=? WHERE id=?";
+            String sql = "UPDATE ACCOUNT " + "SET MONEY=? WHERE ID=?";
 
             st1 = conn.prepareStatement(sql);
             st1.setDouble(1, newMoney);
@@ -452,7 +465,7 @@ class accountDB {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
-            String delete = "DELETE FROM ACCOUNT " + "WHERE id = ?";
+            String delete = "DELETE FROM ACCOUNT " + "WHERE ID=?";
             st1 = conn.prepareStatement(delete);
             st1.setInt(1, acid);
             st1.executeUpdate();
@@ -480,7 +493,7 @@ class accountDB {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
-            String sql = "UPDATE ACCOUNT " + "SET LOAN=? WHERE id=?";
+            String sql = "UPDATE ACCOUNT " + "SET LOAN=? WHERE ID=?";
 
             st1 = conn.prepareStatement(sql);
             st1.setDouble(1, newLoan);
@@ -514,7 +527,7 @@ class accountDB {
 
             stmt = conn.createStatement();
             String sql = "SELECT ID, LAST_NAME, FIRST_NAME, SECOND_NAME, AGE," +
-                    " NUMBER, MONEY, LOAN, NAME, VALUE, CURRENT_SUM FROM ACC_VIEW";
+                    " NUMBER, MONEY, LOAN, NAME, VALUE, CURRENT_SUM FROM ACC_VIEW WHERE NOT ID=42";
             ResultSet rs = stmt.executeQuery(sql);
 
             while(rs.next()) {

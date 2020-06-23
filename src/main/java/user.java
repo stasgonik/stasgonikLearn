@@ -125,7 +125,7 @@ public class user {
                     if (tempDouble < check) {
                         System.out.println("Need your Ukrainian number in 12 digit format!");
                     }
-                    else if (tempDouble/10 > check) {
+                    else if (tempDouble > check*10) {
                         System.out.println("Need your Ukrainian number in 12 digit format!");
                     }
                     else {
@@ -250,6 +250,7 @@ class userDB {
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             String sql = "SELECT FIRST_NAME, SECOND_NAME, LAST_NAME, AGE, NUMBER FROM USERS WHERE ID=?";
+
             st1 = conn.prepareStatement(sql);
             st1.setInt(1, usid);
             ResultSet rs = st1.executeQuery();

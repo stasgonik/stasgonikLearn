@@ -31,7 +31,7 @@ public class currency {
     public currency() {
     }
 
-    public static currency createCurrency() {
+    public static void createCurrency() {
         Scanner sc = new Scanner(System.in);
         currency cur = new currency();
         validators.NameValidator nameValidator = new validators.NameValidator();
@@ -55,8 +55,13 @@ public class currency {
                 String temp = sc.nextLine();
                 if (numberValidator.validate(temp)) {
                     double tempInt = Double.parseDouble (temp);
-                    cur.setValue(tempInt);
-                    i++;
+                    if (tempInt <= 0) {
+                        System.out.println("Prohibited negative or 0 value of currency.");
+                    }
+                    else {
+                        cur.setValue(tempInt);
+                        i++;
+                    }
                 }
                 else {
                     System.out.println("Incorrect value format. Use only numbers!");
@@ -68,10 +73,9 @@ public class currency {
             ex.getMessage();
         }
         currencyDB.currencyToDB(cur);
-        return cur;
     }
 
-    public static currency chooseCurrency() {
+    public static int chooseCurrency() {
         int crid = 0;
         try {
             currencyDB.viewCurrency();
@@ -84,21 +88,23 @@ public class currency {
                 if (numberValidator.validate(temp)) {
                     int tempInt = Integer.parseInt (temp);
                     crid = tempInt;
-                    i++;
+                    if (crid <= 0){
+                        System.out.println("There is no currency with negative ID. Please, repeat your set.");
+                    }
+                    else {
+                        i++;
+                    }
                 }
                 else {
                     System.out.println("Incorrect ID format. Use only numbers!");
                 }
             }
             while (i==0);
-
-
         }
         catch (Exception ex) {
             ex.getMessage();
         }
-        currency cur = currencyDB.currencyFromDB(crid);
-        return cur;
+        return crid;
     }
 
     @Override
