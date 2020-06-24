@@ -20,6 +20,7 @@ public class application {
                 System.out.println("9. Take credit.");
                 System.out.println("10. Pay credit.");
                 System.out.println("11. Change currency name.");
+                System.out.println("12. TEST.");
                 System.out.println("1Q. Exit.");
                 switch (sc.nextLine().toLowerCase()) {
                     case "1" :
@@ -510,7 +511,6 @@ public class application {
                         currencyDB.currencyUpdateName(crid, newName);
                         currencyDB.viewCurrency();
                         break;
-
                     case "1q" :
                         i++;
                         break;

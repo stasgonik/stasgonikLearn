@@ -109,6 +109,20 @@ public class currency {
     public String toString() {
         return  name + " (" + "Value of this currency is " + value + ")";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof currency)) return false;
+        currency currency = (currency) o;
+        return Double.compare(currency.getValue(), getValue()) == 0 &&
+                Objects.equals(getName(), currency.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getValue());
+    }
 }
 class currencyDB {
     static final String JDBC_DRIVER = "org.h2.Driver";
