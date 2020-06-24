@@ -511,6 +511,9 @@ public class application {
                         currencyDB.currencyUpdateName(crid, newName);
                         currencyDB.viewCurrency();
                         break;
+                    case "12" :
+                        operationDB.viewOperations(43);
+                        break;
                     case "1q" :
                         i++;
                         break;

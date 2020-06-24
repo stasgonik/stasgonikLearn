@@ -205,6 +205,46 @@ class currencyDB {
         }
         return cur;
     }
+    static int currencyGetID (currency search) {
+        int crid = 0;
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            String sql = "SELECT ID FROM CURRENCY WHERE NAME=?";
+            st1 = conn.prepareStatement(sql);
+            st1.setString(1, search.getName());
+            ResultSet rs = st1.executeQuery();
+
+            int[] intsTemp = new int[1];
+
+            while(rs.next()) {
+                int id = rs.getInt("ID");
+                intsTemp[0] = id;
+            }
+            rs.close();
+
+            crid = intsTemp[0];
+
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return crid;
+    }
     static void currencyToDB (currency newCurrency) {
         Connection conn = null;
         PreparedStatement st1 = null;
@@ -337,36 +377,6 @@ class currencyDB {
         }
     }
 }
-/*class currencyNameValidator {
-    private Pattern pattern;
-    private Matcher matcher;
-
-    private static final String NAMES_PATTERN =
-            "^[_A-Za-z-\\+]+$";
-    public currencyNameValidator() {
-        pattern = Pattern.compile(NAMES_PATTERN);
-    }
-    public boolean validate(final String hex) {
-        matcher = pattern.matcher(hex);
-
-        return matcher.matches();
-    }
-}
-class currencyNumberValidator {
-    private Pattern pattern;
-    private Matcher matcher;
-
-    private static final String NAMES_PATTERN =
-            "^[_0-9\\+]+$";
-    public currencyNumberValidator() {
-        pattern = Pattern.compile(NAMES_PATTERN);
-    }
-    public boolean validate(final String hex) {
-        matcher = pattern.matcher(hex);
-
-        return matcher.matches();
-    }
-}*/
 
 
 
