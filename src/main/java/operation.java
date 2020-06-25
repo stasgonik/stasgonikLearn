@@ -67,7 +67,8 @@ enum operationType {
     Output,
     Input,
     Exchange,
-    Commission
+    Commission,
+    Loan_repayment
 }
 enum subtype {
     Charge,

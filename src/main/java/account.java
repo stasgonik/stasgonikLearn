@@ -214,7 +214,11 @@ public class account {
             System.out.println("Restricted operation : Account with negative or 0 ID do not exist.");
         }
         else {
-           double tempLoan = alreadyLoan + (newLoan * 1.05);
+           double percent = 1.08;
+           if (currencyDB.currencyGetID(credited.getAccountCurrency()) == 1) {
+               percent = 1.17;
+           }
+           double tempLoan = alreadyLoan + (newLoan * percent);
            double endLoan = tempLoan / credited.getAccountCurrency().getValue();
            double newMoney = credited.getMoney() + credit;
            bank.setMoney(bank.getMoney() - newLoan);
@@ -245,11 +249,19 @@ public class account {
             System.out.println("Surplus money will be transferred back to your account.");
             double fullPayment = credited.getLoan();
             double fullToBank = fullPayment * credited.getAccountCurrency().getValue();
-            commission(fullToBank, acid);
             credited.setLoan(0);
             credited.setMoney(credited.getMoney() - fullPayment);
             accountDB.updateLoan(acid, credited.getLoan());
             accountDB.updateMoney(acid, credited.getMoney());
+            operation from = new operation(operationType.Loan_repayment, subtype.Withdraw,
+                    credited.getAccountCurrency(), fullPayment);
+            operationDB.operationToDB_2acc(from, acid, 42);
+            account bank = accountDB.accountFromDB(42);
+            bank.setMoney(bank.getMoney() + fullToBank);
+            accountDB.updateMoney(42, bank.getMoney());
+            operation to = new operation(operationType.Loan_repayment, subtype.Charge,
+                    bank.getAccountCurrency(), fullToBank);
+            operationDB.operationToDB_2acc(to, acid, 42);
         }
         else if (acid == 42) {
             System.out.println("Restricted operation : Administration account involved.");
@@ -259,29 +271,37 @@ public class account {
         }
         else {
             double toBank = payment * credited.getAccountCurrency().getValue();
-            commission(toBank, acid);
             credited.setMoney(credited.getMoney() - payment);
             credited.setLoan(credited.getLoan() - payment);
             accountDB.updateLoan(acid, credited.getLoan());
             accountDB.updateMoney(acid, credited.getMoney());
+            operation from = new operation(operationType.Loan_repayment, subtype.Withdraw,
+                    credited.getAccountCurrency(),  payment);
+            operationDB.operationToDB_2acc(from, acid, 42);
+            account bank = accountDB.accountFromDB(42);
+            bank.setMoney(bank.getMoney() + toBank);
+            accountDB.updateMoney(42, bank.getMoney());
+            operation to = new operation(operationType.Loan_repayment, subtype.Charge,
+                    bank.getAccountCurrency(), toBank);
+            operationDB.operationToDB_2acc(to, acid, 42);
         }
     }
 
-    public static void extractPayment (int acid, double pay) {
+    public static void extraction (int acid, double extract) {
         account sender = accountDB.accountFromDB(acid);
-        double payUAH = pay * sender.getAccountCurrency().getValue();
+        double payBase = extract * sender.getAccountCurrency().getValue();
         double commit = 0;
-        if (payUAH < 5000) {
-            commit = 5;
+        if (payBase < 5000) {
+            commit = payBase * 0.005;
         }
-        else if (payUAH >= 5000 && payUAH < 100000) {
-            commit = 10;
+        else if (payBase >= 5000 && payBase < 100000) {
+            commit = payBase * 0.003;
         }
-        else if (payUAH >= 100000) {
-            commit = 20;
+        else if (payBase >= 100000) {
+            commit = payBase * 0.002;
         }
-        if (sender.getMoney() < pay + commit / sender.getAccountCurrency().getValue()) {
-            System.out.println("Warning user! Your payment is larger than sum of money on your account.");
+        if (sender.getMoney() < extract + commit / sender.getAccountCurrency().getValue()) {
+            System.out.println("Warning user! Your extraction sum is larger than sum of money on your account.");
             System.out.println("Operation terminated.");
         }
         else if (acid == 42) {
@@ -291,11 +311,51 @@ public class account {
             System.out.println("Restricted operation : Account with negative or 0 ID do not exist.");
         }
         else {
-            sender.setMoney(sender.getMoney() - pay - commit);
             commission(commit, acid);
+            if (currencyDB.currencyGetID(sender.getAccountCurrency()) != 1) {
+                operation exFrom = new operation(operationType.Exchange, subtype.Withdraw,
+                        sender.getAccountCurrency(), extract);
+                operationDB.operationToDB_From(exFrom, acid);
+                operation exTo = new operation(operationType.Exchange, subtype.Charge,
+                        currencyDB.currencyFromDB(1), payBase);
+                operationDB.operationToDB_To(exTo, acid);
+            }
+            sender.setMoney(sender.getMoney() - extract - commit / sender.getAccountCurrency().getValue());
             accountDB.updateMoney(acid, sender.getMoney());
+            operation extraction = new operation(operationType.Output, subtype.Withdraw,
+                    currencyDB.currencyFromDB(1), payBase);
+            operationDB.operationToDB_From(extraction, acid);
         }
     }
+    public static void charging (int acid, double charge) {
+        account recipient = accountDB.accountFromDB(acid);
+        double chargeInCur = charge / recipient.getAccountCurrency().getValue();
+        double commit = 0;
+        if (charge < 5000) {
+            commit = charge * 0.004;
+        }
+        else if (charge >= 5000 && charge < 100000) {
+            commit = charge * 0.002;
+        }
+        else if (charge >= 100000) {
+            commit = charge * 0.001;
+        }
+        if (acid == 42) {
+            System.out.println("Restricted operation : Administration account involved.");
+        }
+        else if (acid <= 0) {
+            System.out.println("Restricted operation : Account with negative or 0 ID do not exist.");
+        }
+        else {
+            commission(commit, acid);
+            recipient.setMoney(recipient.getMoney() + chargeInCur - commit / recipient.getAccountCurrency().getValue());
+            accountDB.updateMoney(acid, recipient.getMoney());
+            operation adding = new operation(operationType.Input, subtype.Charge,
+                    recipient.getAccountCurrency(), chargeInCur);
+            operationDB.operationToDB_To(adding, acid);
+        }
+    }
+        
 }
 /*class numberValidator {
     private Pattern pattern;
