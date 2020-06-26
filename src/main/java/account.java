@@ -104,16 +104,16 @@ public class account {
     }
 
     public static void commission (double com, int acidFrom) {
-        account bank = accountDB.accountFromDB(42);
+        account bank = accountDB.accountFromDB(constants.bank);
         bank.setMoney(bank.getMoney() + com);
-        accountDB.updateMoney(42 , bank.getMoney());
+        accountDB.updateMoney(constants.bank , bank.getMoney());
         operation commissionFrom = new operation (operationType.Commission, subtype.Withdraw,
                 accountDB.accountFromDB(acidFrom).getAccountCurrency(),
                 com / accountDB.accountFromDB(acidFrom).getAccountCurrency().getValue());
-        operationDB.operationToDB_2acc(commissionFrom, acidFrom, 42);
+        operationDB.operationToDB_2acc(commissionFrom, acidFrom, constants.bank);
         operation commissionBank = new operation (operationType.Commission, subtype.Charge,
                 bank.getAccountCurrency(), com);
-        operationDB.operationToDB_2acc(commissionBank, acidFrom, 42);
+        operationDB.operationToDB_2acc(commissionBank, acidFrom, constants.bank);
 
     }
 
@@ -150,7 +150,7 @@ public class account {
         else if (acidFrom <= 0 || acidTo <= 0) {
             System.out.println("Restricted operation : Transfer by not existing accounts.");
         }
-        else if (acidTo == 42 || acidFrom == 42) {
+        else if (acidTo == constants.bank || acidFrom == constants.bank) {
             System.out.println("Restricted operation : Administration account involved.");
         }
         else {
@@ -184,7 +184,7 @@ public class account {
     }
 
     public static void takeCredit (int acid, double credit) {
-        account bank = accountDB.accountFromDB(42);
+        account bank = accountDB.accountFromDB(constants.bank);
         account credited = accountDB.accountFromDB(acid);
         double alreadyLoan = credited.loanBase();
         double newLoan = credit*credited.getAccountCurrency().getValue();
@@ -202,7 +202,7 @@ public class account {
             System.out.printf("Your loan on today is %.2f UAH.%n", alreadyLoan);
             System.out.println("Operation restricted. For more details, please, contact our support line.");
         }
-        else if (acid == 42) {
+        else if (acid == constants.bank) {
             System.out.println("Restricted operation : Administration account involved.");
         }
         else if (bank.getMoney() < 2000000) {
@@ -222,15 +222,15 @@ public class account {
            double endLoan = tempLoan / credited.getAccountCurrency().getValue();
            double newMoney = credited.getMoney() + credit;
            bank.setMoney(bank.getMoney() - newLoan);
-           accountDB.updateMoney(42, bank.getMoney());
+           accountDB.updateMoney(constants.bank, bank.getMoney());
            operation creditBank = new operation(operationType.Credit,
                     subtype.Withdraw, bank.getAccountCurrency(), newLoan);
-           operationDB.operationToDB_2acc(creditBank, 42, acid);
+           operationDB.operationToDB_2acc(creditBank, constants.bank, acid);
            accountDB.updateMoney(acid, newMoney);
            accountDB.updateLoan(acid, endLoan);
            operation creditUser = new operation(operationType.Credit,
                     subtype.Charge, credited.getAccountCurrency(), credit);
-           operationDB.operationToDB_2acc(creditUser, 42, acid);
+           operationDB.operationToDB_2acc(creditUser, constants.bank, acid);
         }
     }
 
@@ -255,15 +255,15 @@ public class account {
             accountDB.updateMoney(acid, credited.getMoney());
             operation from = new operation(operationType.Loan_repayment, subtype.Withdraw,
                     credited.getAccountCurrency(), fullPayment);
-            operationDB.operationToDB_2acc(from, acid, 42);
-            account bank = accountDB.accountFromDB(42);
+            operationDB.operationToDB_2acc(from, acid, constants.bank);
+            account bank = accountDB.accountFromDB(constants.bank);
             bank.setMoney(bank.getMoney() + fullToBank);
-            accountDB.updateMoney(42, bank.getMoney());
+            accountDB.updateMoney(constants.bank, bank.getMoney());
             operation to = new operation(operationType.Loan_repayment, subtype.Charge,
                     bank.getAccountCurrency(), fullToBank);
-            operationDB.operationToDB_2acc(to, acid, 42);
+            operationDB.operationToDB_2acc(to, acid, constants.bank);
         }
-        else if (acid == 42) {
+        else if (acid == constants.bank) {
             System.out.println("Restricted operation : Administration account involved.");
         }
         else if (acid <= 0) {
@@ -277,13 +277,13 @@ public class account {
             accountDB.updateMoney(acid, credited.getMoney());
             operation from = new operation(operationType.Loan_repayment, subtype.Withdraw,
                     credited.getAccountCurrency(),  payment);
-            operationDB.operationToDB_2acc(from, acid, 42);
-            account bank = accountDB.accountFromDB(42);
+            operationDB.operationToDB_2acc(from, acid, constants.bank);
+            account bank = accountDB.accountFromDB(constants.bank);
             bank.setMoney(bank.getMoney() + toBank);
-            accountDB.updateMoney(42, bank.getMoney());
+            accountDB.updateMoney(constants.bank, bank.getMoney());
             operation to = new operation(operationType.Loan_repayment, subtype.Charge,
                     bank.getAccountCurrency(), toBank);
-            operationDB.operationToDB_2acc(to, acid, 42);
+            operationDB.operationToDB_2acc(to, acid, constants.bank);
         }
     }
 
@@ -304,7 +304,7 @@ public class account {
             System.out.println("Warning user! Your extraction sum is larger than sum of money on your account.");
             System.out.println("Operation terminated.");
         }
-        else if (acid == 42) {
+        else if (acid == constants.bank) {
             System.out.println("Restricted operation : Administration account involved.");
         }
         else if (acid <= 0) {
@@ -340,7 +340,7 @@ public class account {
         else if (charge >= 100000) {
             commit = charge * 0.001;
         }
-        if (acid == 42) {
+        if (acid == constants.bank) {
             System.out.println("Restricted operation : Administration account involved.");
         }
         else if (acid <= 0) {
@@ -373,18 +373,13 @@ public class account {
     }
 }*/
 class accountDB {
-    static final String JDBC_DRIVER = "org.h2.Driver";
-    static final String DB_URL = "jdbc:h2:~/test2";
-    static final String USER = "sa";
-    static final String PASS = "";
-
     static void accountToDB(account newAccount) {
         Connection conn = null;
         PreparedStatement st1 = null;
         PreparedStatement st2 = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "INSERT INTO ACCOUNT (USID, CRID, MONEY, LOAN) " +
                     "VALUES (?, ?, ?, ?)";
@@ -450,8 +445,8 @@ class accountDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "SELECT USID, CRID, MONEY, LOAN FROM ACCOUNT WHERE ID=?";
             st1 = conn.prepareStatement(sql);
@@ -500,8 +495,8 @@ class accountDB {
         PreparedStatement st1 = null;
         int usid = 0;
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "SELECT USID FROM ACCOUNT WHERE ID=?";
             st1 = conn.prepareStatement(sql);
@@ -538,8 +533,8 @@ class accountDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try{
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE ACCOUNT " + "SET MONEY=? WHERE ID=?";
 
@@ -566,57 +561,12 @@ class accountDB {
             }
         }
     }
-    /*static void viewAccounts () {
-        Connection conn = null;
-        Statement stmt = null;
-        try {
-        Class.forName(JDBC_DRIVER);
-        conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-        stmt = conn.createStatement();
-        String sql = "SELECT ID, USID, CRID, MONEY FROM ACCOUNT";
-        ResultSet rs = stmt.executeQuery(sql);
-
-        while(rs.next()) {
-            int id  = rs.getInt("ID");
-            int usid = rs.getInt("USID");
-            user usV = userDB.userFromDB(usid);
-            int crid = rs.getInt("CRID");
-            currency curV = currencyDB.currencyFromDB(crid);
-            double money = rs.getDouble("MONEY");
-
-            System.out.print("AccountID: " + id);
-            System.out.print(", First name: " + usV.getFirstName());
-            System.out.print(", Second name: " + usV.getSecondName());
-            System.out.print(", Last name: " + usV.getFamilyName());
-            System.out.print(", Age: " + usV.getAge());
-            System.out.print(", Phone number: " + usV.getNumber());
-            System.out.print(", CurrencyName: " + curV.getName());
-            System.out.println(", Money: " + money);
-        }
-        rs.close();
-    } catch(SQLException se) {
-        se.printStackTrace();
-    } catch(Exception e) {
-        e.printStackTrace();
-    } finally {
-        try {
-            if(stmt!=null) stmt.close();
-        } catch(SQLException se2) {
-        } // nothing we can do
-        try {
-            if(conn!=null) conn.close();
-        } catch(SQLException se) {
-            se.printStackTrace();
-        }
-    }
-}*/
     static void deleteAccount (int acid) {
         Connection conn = null;
         PreparedStatement st1 = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String delete = "DELETE FROM ACCOUNT " + "WHERE ID=?";
             st1 = conn.prepareStatement(delete);
@@ -643,8 +593,8 @@ class accountDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try{
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE ACCOUNT " + "SET LOAN=? WHERE ID=?";
 
@@ -675,8 +625,8 @@ class accountDB {
         Connection conn = null;
         Statement stmt = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             stmt = conn.createStatement();
             String sql = "SELECT ID, LAST_NAME, FIRST_NAME, SECOND_NAME, AGE," +

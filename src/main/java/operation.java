@@ -75,17 +75,12 @@ enum subtype {
     Withdraw
 }
 class operationDB {
-    static final String JDBC_DRIVER = "org.h2.Driver";
-    static final String DB_URL = "jdbc:h2:~/test2";
-    static final String USER = "sa";
-    static final String PASS = "";
-    
     static void operationToDB_2acc(operation newOperation, int acidFrom, int acidTo) {
         Connection conn = null;
         PreparedStatement st1 = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "INSERT INTO OPERATIONS (ACID_FROM, ACID_TO, TYPE, SUBTYPE, SUM, CURRENCY_NAME," +
                     " CURRENCY_VALUE, CRID, OPERATION_TIME) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -127,8 +122,8 @@ class operationDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "INSERT INTO OPERATIONS (ACID_FROM, TYPE, SUBTYPE, SUM, CURRENCY_NAME," +
                     " CURRENCY_VALUE, CRID, OPERATION_TIME) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -169,8 +164,8 @@ class operationDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "INSERT INTO OPERATIONS (ACID_TO, TYPE, SUBTYPE, SUM, CURRENCY_NAME," +
                     " CURRENCY_VALUE, CRID, OPERATION_TIME) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -207,15 +202,14 @@ class operationDB {
             }
         }
     }
-    static void viewOperations (int acid) {
+    static void viewOperationsAll(int acid) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
-
-            String sql = "SELECT ID, ACID_FROM, ACID_TO, TYPE, SUM, CURRENCY_NAME," +
+            String sql = "SELECT ID, ACID_FROM, ACID_TO, TYPE, SUBTYPE, SUM, CURRENCY_NAME," +
                     " CURRENCY_VALUE, OPERATION_TIME FROM OPERATIONS WHERE ACID_FROM=? OR ACID_TO=?";
             stmt = conn.prepareStatement(sql);
 
@@ -231,6 +225,7 @@ class operationDB {
                 int acidTo = rs.getInt("ACID_TO");
                 user to = userDB.userFromDB(accountDB.usidFromDB(acidTo));
                 String type = rs.getString("TYPE");
+                String subType = rs.getString("SUBTYPE");
                 double sum = rs.getDouble("SUM");
                 String currencyName = rs.getString("CURRENCY_NAME");
                 double currencyValue = rs.getDouble("CURRENCY_VALUE");
@@ -239,13 +234,263 @@ class operationDB {
 
                 System.out.println("                                              | _---_ |");
                 System.out.print("ID of operation : " + id);
-                System.out.println(", Operation type: " + type + " ;");
-                System.out.print("ID of sender account: " + acidFrom);
-                System.out.println(", owner of this account is: " + from.getLastName() + " " + from.getFirstName() +
-                        " " + from.getSecondName() + " ;");
-                System.out.print("ID of recipient account: " + acidTo);
-                System.out.println(", owner of this account is: " + to.getLastName() + " " + to.getFirstName() +
-                        " " + to.getSecondName() + " ;");
+                System.out.println(", Operation type: " + type + " ( " + subType + " );");
+                if (acidFrom == constants.bank) {
+                    System.out.println("Sender account: GSI Bank Administration.");
+                }
+                else if (acidFrom == 0) {
+                    System.out.println("");
+                }
+                else {
+                    System.out.print("ID of sender account: " + acidFrom);
+                    System.out.println(", owner of this account is: " + from.getLastName() + " " + from.getFirstName() +
+                            " " + from.getSecondName() + " ;");
+                }
+                if (acidTo == constants.bank) {
+                    System.out.println("Recipient account: GSI Bank Administration.");
+                }
+                else if (acidTo == 0) {
+                    System.out.println("");
+                }
+                else {
+                    System.out.print("ID of recipient account: " + acidTo);
+                    System.out.println(", owner of this account is: " + to.getLastName() + " " + to.getFirstName() +
+                            " " + to.getSecondName() + " ;");
+                }
+                System.out.println("Sum of operation : " + sum + " " + currencyName +
+                        " ( Currency course " + currencyValue + ") ;" );
+                System.out.println("Operation registered : " + operationTime + ".");
+                System.out.println("");
+
+            }
+            rs.close();
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+    static void viewOperationsSender(int acidFrom) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
+
+            String sql = "SELECT ID, ACID_FROM, ACID_TO, TYPE, SUBTYPE, SUM, CURRENCY_NAME," +
+                    " CURRENCY_VALUE, OPERATION_TIME FROM OPERATIONS WHERE ACID_FROM=?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setInt(1, acidFrom);
+
+
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                int id  = rs.getInt("ID");
+                acidFrom = rs.getInt("ACID_FROM");
+                user from = userDB.userFromDB(accountDB.usidFromDB(acidFrom));
+                int acidTo = rs.getInt("ACID_TO");
+                user to = userDB.userFromDB(accountDB.usidFromDB(acidTo));
+                String type = rs.getString("TYPE");
+                String subType = rs.getString("SUBTYPE");
+                double sum = rs.getDouble("SUM");
+                String currencyName = rs.getString("CURRENCY_NAME");
+                double currencyValue = rs.getDouble("CURRENCY_VALUE");
+                LocalDateTime operationTime = rs.getTimestamp("OPERATION_TIME").toLocalDateTime();
+
+
+                System.out.println("                                              | _---_ |");
+                System.out.print("ID of operation : " + id);
+                System.out.println(", Operation type: " + type + " ( " + subType + " );");
+                if (acidFrom == constants.bank) {
+                    System.out.println("Sender account: GSI Bank Administration.");
+                }
+                else if (acidFrom == 0) {
+                    System.out.println("");
+                }
+                else {
+                    System.out.print("ID of sender account: " + acidFrom);
+                    System.out.println(", owner of this account is: " + from.getLastName() + " " + from.getFirstName() +
+                            " " + from.getSecondName() + " ;");
+                }
+                if (acidTo == constants.bank) {
+                    System.out.println("Recipient account: GSI Bank Administration.");
+                }
+                else if (acidTo == 0) {
+                    System.out.println("");
+                }
+                else {
+                    System.out.print("ID of recipient account: " + acidTo);
+                    System.out.println(", owner of this account is: " + to.getLastName() + " " + to.getFirstName() +
+                            " " + to.getSecondName() + " ;");
+                }
+                System.out.println("Sum of operation : " + sum + " " + currencyName +
+                        " ( Currency course " + currencyValue + ") ;" );
+                System.out.println("Operation registered : " + operationTime + ".");
+                System.out.println("");
+
+            }
+            rs.close();
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+    static void viewOperationsRecipient(int acidTo) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
+
+            String sql = "SELECT ID, ACID_FROM, ACID_TO, TYPE, SUBTYPE, SUM, CURRENCY_NAME," +
+                    " CURRENCY_VALUE, OPERATION_TIME FROM OPERATIONS WHERE ACID_TO=?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setInt(1, acidTo);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                int id  = rs.getInt("ID");
+                int acidFrom = rs.getInt("ACID_FROM");
+                user from = userDB.userFromDB(accountDB.usidFromDB(acidFrom));
+                acidTo = rs.getInt("ACID_TO");
+                user to = userDB.userFromDB(accountDB.usidFromDB(acidTo));
+                String type = rs.getString("TYPE");
+                String subType = rs.getString("SUBTYPE");
+                double sum = rs.getDouble("SUM");
+                String currencyName = rs.getString("CURRENCY_NAME");
+                double currencyValue = rs.getDouble("CURRENCY_VALUE");
+                LocalDateTime operationTime = rs.getTimestamp("OPERATION_TIME").toLocalDateTime();
+
+
+                System.out.println("                                              | _---_ |");
+                System.out.print("ID of operation : " + id);
+                System.out.println(", Operation type: " + type + " ( " + subType + " );");
+                if (acidFrom == constants.bank) {
+                    System.out.println("Sender account: GSI Bank Administration.");
+                }
+                else if (acidFrom == 0) {
+                    System.out.println("");
+                }
+                else {
+                    System.out.print("ID of sender account: " + acidFrom);
+                    System.out.println(", owner of this account is: " + from.getLastName() + " " + from.getFirstName() +
+                            " " + from.getSecondName() + " ;");
+                }
+                if (acidTo == constants.bank) {
+                    System.out.println("Recipient account: GSI Bank Administration.");
+                }
+                else if (acidTo == 0) {
+                    System.out.println("");
+                }
+                else {
+                    System.out.print("ID of recipient account: " + acidTo);
+                    System.out.println(", owner of this account is: " + to.getLastName() + " " + to.getFirstName() +
+                            " " + to.getSecondName() + " ;");
+                }
+                System.out.println("Sum of operation : " + sum + " " + currencyName +
+                        " ( Currency course " + currencyValue + ") ;" );
+                System.out.println("Operation registered : " + operationTime + ".");
+                System.out.println("");
+
+            }
+            rs.close();
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+    static void viewOperationsTyped(int acid, operationType opType) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
+
+            String sql = "SELECT ID, ACID_FROM, ACID_TO, TYPE, SUBTYPE, SUM, CURRENCY_NAME," +
+                    " CURRENCY_VALUE, OPERATION_TIME FROM OPERATIONS WHERE TYPE=? AND (ACID_FROM=? OR ACID_TO=?)";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, opType.name());
+            stmt.setInt(2, acid);
+            stmt.setInt(3, acid);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                int id  = rs.getInt("ID");
+                int acidFrom = rs.getInt("ACID_FROM");
+                user from = userDB.userFromDB(accountDB.usidFromDB(acidFrom));
+                int acidTo = rs.getInt("ACID_TO");
+                user to = userDB.userFromDB(accountDB.usidFromDB(acidTo));
+                String type = rs.getString("TYPE");
+                String subType = rs.getString("SUBTYPE");
+                double sum = rs.getDouble("SUM");
+                String currencyName = rs.getString("CURRENCY_NAME");
+                double currencyValue = rs.getDouble("CURRENCY_VALUE");
+                LocalDateTime operationTime = rs.getTimestamp("OPERATION_TIME").toLocalDateTime();
+
+
+                System.out.println("                                              | _---_ |");
+                System.out.print("ID of operation : " + id);
+                System.out.println(", Operation type: " + type + " ( " + subType + " );");
+                if (acidFrom == constants.bank) {
+                    System.out.println("Sender account: GSI Bank Administration.");
+                }
+                else if (acidFrom == 0) {
+                    System.out.println("");
+                }
+                else {
+                    System.out.print("ID of sender account: " + acidFrom);
+                    System.out.println(", owner of this account is: " + from.getLastName() + " " + from.getFirstName() +
+                            " " + from.getSecondName() + " ;");
+                }
+                if (acidTo == constants.bank) {
+                    System.out.println("Recipient account: GSI Bank Administration.");
+                }
+                else if (acidTo == 0) {
+                    System.out.println("");
+                }
+                else {
+                    System.out.print("ID of recipient account: " + acidTo);
+                    System.out.println(", owner of this account is: " + to.getLastName() + " " + to.getFirstName() +
+                            " " + to.getSecondName() + " ;");
+                }
                 System.out.println("Sum of operation : " + sum + " " + currencyName +
                         " ( Currency course " + currencyValue + ") ;" );
                 System.out.println("Operation registered : " + operationTime + ".");

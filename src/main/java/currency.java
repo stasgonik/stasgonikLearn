@@ -125,17 +125,12 @@ public class currency {
     }
 }
 class currencyDB {
-    static final String JDBC_DRIVER = "org.h2.Driver";
-    static final String DB_URL = "jdbc:h2:~/test2";
-    static final String USER = "sa";
-    static final String PASS = "";
-
     static void currencyUpdateValue(int crid, double newValue) {
         Connection conn = null;
         PreparedStatement st1 = null;
         try{
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE CURRENCY " + "SET VALUE=? WHERE ID=?";
 
@@ -167,8 +162,8 @@ class currencyDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "SELECT NAME, VALUE FROM CURRENCY WHERE ID=?";
             st1 = conn.prepareStatement(sql);
@@ -210,8 +205,8 @@ class currencyDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "SELECT ID FROM CURRENCY WHERE NAME=?";
             st1 = conn.prepareStatement(sql);
@@ -249,8 +244,8 @@ class currencyDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try{
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "INSERT INTO CURRENCY (NAME, VALUE) " + "VALUES (?, ?)";
 
@@ -283,8 +278,8 @@ class currencyDB {
         Connection conn = null;
         Statement stmt = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             stmt = conn.createStatement();
             String sql = "SELECT ID, NAME, VALUE FROM CURRENCY";
@@ -320,8 +315,8 @@ class currencyDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String delete = "DELETE FROM CURRENCY " + "WHERE ID = ?";
             st1 = conn.prepareStatement(delete);
@@ -348,8 +343,8 @@ class currencyDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try{
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE CURRENCY " + "SET NAME=? WHERE ID=?";
 

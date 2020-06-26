@@ -197,18 +197,13 @@ class userPhoneValidator {
     }
 }*/
 class userDB {
-    static final String JDBC_DRIVER = "org.h2.Driver";
-    static final String DB_URL = "jdbc:h2:~/test2";
-    static final String USER = "sa";
-    static final String PASS = "";
-
     static void userToDB(user newUser) {
         Connection conn = null;
         PreparedStatement st1 = null;
         try{
-            Class.forName(JDBC_DRIVER);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             String sql = "INSERT INTO USERS (FIRST_NAME, SECOND_NAME, LAST_NAME, AGE, NUMBER) " +
                     "VALUES (?, ?, ?, ?, ?)";
@@ -246,8 +241,8 @@ class userDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "SELECT FIRST_NAME, SECOND_NAME, LAST_NAME, AGE, NUMBER FROM USERS WHERE ID=?";
 
@@ -300,8 +295,8 @@ class userDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try{
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE USERS " + "SET FIRST_NAME=? WHERE id=?";
 
@@ -332,8 +327,8 @@ class userDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try{
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE USERS " + "SET SECOND_NAME=? WHERE id=?";
 
@@ -365,8 +360,8 @@ class userDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try{
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE USERS " + "SET LAST_NAME=? WHERE id=?";
 
@@ -397,8 +392,8 @@ class userDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try{
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE USERS " + "SET AGE=? WHERE id=?";
 
@@ -431,8 +426,8 @@ class userDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try{
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE USERS " + "SET NUMBER=? WHERE id=?";
 
@@ -464,8 +459,8 @@ class userDB {
         Connection conn = null;
         PreparedStatement st1 = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String delete = "DELETE FROM USERS " + "WHERE ID = ?";
             st1 = conn.prepareStatement(delete);
@@ -492,8 +487,8 @@ class userDB {
         Connection conn = null;
         Statement stmt = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             stmt = conn.createStatement();
             String sql = "SELECT ID, LAST_NAME, FIRST_NAME, SECOND_NAME, AGE, NUMBER FROM ACC_VIEW WHERE NOT ID=42";
