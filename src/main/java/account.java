@@ -116,32 +116,62 @@ public class account {
         operationDB.operationToDB_2acc(commissionBank, acidFrom, constants.bank);
 
     }
-
-    public static void transferMoney (double trMoney, int acidFrom, int acidTo) {
+    public static void transferMoney (double transferMoney, int acidFrom, int acidTo) {
         account transferFrom = accountDB.accountFromDB(acidFrom);
         account transferTo = accountDB.accountFromDB(acidTo);
-        double trSum = trMoney * transferFrom.getAccountCurrency().getValue();
-        double commit = 2;
-        double outMoney = trSum / transferTo.getAccountCurrency().getValue();
-        if (trSum < 10000){
-            commit = 2 + trSum * 0.009;
+        double transferSum = transferMoney * transferFrom.getAccountCurrency().getValue();
+        double commit = 0;
+        double exchangeCommit = 0;
+        double outMoney = transferSum / transferTo.getAccountCurrency().getValue();
+
+        if (transferSum < 10000){
+            commit = 1 + transferSum * 0.009;
+            exchangeCommit = 0.5 + transferSum * 0.0045;
         }
-        else if(trSum >= 10000 && trSum < 100000) {
-            commit = 2 + trSum * 0.007;
+        else if(transferSum >= 10000 && transferSum < 100000) {
+            commit = 5 + transferSum * 0.007;
+            exchangeCommit = 2.5 + transferSum * 0.0035;
         }
-        else if(trSum >= 100000 && trSum < 500000){
-            commit = 2 + trSum * 0.005;
+        else if(transferSum >= 100000 && transferSum < 500000){
+            commit = 10 + transferSum * 0.005;
+            exchangeCommit = 5 + transferSum * 0.0025;
         }
-        else if( trSum >= 500000){
-            commit = 2 + trSum * 0.004;
+        else if( transferSum >= 500000){
+            commit = 20 + transferSum * 0.004;
+            exchangeCommit = 10 + transferSum * 0.002;
         }
-        if (transferFrom.getMoney() < trMoney + commit) {
+
+        if (accountDB.usidFromDB(acidTo) == accountDB.usidFromDB(acidFrom)) {
+            commit = 0;
+        }
+
+        if (currencyDB.currencyGetID(transferFrom.getAccountCurrency()) ==
+                currencyDB.currencyGetID(transferTo.getAccountCurrency())) {
+            exchangeCommit = 0;
+        }
+
+        if (transferFrom.getMoney() < transferMoney + commit / transferFrom.getAccountCurrency().getValue() &&
+        accountDB.usidFromDB(acidFrom) != accountDB.usidFromDB(acidTo)) {
             System.out.println("Insufficient sum on account.");
         }
-        else  if (trMoney == 0) {
+        else if(transferFrom.getMoney() < transferMoney + (commit * exchangeCommit) /
+                transferFrom.getAccountCurrency().getValue() &&
+                currencyDB.currencyGetID(transferFrom.getAccountCurrency()) !=
+                currencyDB.currencyGetID(transferTo.getAccountCurrency()) &&
+                accountDB.usidFromDB(acidFrom) != accountDB.usidFromDB(acidTo)) {
+            System.out.println("Insufficient sum on account.");
+        }
+        else if (transferFrom.getMoney() < transferMoney + exchangeCommit /
+                transferFrom.getAccountCurrency().getValue() &&
+                accountDB.usidFromDB(acidFrom) == accountDB.usidFromDB(acidTo) &&
+                currencyDB.currencyGetID(transferFrom.getAccountCurrency()) !=
+                currencyDB.currencyGetID(transferTo.getAccountCurrency())) {
+            System.out.println("Insufficient sum on account.");
+        }
+        else  if (transferMoney == 0) {
             System.out.println("Restricted operation : Transfer '0'.");
         }
-        else if (trMoney < 0) {
+        else if (transferMoney < 0) {
             System.out.println("Restricted operation : Transfer negative sum.");
         }
         else if (acidFrom == acidTo) {
@@ -153,36 +183,43 @@ public class account {
         else if (acidTo == constants.bank || acidFrom == constants.bank) {
             System.out.println("Restricted operation : Administration account involved.");
         }
+
         else {
 
             transferFrom.setMoney(transferFrom.getMoney() -
-                    trMoney - commit / transferFrom.getAccountCurrency().getValue());
+                    transferMoney - (commit + exchangeCommit) / transferFrom.getAccountCurrency().getValue());
             operation from = new operation(operationType.Transfer, subtype.Withdraw,
-                    transferFrom.getAccountCurrency(), trMoney);
+                    transferFrom.getAccountCurrency(), transferMoney);
             operationDB.operationToDB_2acc(from, acidFrom, acidTo);
 
             if (currencyDB.currencyGetID(transferFrom.getAccountCurrency()) !=
                     currencyDB.currencyGetID(transferTo.getAccountCurrency())) {
+                System.out.println("Transferring money between accounts with" +
+                        " different currency requires exchange operation.");
+                System.out.println("Warning user! For this exchange operation you need to pay commission.");
                 operation exFrom = new operation(operationType.Exchange, subtype.Withdraw,
-                        transferFrom.getAccountCurrency(), trMoney);
+                        transferFrom.getAccountCurrency(), transferMoney);
                 operationDB.operationToDB_From(exFrom, acidFrom);
                 operation exTo = new operation(operationType.Exchange, subtype.Charge,
                         transferTo.getAccountCurrency(), outMoney);
                 operationDB.operationToDB_To(exTo, acidFrom);
+                commission(commit/2, acidFrom);
             }
+
             transferTo.setMoney(transferTo.getMoney() + outMoney);
             operation to = new operation(operationType.Transfer, subtype.Charge,
                     transferTo.getAccountCurrency(), outMoney);
             operationDB.operationToDB_2acc(to, acidFrom, acidTo);
 
-            commission(commit, acidFrom);
+            if (accountDB.usidFromDB(acidFrom) != accountDB.usidFromDB(acidTo)) {
+                commission(commit, acidFrom);
+            }
 
             accountDB.updateMoney(acidFrom, transferFrom.getMoney());
             accountDB.updateMoney(acidTo, transferTo.getMoney());
 
         }
     }
-
     public static void takeCredit (int acid, double credit) {
         account bank = accountDB.accountFromDB(constants.bank);
         account credited = accountDB.accountFromDB(acid);
@@ -233,7 +270,6 @@ public class account {
            operationDB.operationToDB_2acc(creditUser, constants.bank, acid);
         }
     }
-
     public static void payCredit (int acid, double payment) {
         account credited = accountDB.accountFromDB(acid);
         if (credited.getLoan() <= 0) {
@@ -286,7 +322,6 @@ public class account {
             operationDB.operationToDB_2acc(to, acid, constants.bank);
         }
     }
-
     public static void extraction (int acid, double extract) {
         account sender = accountDB.accountFromDB(acid);
         double payBase = extract * sender.getAccountCurrency().getValue();
@@ -300,7 +335,13 @@ public class account {
         else if (payBase >= 100000) {
             commit = payBase * 0.002;
         }
-        if (sender.getMoney() < extract + commit / sender.getAccountCurrency().getValue()) {
+        if (sender.getMoney() < extract + commit / sender.getAccountCurrency().getValue() &&
+                currencyDB.currencyGetID(sender.getAccountCurrency()) == 1) {
+            System.out.println("Warning user! Your extraction sum is larger than sum of money on your account.");
+            System.out.println("Operation terminated.");
+        }
+        else  if (sender.getMoney() < extract + commit * 3 / sender.getAccountCurrency().getValue() &&
+                currencyDB.currencyGetID(sender.getAccountCurrency()) != 1) {
             System.out.println("Warning user! Your extraction sum is larger than sum of money on your account.");
             System.out.println("Operation terminated.");
         }
@@ -319,6 +360,7 @@ public class account {
                 operation exTo = new operation(operationType.Exchange, subtype.Charge,
                         currencyDB.currencyFromDB(1), payBase);
                 operationDB.operationToDB_To(exTo, acid);
+                commission(commit*2, acid);
             }
             sender.setMoney(sender.getMoney() - extract - commit / sender.getAccountCurrency().getValue());
             accountDB.updateMoney(acid, sender.getMoney());
@@ -332,7 +374,7 @@ public class account {
         double chargeInCur = charge / recipient.getAccountCurrency().getValue();
         double commit = 0;
         if (charge < 5000) {
-            commit = charge * 0.004;
+            commit = charge * 0.003;
         }
         else if (charge >= 5000 && charge < 100000) {
             commit = charge * 0.002;
@@ -357,21 +399,6 @@ public class account {
     }
         
 }
-/*class numberValidator {
-    private Pattern pattern;
-    private Matcher matcher;
-
-    private static final String NAMES_PATTERN =
-            "^[_0-9\\+]+$";
-    public numberValidator() {
-        pattern = Pattern.compile(NAMES_PATTERN);
-    }
-    public boolean validate(final String hex) {
-        matcher = pattern.matcher(hex);
-
-        return matcher.matches();
-    }
-}*/
 class accountDB {
     static void accountToDB(account newAccount) {
         Connection conn = null;

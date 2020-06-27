@@ -21,6 +21,8 @@ public class application {
                 System.out.println("10. Pay credit.");
                 System.out.println("11. Change currency name.");
                 System.out.println("12. Operation view.");
+                System.out.println("13. Charge account.");
+                System.out.println("14. Extract money from account.");
                 System.out.println("1Q. Exit.");
                 switch (sc.nextLine().toLowerCase()) {
                     case "1" :
@@ -520,6 +522,7 @@ public class application {
                             System.out.println("122. Search all sender operations with selected account ID.");
                             System.out.println("123. Search all recipient operations with selected account ID.");
                             System.out.println("124. Search operations of specific type with selected account ID.");
+                            System.out.println("125. Search filtered operations with selected account ID.");
                             System.out.println("12Q. Exit");
                             switch (sc.nextLine().toLowerCase()) {
                                 case "121" :
@@ -663,6 +666,31 @@ public class application {
                                     }
                                     while (k == 1);
                                     break;
+                                case "125" :
+                                    acid = 0;
+                                    k = 0;
+                                    do {
+                                        System.out.println("Set account ID for operation view:");
+                                        String temp = sc.nextLine();
+                                        if (numberValidator.validate(temp)) {
+                                            acid = Integer.parseInt (temp);
+                                            if (acid == constants.bank) {
+                                                System.out.println("Restricted operation : Restricted access.");
+                                            }
+                                            else if (acid <= 0) {
+                                                System.out.println("Account with negative or 0 ID do not exist.");
+                                            }
+                                            else {
+                                                k++;
+                                            }
+                                        }
+                                        else {
+                                            System.out.println("Incorrect ID format. Use only numbers!");
+                                        }
+                                    }
+                                    while (k == 0);
+                                    operationDB.viewOperationsAllFiltered(acid);
+                                    break;
                                 case "12q" :
                                     m++;
                                     break;
@@ -673,6 +701,94 @@ public class application {
 
                         }
                         while (m == 0);
+                        break;
+                    case "13" :
+                        numberValidator = new validators.NumberValidator();
+                        acid = 0;
+                        k = 0;
+                        do {
+                        System.out.println("Set account ID for operation view:");
+                        String temp = sc.nextLine();
+                        if (numberValidator.validate(temp)) {
+                            acid = Integer.parseInt (temp);
+                            if (acid == constants.bank) {
+                                System.out.println("Restricted operation : Restricted access.");
+                            }
+                            else if (acid <= 0) {
+                                System.out.println("Account with negative or 0 ID do not exist.");
+                            }
+                            else {
+                                k++;
+                            }
+                        }
+                        else {
+                            System.out.println("Incorrect ID format. Use only numbers!");
+                        }
+                        }
+                        while (k == 0);
+                        double sum = 0;
+                        do {
+                            System.out.println("Set sum  for charging account:");
+                            String temp = sc.nextLine();
+                            if (numberValidator.validate(temp)) {
+                                sum = Double.parseDouble (temp);
+                                if (sum <= 0) {
+                                    System.out.println("Charging with negative or 0 sum impossible.");
+                                }
+                                else {
+                                    k++;
+                                }
+                            }
+                            else {
+                                System.out.println("Incorrect sum format. Use only numbers!");
+                            }
+                        }
+                        while (k == 1);
+                        account.charging(acid, sum);
+                        break;
+                    case "14" :
+                        numberValidator = new validators.NumberValidator();
+                        acid = 0;
+                        k = 0;
+                        do {
+                            System.out.println("Set account ID for operation view:");
+                            String temp = sc.nextLine();
+                            if (numberValidator.validate(temp)) {
+                                acid = Integer.parseInt (temp);
+                                if (acid == constants.bank) {
+                                    System.out.println("Restricted operation : Restricted access.");
+                                }
+                                else if (acid <= 0) {
+                                    System.out.println("Account with negative or 0 ID do not exist.");
+                                }
+                                else {
+                                    k++;
+                                }
+                            }
+                            else {
+                                System.out.println("Incorrect ID format. Use only numbers!");
+                            }
+                        }
+                        while (k == 0);
+                        sum = 0;
+                        do {
+                            System.out.println("Set sum for extraction from account:");
+                            String temp = sc.nextLine();
+                            if (numberValidator.validate(temp)) {
+                                sum = Double.parseDouble (temp);
+                                if (sum <= 0) {
+                                    System.out.println("Extraction with negative or 0 sum impossible.");
+                                }
+                                else {
+                                    k++;
+                                }
+                            }
+                            else {
+                                System.out.println("Incorrect sum format. Use only numbers!");
+                            }
+                        }
+                        while (k == 1);
+                        account.extraction(acid, sum);
                         break;
                     case "1q" :
                         i++;
