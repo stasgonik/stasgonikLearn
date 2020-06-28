@@ -491,7 +491,7 @@ class userDB {
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             stmt = conn.createStatement();
-            String sql = "SELECT ID, LAST_NAME, FIRST_NAME, SECOND_NAME, AGE, NUMBER FROM ACC_VIEW WHERE NOT ID=42";
+            String sql = "SELECT ID, LAST_NAME, FIRST_NAME, SECOND_NAME, AGE, NUMBER FROM USERS WHERE NOT ID=42";
             ResultSet rs = stmt.executeQuery(sql);
 
             while(rs.next()) {

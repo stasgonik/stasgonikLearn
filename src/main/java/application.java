@@ -9,10 +9,12 @@ public class application {
         try {
             do {
                 System.out.println("Please choose Your next action(type number):");
-                System.out.println("1. Create new account.");
+                System.out.println("1. Create new account/user pair.");
+                System.out.println("1A. Create new account for existing user.");
                 System.out.println("2. Change currency value.");
                 System.out.println("3. Update account detail.");
                 System.out.println("4. Delete account and user.");
+                System.out.println("4A. Delete account of selected user.");
                 System.out.println("5. Add new currency to DB.");
                 System.out.println("6. View all currencies.");
                 System.out.println("7. Delete currency.");
@@ -26,13 +28,39 @@ public class application {
                 System.out.println("1Q. Exit.");
                 switch (sc.nextLine().toLowerCase()) {
                     case "1" :
-                        account newAccount = account.createAccount();
+                        account newAccount = account.createAccountAndUser();
                         newAccount.printToConsole();
                         break;
+                    case "1a":
+                        userDB.viewUsers();
+                        int usid = 0;
+                        validators.NumberValidator numberValidator = new validators.NumberValidator();
+                        int m = 0;
+                        do {
+                            System.out.println("Type your user ID:");
+                            String temp = sc.nextLine();
+                            if (numberValidator.validate(temp)) {
+                                usid = Integer.parseInt(temp);
+                                if (usid <= 0) {
+                                    System.out.println("Restricted operation : Negative or 0 ID.");
+                                }
+                                else {
+                                    m++;
+                                }
 
+                            }
+                            else {
+                                System.out.println("Incorrect currency value format. Use only numbers!");
+                            }
+                        }
+                        while (m == 0);
+                        user selectedUser = userDB.userFromDB(usid);
+                        account newForUser = account.createAccount(selectedUser);
+                        newForUser.printToConsole();
+                        break;
                     case "2" :
                         int crid;
-                        int m = 0;
+                        m = 0;
                         do {
                             crid = currency.chooseCurrency();
                             if (crid == 1) {
@@ -47,7 +75,7 @@ public class application {
                             }
                         }
                         while (m == 0);
-                        validators.NumberValidator numberValidator = new validators.NumberValidator();
+                        numberValidator = new validators.NumberValidator();
                         double newValue = 0;
                         do {
                             System.out.println("Set new value for this currency:");
@@ -73,7 +101,7 @@ public class application {
 
                     case "3" :
                         userDB.viewUsers();
-                        int usid = 0;
+                        usid = 0;
                         numberValidator = new validators.NumberValidator();
                         validators.NameValidator nameValidator = new validators.NameValidator();
                         m = 0;
@@ -220,10 +248,74 @@ public class application {
                             while (k == 0);
                         break;
                     case "4" :
-                        int acid = 0;
+                        int usidDel = 0;
                         numberValidator = new validators.NumberValidator();
-                        accountDB.viewAccounts();
+                        userDB.viewUsers();
                         m = 0;
+                        do {
+                            System.out.println("Set ID of user to delete (or type 0 to quit):");
+                            String temp = sc.nextLine();
+                            if (numberValidator.validate(temp)) {
+                                usidDel = Integer.parseInt(temp);
+                                if (usidDel == constants.bank) {
+                                    System.out.println("Restricted operation : Restricted access.");
+                                }
+                                else if (usidDel < 0){
+                                    System.out.println("There is no users with negative ID." +
+                                            " Please, repeat your set.");
+                                }
+                                else {
+                                    m++;
+                                }
+                            }
+                            else {
+                                System.out.println("Incorrect ID format. Use only numbers!");
+                            }
+                        }
+                        while (m == 0);
+                        int[] accountsID = accountDB.searchUserAccounts(usidDel);
+                        for (int id : accountsID) {
+                            accountDB.deleteAccount(id);
+                        }
+                        userDB.deleteUser(usidDel);
+                        userDB.viewUsers();
+                        accountDB.viewAccounts();
+                        break;
+
+                    case "4a" :
+                        usidDel = 0;
+                        numberValidator = new validators.NumberValidator();
+                        userDB.viewUsers();
+                        m = 0;
+                        do {
+                            System.out.println("Set ID of user(or type 0 to quit):");
+                            String temp = sc.nextLine();
+                            if (numberValidator.validate(temp)) {
+                                usidDel = Integer.parseInt(temp);
+                                if (usidDel == constants.bank) {
+                                    System.out.println("Restricted operation : Restricted access.");
+                                }
+                                else if (usidDel < 0){
+                                    System.out.println("There is no users with negative ID." +
+                                            " Please, repeat your set.");
+                                }
+                                else {
+                                    m++;
+                                }
+                            }
+                            else {
+                                System.out.println("Incorrect ID format. Use only numbers!");
+                            }
+                        }
+                        while (m == 0);
+                        accountsID = accountDB.searchUserAccounts(usidDel);
+                        for (int id : accountsID) {
+                            if (id != 0) {
+                                System.out.println("Account ID: " + id);
+                                accountDB.accountFromDB(id).printToConsole();
+                            }
+                        }
+                        int acid = 0;
                         do {
                             System.out.println("Set ID of account to delete (or type 0 to quit):");
                             String temp = sc.nextLine();
@@ -244,13 +336,10 @@ public class application {
                                 System.out.println("Incorrect ID format. Use only numbers!");
                             }
                         }
-                        while (m == 0);
-                        int usidDel = accountDB.usidFromDB(acid);
+                        while (m == 1);
                         accountDB.deleteAccount(acid);
-                        userDB.deleteUser(usidDel);
                         accountDB.viewAccounts();
                         break;
-
                     case "5" :
                         System.out.println("List of currencies in DB:");
                         currencyDB.viewCurrency();
@@ -483,7 +572,6 @@ public class application {
                         break;
 
                     case "11" :
-                        crid = 0;
                         m = 0;
                         do {
                             crid = currency.chooseCurrency();

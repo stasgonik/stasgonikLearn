@@ -58,7 +58,7 @@ public class account {
         return loan * accountCurrency.getValue();
     }
 
-    public static account createAccount() {
+    public static account createAccountAndUser() {
         System.out.println("Starting creation of new account.");
         Scanner sc = new Scanner(System.in);
         account Cr = new account();
@@ -83,6 +83,37 @@ public class account {
             while (i==0);
             Cr.setAccountCurrency(cur);
             Cr.setMaster(user1);
+            accountDB.accountToDB(Cr);
+        }
+        catch (Exception ex) {
+            ex.getMessage();
+        }
+        return Cr;
+    }
+    public static account createAccount(user selected) {
+        System.out.println("Starting creation of new account.");
+        Scanner sc = new Scanner(System.in);
+        account Cr = new account();
+        try {
+            int crid = currency.chooseCurrency();
+            currency cur = currencyDB.currencyFromDB(crid);
+            validators.NumberValidator numberValidator = new validators.NumberValidator();
+            int i =0;
+            do {
+                System.out.println("Enter sum of money for test account:");
+                String temp = sc.nextLine();
+                if (numberValidator.validate(temp)) {
+                    int tempInt = Integer.parseInt (temp);
+                    Cr.setMoney(tempInt);
+                    i++;
+                }
+                else {
+                    System.out.println("Incorrect sum format. Use only numbers!");
+                }
+            }
+            while (i==0);
+            Cr.setAccountCurrency(cur);
+            Cr.setMaster(selected);
             accountDB.accountToDB(Cr);
         }
         catch (Exception ex) {
@@ -203,7 +234,7 @@ public class account {
                 operation exTo = new operation(operationType.Exchange, subtype.Charge,
                         transferTo.getAccountCurrency(), outMoney);
                 operationDB.operationToDB_To(exTo, acidFrom);
-                commission(commit/2, acidFrom);
+                commission(exchangeCommit, acidFrom);
             }
 
             transferTo.setMoney(transferTo.getMoney() + outMoney);
@@ -704,5 +735,43 @@ class accountDB {
                 se.printStackTrace();
             }
         }
+    }
+    static int[] searchUserAccounts (int usid) {
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        int[] acids = new int[20];
+        try {
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
+
+            String sql = "SELECT ID FROM ACCOUNT WHERE USID=?";
+            st1 = conn.prepareStatement(sql);
+            st1.setInt(1, usid);
+            ResultSet rs = st1.executeQuery();
+            int i = 0;
+
+            while(rs.next()) {
+                int acid = rs.getInt("ID");
+                acids[i] = acid;
+                i++;
+            }
+            rs.close();
+
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return acids;
     }
 }
