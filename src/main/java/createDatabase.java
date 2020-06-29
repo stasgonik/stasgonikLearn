@@ -1,14 +1,18 @@
 import java.sql.*;
 
 public class createDatabase {
+    static final String JDBC_DRIVER = "org.h2.Driver";
+    static final String DB_URL = "jdbc:h2:~/test2";
+    static final String USER = "sa";
+    static final String PASS = "";
     static void creation() {
         Connection conn = null;
         Statement stmt = null;
         try {
-            Class.forName(constants.JDBC_DRIVER);
-            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
-            String[] sqlArray = new String[10];
+            String[] sqlArray = new String[13];
             stmt = conn.createStatement();
 
             sqlArray[0] = "CREATE TABLE USERS(ID INT PRIMARY KEY AUTO_INCREMENT, FIRST_NAME VARCHAR(255)," +
@@ -29,6 +33,10 @@ public class createDatabase {
             sqlArray[7] = "ALTER TABLE OPERATIONS ADD FOREIGN KEY (ACID_FROM) REFERENCES ACCOUNT(ID);";
             sqlArray[8] = "ALTER TABLE OPERATIONS ADD FOREIGN KEY (ACID_TO) REFERENCES ACCOUNT(ID);";
             sqlArray[9] = "ALTER TABLE OPERATIONS ADD FOREIGN KEY (CRID) REFERENCES ACCOUNT(ID);";
+            sqlArray[10] = "INSERT INTO CURRENCY (ID, NAME, VALUE) VALUES (1, UAH, 1);";
+            sqlArray[11] = "INSERT INTO USERS (ID, FIRST_NAME, SECOND_NAME, LAST_NAME, AGE, NUMBER) VALUES" +
+                    " (42, ADMIN, BANHAMMER, GOD, 9999, 123456789012);";
+            sqlArray[12] = "INSERT INTO ACCOUNT (ID, USID, CRID, MONEY, LOAN) VALUES (42, 42, 1, 100000000, 0);";
 
             for (String sql : sqlArray) {
                 stmt.executeUpdate(sql);
