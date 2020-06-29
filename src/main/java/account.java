@@ -199,6 +199,12 @@ public class account {
                 currencyDB.currencyGetID(transferTo.getAccountCurrency())) {
             System.out.println("Insufficient sum on account.");
         }
+        else if (transferFrom.getMoney() < transferMoney &&
+                accountDB.usidFromDB(acidFrom) == accountDB.usidFromDB(acidTo) &&
+                currencyDB.currencyGetID(transferFrom.getAccountCurrency()) ==
+                currencyDB.currencyGetID(transferTo.getAccountCurrency())) {
+            System.out.println("Insufficient sum on account.");
+        }
         else  if (transferMoney == 0) {
             System.out.println("Restricted operation : Transfer '0'.");
         }

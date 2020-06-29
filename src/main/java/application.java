@@ -791,6 +791,7 @@ public class application {
                         while (m == 0);
                         break;
                     case "13" :
+                        accountDB.viewAccounts();
                         numberValidator = new validators.NumberValidator();
                         acid = 0;
                         k = 0;
@@ -835,6 +836,7 @@ public class application {
                         account.charging(acid, sum);
                         break;
                     case "14" :
+                        accountDB.viewAccounts();
                         numberValidator = new validators.NumberValidator();
                         acid = 0;
                         k = 0;
