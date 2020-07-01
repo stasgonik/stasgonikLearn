@@ -143,6 +143,9 @@ public class user {
             ex.getMessage();
         }
         userDB.userToDB(us);
+        int usid = userDB.getUSID(us);
+        login usLogin = login.createLogin(usid);
+        loginDB.loginToDB(usLogin);
         return us;
     }
 
@@ -530,4 +533,52 @@ class userDB {
             }
         }
     }
+    static int getUSID (user searchUser) {
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        int usid = 0;
+        try{
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
+
+            String sql = "SELECT ID FROM USERS WHERE FIRST_NAME=? AND SECOND_NAME=?" +
+                    " AND LAST_NAME=? AND AGE=? AND NUMBER=?";
+
+            st1 = conn.prepareStatement(sql);
+
+            st1.setString(1, searchUser.getFirstName());
+            st1.setString(2, searchUser.getSecondName());
+            st1.setString(3, searchUser.getLastName());
+            st1.setInt(4, searchUser.getAge());
+            st1.setLong(5, searchUser.getNumber());
+
+            int[] intsTemp = new int[1];
+
+            ResultSet rs = st1.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("ID");
+                intsTemp[0] = id;
+            }
+            usid = intsTemp[0];
+            rs.close();
+            st1.close();
+            conn.close();
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return usid;
+    }
 }
+
