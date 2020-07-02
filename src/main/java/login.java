@@ -164,6 +164,146 @@ class loginDB {
         }
         return check;
     }
+    static boolean checkLogin (String login) {
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        boolean check = false;
+        try{
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
+
+            String sql = "SELECT COUNT(ID) FROM LOGIN WHERE LOGIN=?";
+
+            st1 = conn.prepareStatement(sql);
+            st1.setString(1, login);
+
+            ResultSet rs = st1.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("COUNT(ID)");
+                check = intToBoolean(id);
+            }
+
+            rs.close();
+            st1.close();
+            conn.close();
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return check;
+    }
+    static int getID (String login, String password) {
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        int usid = 0;
+        try{
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
+
+            String sql = "SELECT USID FROM LOGIN WHERE LOGIN=? AND PASSWORD=?";
+
+            st1 = conn.prepareStatement(sql);
+            st1.setString(1, login);
+            st1.setString(1, password);
+
+            ResultSet rs = st1.executeQuery();
+
+            while (rs.next()) {
+                usid = rs.getInt("USID");
+            }
+
+            rs.close();
+            st1.close();
+            conn.close();
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return usid;
+    }
+    static void deleteLogin (int usid) {
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        try {
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
+
+            String delete = "DELETE FROM LOGIN " + "WHERE USID = ?";
+            st1 = conn.prepareStatement(delete);
+            st1.setInt(1, usid);
+            st1.executeUpdate();
+
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+    static void updatePassword (int usid, String password) {
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        try{
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
+
+            String sql = "UPDATE LOGIN " + "SET PASSWORD=? WHERE USID=?";
+
+            st1 = conn.prepareStatement(sql);
+            st1.setString(1, password);
+            st1.setInt(2, usid);
+            st1.executeUpdate();
+
+            st1.close();
+            conn.close();
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
 }
 
 

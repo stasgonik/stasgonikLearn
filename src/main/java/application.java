@@ -275,8 +275,11 @@ public class application {
                         while (m == 0);
                         int[] accountsID = accountDB.searchUserAccounts(usidDel);
                         for (int id : accountsID) {
-                            accountDB.deleteAccount(id);
+                            if (id != 0) {
+                                accountDB.deleteAccount(id);
+                            }
                         }
+                        loginDB.deleteLogin(usidDel);
                         userDB.deleteUser(usidDel);
                         userDB.viewUsers();
                         accountDB.viewAccounts();
@@ -879,6 +882,12 @@ public class application {
                         }
                         while (k == 1);
                         account.extraction(acid, sum);
+                        break;
+
+                    case "15":
+                        userDB.viewUsers();
+                        System.out.println("CHECK COUNT");
+                        accountDB.countAccountCheck(sc.nextInt());
                         break;
                     case "1q" :
                         i++;

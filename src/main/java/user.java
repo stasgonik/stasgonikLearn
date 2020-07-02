@@ -200,6 +200,13 @@ class userPhoneValidator {
     }
 }*/
 class userDB {
+    private static boolean intToBoolean(int input) {
+        if((input==0)||(input==1)) {
+            return input!=0;
+        }else {
+            throw new IllegalArgumentException("Входное значение может быть равно только 0 или 1 !");
+        }
+    }
     static void userToDB(user newUser) {
         Connection conn = null;
         PreparedStatement st1 = null;
@@ -579,6 +586,46 @@ class userDB {
             }
         }
         return usid;
+    }
+    static boolean checkNumber (double number) {
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        boolean check = false;
+        try{
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
+
+            String sql = "SELECT COUNT(ID) FROM USERS WHERE NUMBER=?";
+
+            st1 = conn.prepareStatement(sql);
+            st1.setDouble(1, number);
+
+            ResultSet rs = st1.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("COUNT(ID)");
+                check = intToBoolean(id);
+            }
+
+            rs.close();
+            st1.close();
+            conn.close();
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return check;
     }
 }
 

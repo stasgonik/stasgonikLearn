@@ -780,4 +780,43 @@ class accountDB {
         }
         return acids;
     }
+    static boolean countAccountCheck (int usid) {
+        Connection conn = null;
+        PreparedStatement st1 = null;
+        boolean checkLess20 = true;
+        int count = 0;
+        try {
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
+
+            String sql = "SELECT COUNT(ID) FROM ACCOUNT WHERE USID=?";
+            st1 = conn.prepareStatement(sql);
+            st1.setInt(1, usid);
+            ResultSet rs = st1.executeQuery();
+
+
+            while(rs.next()) {
+                count = rs.getInt("COUNT(ID)");
+                System.out.println(count);
+            }
+            checkLess20 = count < 20;
+            rs.close();
+
+        } catch(SQLException se) {
+            se.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(st1!=null) st1.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return checkLess20;
+    }
 }
