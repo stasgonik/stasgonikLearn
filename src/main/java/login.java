@@ -1,3 +1,5 @@
+import org.jetbrains.annotations.NotNull;
+
 import java.sql.*;
 import java.util.Scanner;
 
@@ -39,6 +41,7 @@ public class login {
         this.usid = usid;
     }
 
+    @NotNull
     public static login createLogin(int usid) {
         Scanner sc = new Scanner(System.in);
         validators.LoginValidator loginValidator = new validators.LoginValidator();
@@ -94,7 +97,7 @@ class loginDB {
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
 
-            String sql = "INSERT INTO USERS (LOGIN, PASSWORD, USID) " +
+            String sql = "INSERT INTO LOGIN (LOGIN, PASSWORD, USID) " +
                     "VALUES (?, ?, ?)";
 
             st1 = conn.prepareStatement(sql);

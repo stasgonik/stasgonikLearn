@@ -1,3 +1,5 @@
+import org.jetbrains.annotations.NotNull;
+
 import java.sql.*;
 import java.util.Scanner;
 
@@ -58,6 +60,7 @@ public class account {
         return loan * accountCurrency.getValue();
     }
 
+    @NotNull
     public static account createAccountAndUser() {
         System.out.println("Starting creation of new account.");
         Scanner sc = new Scanner(System.in);
@@ -90,6 +93,7 @@ public class account {
         }
         return Cr;
     }
+    @NotNull
     public static account createAccount(user selected) {
         System.out.println("Starting creation of new account.");
         Scanner sc = new Scanner(System.in);
@@ -504,6 +508,7 @@ class accountDB {
             }
         }
     }
+    @NotNull
     static account accountFromDB (int acid) {
         account search =new account();
         Connection conn = null;
@@ -703,7 +708,7 @@ class accountDB {
                 String first = rs.getString("FIRST_NAME");
                 String second = rs.getString("SECOND_NAME");
                 int age = rs.getInt("AGE");
-                long number = rs.getLong("NUMBER");
+                String number = rs.getString("NUMBER");
                 double money = rs.getDouble("MONEY");
                 double loan = rs.getDouble("LOAN");
                 String curName = rs.getString("NAME");
@@ -742,6 +747,7 @@ class accountDB {
             }
         }
     }
+    @org.jetbrains.annotations.NotNull
     static int[] searchUserAccounts (int usid) {
         Connection conn = null;
         PreparedStatement st1 = null;

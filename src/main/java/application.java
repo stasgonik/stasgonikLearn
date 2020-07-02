@@ -104,6 +104,7 @@ public class application {
                         usid = 0;
                         numberValidator = new validators.NumberValidator();
                         validators.NameValidator nameValidator = new validators.NameValidator();
+                        validators.PhoneValidator phoneValidator = new validators.PhoneValidator();
                         m = 0;
                         do {
                             System.out.println("Set ID for update:");
@@ -211,28 +212,14 @@ public class application {
                                     case "135" :
                                         m = 0;
                                         do {
-                                            System.out.println("Set new phone number (Format: 380971234567):");
+                                            System.out.println("Set new phone number:");
                                             String temp = sc.nextLine();
-                                            if (numberValidator.validate(temp)) {
-                                                long tempLong = Long.parseLong (temp);
-                                                double check = 100000000000L;
-                                                if (tempLong < check) {
-                                                    System.out.println("Need your Ukrainian" +
-                                                            " number in 12 digit format!");
-                                                }
-                                                else if (tempLong > check*10) {
-                                                    System.out.println("Need your Ukrainian" +
-                                                            " number in 12 digit format!");
-                                                }
-                                                else {
-                                                    userDB.updateNumber(usid, tempLong);
-                                                    i++;
-                                                }
+                                            if (phoneValidator.validate(temp)) {
+                                                userDB.updateNumber(usid, temp);
                                                 m++;
                                             }
                                             else {
-                                                System.out.println("Incorrect phone number format." +
-                                                        " Must be 12-digit number!");
+                                                System.out.println("Incorrect phone number format.");
                                             }
                                         }
                                         while (m==0);

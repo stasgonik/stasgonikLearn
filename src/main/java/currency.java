@@ -1,3 +1,5 @@
+import org.jetbrains.annotations.NotNull;
+
 import java.sql.*;
 import java.util.*;
 
@@ -157,6 +159,7 @@ class currencyDB {
             }
         }
     }
+    @NotNull
     static currency currencyFromDB (int crid) {
         currency cur = new currency();
         Connection conn = null;

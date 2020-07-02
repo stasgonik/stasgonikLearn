@@ -1,3 +1,5 @@
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Scanner;
 import java.sql.*;
 
@@ -6,9 +8,9 @@ public class user {
     private String secondName;
     private String lastName;
     private int age;
-    private long number;
+    private String number;
 
-    public user(String firstName, String secondName, String familyName, int age, long number) {
+    public user(String firstName, String secondName, String familyName, int age, String number) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastName = familyName;
@@ -51,19 +53,21 @@ public class user {
         this.age = age;
     }
 
-    public long getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(long number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
+    @NotNull
     public static user createUser() {
         Scanner sc = new Scanner(System.in);
         user us = new user();
         validators.NameValidator nameValidator = new validators.NameValidator();
         validators.NumberValidator numberValidator = new validators.NumberValidator();
+        validators.PhoneValidator phoneValidator = new validators.PhoneValidator();
 
         int i = 0;
         try {
@@ -117,21 +121,11 @@ public class user {
             }
             while (i==3);
             do {
-                System.out.println("Enter your phone number (Format: 3806788888888):");
+                System.out.println("Enter your phone number:");
                 String temp = sc.nextLine();
-                if (numberValidator.validate(temp)) {
-                    long tempDouble = Long.parseLong (temp);
-                    double check = 100000000000L;
-                    if (tempDouble < check) {
-                        System.out.println("Need your Ukrainian number in 12 digit format!");
-                    }
-                    else if (tempDouble > check*10) {
-                        System.out.println("Need your Ukrainian number in 12 digit format!");
-                    }
-                    else {
-                        us.setNumber(tempDouble);
-                        i++;
-                    }
+                if (phoneValidator.validate(temp)) {
+                    us.setNumber(temp);
+                    i++;
                 }
                 else {
                     System.out.println("Incorrect number format. Use only numbers!");
@@ -224,7 +218,7 @@ class userDB {
             st1.setString(2, newUser.getSecondName());
             st1.setString(3, newUser.getLastName());
             st1.setInt(4, newUser.getAge());
-            st1.setLong(5, newUser.getNumber());
+            st1.setString(5, newUser.getNumber());
 
             st1.execute();
 
@@ -246,6 +240,7 @@ class userDB {
             }
         }
     }
+    @NotNull
     static user userFromDB (int usid) {
         user sUser = new user();
         Connection conn = null;
@@ -260,9 +255,8 @@ class userDB {
             st1.setInt(1, usid);
             ResultSet rs = st1.executeQuery();
 
-            String[] stringsTemp = new String[3];
+            String[] stringsTemp = new String[4];
             int[] intsTemp = new int[1];
-            long[] longsTemp = new long[1];
 
             while (rs.next()) {
                 String fName = rs.getString("FIRST_NAME");
@@ -273,14 +267,14 @@ class userDB {
                 stringsTemp[2] = lName;
                 int age = rs.getInt("AGE");
                 intsTemp[0] = age;
-                long number = rs.getLong("NUMBER");
-                longsTemp[0] = number;
+                String number = rs.getString("NUMBER");
+                stringsTemp[3] = number;
             }
             sUser.setAge(intsTemp[0]);
             sUser.setLastName(stringsTemp[2]);
             sUser.setFirstName(stringsTemp[0]);
             sUser.setSecondName(stringsTemp[1]);
-            sUser.setNumber(longsTemp[0]);
+            sUser.setNumber(stringsTemp[3]);
 
             rs.close();
 
@@ -432,7 +426,7 @@ class userDB {
             }
         }
     }
-    static void updateNumber (int usid, long number) {
+    static void updateNumber (int usid, String number) {
         Connection conn = null;
         PreparedStatement st1 = null;
         try{
@@ -442,7 +436,7 @@ class userDB {
             String sql = "UPDATE USERS " + "SET NUMBER=? WHERE id=?";
 
             st1 = conn.prepareStatement(sql);
-            st1.setLong(1, number);
+            st1.setString(1, number);
             st1.setInt(2, usid);
             st1.executeUpdate();
 
@@ -510,7 +504,7 @@ class userDB {
                 String first = rs.getString("FIRST_NAME");
                 String second = rs.getString("SECOND_NAME");
                 int age = rs.getInt("AGE");
-                long number = rs.getLong("NUMBER");
+                String number = rs.getString("NUMBER");
 
 
                 System.out.println("                                              | _---_ |");
@@ -557,7 +551,7 @@ class userDB {
             st1.setString(2, searchUser.getSecondName());
             st1.setString(3, searchUser.getLastName());
             st1.setInt(4, searchUser.getAge());
-            st1.setLong(5, searchUser.getNumber());
+            st1.setString(5, searchUser.getNumber());
 
             int[] intsTemp = new int[1];
 
@@ -587,7 +581,7 @@ class userDB {
         }
         return usid;
     }
-    static boolean checkNumber (double number) {
+    static boolean checkNumber (String number) {
         Connection conn = null;
         PreparedStatement st1 = null;
         boolean check = false;
@@ -598,7 +592,7 @@ class userDB {
             String sql = "SELECT COUNT(ID) FROM USERS WHERE NUMBER=?";
 
             st1 = conn.prepareStatement(sql);
-            st1.setDouble(1, number);
+            st1.setString(1, number);
 
             ResultSet rs = st1.executeQuery();
 

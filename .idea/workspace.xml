@@ -40,6 +40,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.27011493" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RecentsManager">
@@ -164,30 +165,34 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="614" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1593002685530" />
-    <state x="793" y="286" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog" timestamp="1592904893533">
+    <state x="793" y="286" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog" timestamp="1593696474952">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state x="793" y="286" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1592904893533" />
+    <state x="793" y="286" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1593696474952" />
+    <state x="819" y="379" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1593699244857">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="819" y="379" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1920.1050@0.0.1920.1050" timestamp="1593699244857" />
     <state x="719" y="212" key="FileChooserDialogImpl" timestamp="1593634997559">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="719" y="212" key="FileChooserDialogImpl/0.0.1920.1050@0.0.1920.1050" timestamp="1593634997559" />
-    <state width="1340" height="282" key="GridCell.Tab.0.bottom" timestamp="1593695619939">
+    <state width="1340" height="282" key="GridCell.Tab.0.bottom" timestamp="1593699246403">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1340" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1050@0.0.1920.1050" timestamp="1593695619939" />
-    <state width="1340" height="282" key="GridCell.Tab.0.center" timestamp="1593695619939">
+    <state width="1340" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1050@0.0.1920.1050" timestamp="1593699246403" />
+    <state width="1340" height="282" key="GridCell.Tab.0.center" timestamp="1593699246403">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1340" height="282" key="GridCell.Tab.0.center/0.0.1920.1050@0.0.1920.1050" timestamp="1593695619939" />
-    <state width="1340" height="282" key="GridCell.Tab.0.left" timestamp="1593695619939">
+    <state width="1340" height="282" key="GridCell.Tab.0.center/0.0.1920.1050@0.0.1920.1050" timestamp="1593699246403" />
+    <state width="1340" height="282" key="GridCell.Tab.0.left" timestamp="1593699246403">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1340" height="282" key="GridCell.Tab.0.left/0.0.1920.1050@0.0.1920.1050" timestamp="1593695619939" />
-    <state width="1340" height="282" key="GridCell.Tab.0.right" timestamp="1593695619939">
+    <state width="1340" height="282" key="GridCell.Tab.0.left/0.0.1920.1050@0.0.1920.1050" timestamp="1593699246403" />
+    <state width="1340" height="282" key="GridCell.Tab.0.right" timestamp="1593699246403">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1340" height="282" key="GridCell.Tab.0.right/0.0.1920.1050@0.0.1920.1050" timestamp="1593695619939" />
+    <state width="1340" height="282" key="GridCell.Tab.0.right/0.0.1920.1050@0.0.1920.1050" timestamp="1593699246403" />
     <state width="1340" height="318" key="GridCell.Tab.1.bottom" timestamp="1593638805664">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
