@@ -121,14 +121,21 @@ public class user {
             }
             while (i==3);
             do {
-                System.out.println("Enter your phone number:");
+                System.out.println("Enter your phone number with country code:");
+                System.out.println("Preferred format: +38 123 123-4567");
                 String temp = sc.nextLine();
                 if (phoneValidator.validate(temp)) {
-                    us.setNumber(temp);
-                    i++;
+                    if (userDB.checkNumber(temp)) {
+                        System.out.println("We already have this number in database.");
+                        System.out.println("Please, use another number for new user.");
+                    }
+                    else {
+                        us.setNumber(temp);
+                        i++;
+                    }
                 }
                 else {
-                    System.out.println("Incorrect number format. Use only numbers!");
+                    System.out.println("Incorrect number format. Please, repeat again.");
                 }
             }
             while (i==4);
@@ -203,7 +210,7 @@ class userDB {
     }
     static void userToDB(user newUser) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try{
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
@@ -212,26 +219,25 @@ class userDB {
             String sql = "INSERT INTO USERS (FIRST_NAME, SECOND_NAME, LAST_NAME, AGE, NUMBER) " +
                     "VALUES (?, ?, ?, ?, ?)";
 
-            st1 = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(sql);
 
-            st1.setString(1, newUser.getFirstName());
-            st1.setString(2, newUser.getSecondName());
-            st1.setString(3, newUser.getLastName());
-            st1.setInt(4, newUser.getAge());
-            st1.setString(5, newUser.getNumber());
+            stmt.setString(1, newUser.getFirstName());
+            stmt.setString(2, newUser.getSecondName());
+            stmt.setString(3, newUser.getLastName());
+            stmt.setInt(4, newUser.getAge());
+            stmt.setString(5, newUser.getNumber());
 
-            st1.execute();
+            stmt.execute();
 
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch(SQLException se) {
+
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -242,18 +248,18 @@ class userDB {
     }
     @NotNull
     static user userFromDB (int usid) {
-        user sUser = new user();
+        user searchUser = new user();
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "SELECT FIRST_NAME, SECOND_NAME, LAST_NAME, AGE, NUMBER FROM USERS WHERE ID=?";
 
-            st1 = conn.prepareStatement(sql);
-            st1.setInt(1, usid);
-            ResultSet rs = st1.executeQuery();
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, usid);
+            ResultSet rs = stmt.executeQuery();
 
             String[] stringsTemp = new String[4];
             int[] intsTemp = new int[1];
@@ -270,22 +276,22 @@ class userDB {
                 String number = rs.getString("NUMBER");
                 stringsTemp[3] = number;
             }
-            sUser.setAge(intsTemp[0]);
-            sUser.setLastName(stringsTemp[2]);
-            sUser.setFirstName(stringsTemp[0]);
-            sUser.setSecondName(stringsTemp[1]);
-            sUser.setNumber(stringsTemp[3]);
+            searchUser.setAge(intsTemp[0]);
+            searchUser.setLastName(stringsTemp[2]);
+            searchUser.setFirstName(stringsTemp[0]);
+            searchUser.setSecondName(stringsTemp[1]);
+            searchUser.setNumber(stringsTemp[3]);
 
             rs.close();
+            stmt.close();
+            conn.close();
 
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -293,32 +299,30 @@ class userDB {
                 se.printStackTrace();
             }
         }
-        return sUser;
+        return searchUser;
     }
     static void updateFName (int usid, String fName) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try{
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE USERS " + "SET FIRST_NAME=? WHERE id=?";
 
-            st1 = conn.prepareStatement(sql);
-            st1.setString(1, fName);
-            st1.setInt(2, usid);
-            st1.executeUpdate();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, fName);
+            stmt.setInt(2, usid);
+            stmt.executeUpdate();
 
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -329,29 +333,27 @@ class userDB {
     }
     static void updateSName (int usid, String sName) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try{
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE USERS " + "SET SECOND_NAME=? WHERE id=?";
 
-            st1 = conn.prepareStatement(sql);
-            st1.setString(1, sName);
-            st1.setInt(2, usid);
-            st1.executeUpdate();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, sName);
+            stmt.setInt(2, usid);
+            stmt.executeUpdate();
 
-            st1.close();
+            stmt.close();
             conn.close();
 
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -362,28 +364,27 @@ class userDB {
     }
     static void updateLName (int usid, String lName) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try{
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE USERS " + "SET LAST_NAME=? WHERE id=?";
 
-            st1 = conn.prepareStatement(sql);
-            st1.setString(1, lName);
-            st1.setInt(2, usid);
-            st1.executeUpdate();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, lName);
+            stmt.setInt(2, usid);
+            stmt.executeUpdate();
 
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch(SQLException se) {
+
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if (st1 != null) st1.close();
-            } catch (SQLException se2) {
+                if (stmt != null) stmt.close();
+            } catch (SQLException ignored) {
             } // nothing we can do
             try {
                 if (conn != null) conn.close();
@@ -394,30 +395,28 @@ class userDB {
     }
     static void updateAge (int usid, int age) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try{
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE USERS " + "SET AGE=? WHERE id=?";
 
-            st1 = conn.prepareStatement(sql);
-            st1.setInt(1, age);
-            st1.setInt(2, usid);
-            st1.executeUpdate();
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, age);
+            stmt.setInt(2, usid);
+            stmt.executeUpdate();
 
-            st1.close();
+            stmt.close();
             conn.close();
 
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             // finally block used to close resources
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -428,29 +427,27 @@ class userDB {
     }
     static void updateNumber (int usid, String number) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try{
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE USERS " + "SET NUMBER=? WHERE id=?";
 
-            st1 = conn.prepareStatement(sql);
-            st1.setString(1, number);
-            st1.setInt(2, usid);
-            st1.executeUpdate();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, number);
+            stmt.setInt(2, usid);
+            stmt.executeUpdate();
 
-            st1.close();
+            stmt.close();
             conn.close();
 
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if (st1 != null) st1.close();
-            } catch (SQLException se2) {
+                if (stmt != null) stmt.close();
+            } catch (SQLException ignored) {
             } // nothing we can do
             try {
                 if (conn != null) conn.close();
@@ -461,24 +458,25 @@ class userDB {
     }
     static void deleteUser (int usid) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String delete = "DELETE FROM USERS " + "WHERE ID = ?";
-            st1 = conn.prepareStatement(delete);
-            st1.setInt(1, usid);
-            st1.executeUpdate();
+            stmt = conn.prepareStatement(delete);
+            stmt.setInt(1, usid);
+            stmt.executeUpdate();
 
-        } catch(SQLException se) {
+            stmt.close();
+            conn.close();
+
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -506,7 +504,6 @@ class userDB {
                 int age = rs.getInt("AGE");
                 String number = rs.getString("NUMBER");
 
-
                 System.out.println("                                              | _---_ |");
                 System.out.print("UserID: " + id);
                 System.out.print("; Last name: " + last);
@@ -514,18 +511,17 @@ class userDB {
                 System.out.print("; Second name: " + second);
                 System.out.print("; Age: " + age);
                 System.out.println("; Phone number: " + number);
-                System.out.println("");
-
+                System.out.println(" ");
             }
             rs.close();
-        } catch(SQLException se) {
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -536,7 +532,7 @@ class userDB {
     }
     static int getUSID (user searchUser) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         int usid = 0;
         try{
             Class.forName(constants.JDBC_DRIVER);
@@ -545,33 +541,31 @@ class userDB {
             String sql = "SELECT ID FROM USERS WHERE FIRST_NAME=? AND SECOND_NAME=?" +
                     " AND LAST_NAME=? AND AGE=? AND NUMBER=?";
 
-            st1 = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(sql);
 
-            st1.setString(1, searchUser.getFirstName());
-            st1.setString(2, searchUser.getSecondName());
-            st1.setString(3, searchUser.getLastName());
-            st1.setInt(4, searchUser.getAge());
-            st1.setString(5, searchUser.getNumber());
+            stmt.setString(1, searchUser.getFirstName());
+            stmt.setString(2, searchUser.getSecondName());
+            stmt.setString(3, searchUser.getLastName());
+            stmt.setInt(4, searchUser.getAge());
+            stmt.setString(5, searchUser.getNumber());
 
             int[] intsTemp = new int[1];
 
-            ResultSet rs = st1.executeQuery();
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("ID");
                 intsTemp[0] = id;
             }
             usid = intsTemp[0];
             rs.close();
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -583,7 +577,7 @@ class userDB {
     }
     static boolean checkNumber (String number) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         boolean check = false;
         try{
             Class.forName(constants.JDBC_DRIVER);
@@ -591,10 +585,10 @@ class userDB {
 
             String sql = "SELECT COUNT(ID) FROM USERS WHERE NUMBER=?";
 
-            st1 = conn.prepareStatement(sql);
-            st1.setString(1, number);
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, number);
 
-            ResultSet rs = st1.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 int id = rs.getInt("COUNT(ID)");
@@ -602,16 +596,14 @@ class userDB {
             }
 
             rs.close();
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();

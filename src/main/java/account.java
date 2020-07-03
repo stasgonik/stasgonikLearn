@@ -443,8 +443,8 @@ public class account {
 class accountDB {
     static void accountToDB(account newAccount) {
         Connection conn = null;
-        PreparedStatement st1 = null;
-        PreparedStatement st2 = null;
+        PreparedStatement stmt1 = null;
+        PreparedStatement stmt2 = null;
         try {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
@@ -455,51 +455,52 @@ class accountDB {
                     " AND AGE=?";
             String sqlSearch2 = "SELECT ID FROM CURRENCY WHERE NAME=?";
 
-            st1 = conn.prepareStatement(sql);
+            stmt1 = conn.prepareStatement(sql);
 
-            st2 = conn.prepareStatement(sqlSearch1);
+            stmt2 = conn.prepareStatement(sqlSearch1);
 
-            st2.setString(1, newAccount.getMaster().getFirstName());
-            st2.setString(2, newAccount.getMaster().getSecondName());
-            st2.setString(3, newAccount.getMaster().getLastName());
-            st2.setInt(4, newAccount.getMaster().getAge());
+            stmt2.setString(1, newAccount.getMaster().getFirstName());
+            stmt2.setString(2, newAccount.getMaster().getSecondName());
+            stmt2.setString(3, newAccount.getMaster().getLastName());
+            stmt2.setInt(4, newAccount.getMaster().getAge());
 
-            ResultSet rs1 = st2.executeQuery();
+            ResultSet rs1 = stmt2.executeQuery();
             int USID = 0;
             while (rs1.next()) {
                 USID = rs1.getInt("id");
             }
 
-            st1.setInt(1, USID);
+            stmt1.setInt(1, USID);
 
-            st2 = conn.prepareStatement(sqlSearch2);
+            stmt2 = conn.prepareStatement(sqlSearch2);
 
-            st2.setString(1, newAccount.getAccountCurrency().getName());
+            stmt2.setString(1, newAccount.getAccountCurrency().getName());
 
-            ResultSet rs2 = st2.executeQuery();
+            ResultSet rs2 = stmt2.executeQuery();
             int CRID = 0;
             while (rs2.next()) {
                 CRID = rs2.getInt("id");
             }
-            st1.setInt(2, CRID);
+            stmt1.setInt(2, CRID);
 
-            st1.setDouble(3, newAccount.getMoney());
-            st1.setDouble(4, newAccount.getLoan());
+            stmt1.setDouble(3, newAccount.getMoney());
+            stmt1.setDouble(4, newAccount.getLoan());
 
-            st1.execute();
+            stmt1.execute();
 
-            st1.close();
-            st2.close();
+            rs1.close();
+            rs2.close();
+
+            stmt1.close();
+            stmt2.close();
             conn.close();
-        } catch (SQLException se) {
+        } catch (Exception se) {
             se.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if (st1 != null) st1.close();
-                if (st2 != null) st2.close();
-            } catch (SQLException se2) {
+                if (stmt1 != null) stmt1.close();
+                if (stmt2 != null) stmt2.close();
+            } catch (SQLException ignored) {
             } // nothing we can do
             try {
                 if (conn != null) conn.close();
@@ -510,17 +511,17 @@ class accountDB {
     }
     @NotNull
     static account accountFromDB (int acid) {
-        account search =new account();
+        account search = new account();
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "SELECT USID, CRID, MONEY, LOAN FROM ACCOUNT WHERE ID=?";
-            st1 = conn.prepareStatement(sql);
-            st1.setInt(1, acid);
-            ResultSet rs = st1.executeQuery();
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, acid);
+            ResultSet rs = stmt.executeQuery();
 
             int[] intsTemp = new int[2];
             double[] doublesTemp = new double[2];
@@ -541,15 +542,15 @@ class accountDB {
             search.setAccountCurrency(currencyDB.currencyFromDB(intsTemp[1]));
 
             rs.close();
+            stmt.close();
+            conn.close();
 
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -561,16 +562,16 @@ class accountDB {
     }
     static int usidFromDB (int acid) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         int usid = 0;
         try {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "SELECT USID FROM ACCOUNT WHERE ID=?";
-            st1 = conn.prepareStatement(sql);
-            st1.setInt(1, acid);
-            ResultSet rs = st1.executeQuery();
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, acid);
+            ResultSet rs = stmt.executeQuery();
 
             int[] intsTemp = new int[1];
 
@@ -579,16 +580,17 @@ class accountDB {
                 intsTemp[0] = usid;
             }
             usid = intsTemp[0];
-            rs.close();
 
-        } catch(SQLException se) {
+            rs.close();
+            stmt.close();
+            conn.close();
+
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -600,28 +602,26 @@ class accountDB {
     }
     static void updateMoney (int acid, double newMoney) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try{
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE ACCOUNT " + "SET MONEY=? WHERE ID=?";
 
-            st1 = conn.prepareStatement(sql);
-            st1.setDouble(1, newMoney);
-            st1.setInt(2, acid);
-            st1.executeUpdate();
+            stmt = conn.prepareStatement(sql);
+            stmt.setDouble(1, newMoney);
+            stmt.setInt(2, acid);
+            stmt.executeUpdate();
 
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -632,24 +632,24 @@ class accountDB {
     }
     static void deleteAccount (int acid) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String delete = "DELETE FROM ACCOUNT " + "WHERE ID=?";
-            st1 = conn.prepareStatement(delete);
-            st1.setInt(1, acid);
-            st1.executeUpdate();
+            stmt = conn.prepareStatement(delete);
+            stmt.setInt(1, acid);
+            stmt.executeUpdate();
 
-        } catch(SQLException se) {
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -660,28 +660,26 @@ class accountDB {
     }
     static void updateLoan (int acid, double newLoan) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try{
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE ACCOUNT " + "SET LOAN=? WHERE ID=?";
 
-            st1 = conn.prepareStatement(sql);
-            st1.setDouble(1, newLoan);
-            st1.setInt(2, acid);
-            st1.executeUpdate();
+            stmt = conn.prepareStatement(sql);
+            stmt.setDouble(1, newLoan);
+            stmt.setInt(2, acid);
+            stmt.executeUpdate();
 
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -727,18 +725,19 @@ class accountDB {
                 System.out.print("; Currency name: " + curName);
                 System.out.printf("; Currency value: %6.2f", value);
                 System.out.printf("; Sum in %s: %10.2f%n", currencyDB.currencyFromDB(1).getName() ,sumBase);
-                System.out.println("");
+                System.out.println(" ");
 
             }
+
             rs.close();
-        } catch(SQLException se) {
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -750,16 +749,16 @@ class accountDB {
     @org.jetbrains.annotations.NotNull
     static int[] searchUserAccounts (int usid) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         int[] acids = new int[20];
         try {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "SELECT ID FROM ACCOUNT WHERE USID=?";
-            st1 = conn.prepareStatement(sql);
-            st1.setInt(1, usid);
-            ResultSet rs = st1.executeQuery();
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, usid);
+            ResultSet rs = stmt.executeQuery();
             int i = 0;
 
             while(rs.next()) {
@@ -768,15 +767,14 @@ class accountDB {
                 i++;
             }
             rs.close();
-
-        } catch(SQLException se) {
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -788,7 +786,7 @@ class accountDB {
     }
     static boolean countAccountCheck (int usid) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         boolean checkLess20 = true;
         int count = 0;
         try {
@@ -796,26 +794,25 @@ class accountDB {
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "SELECT COUNT(ID) FROM ACCOUNT WHERE USID=?";
-            st1 = conn.prepareStatement(sql);
-            st1.setInt(1, usid);
-            ResultSet rs = st1.executeQuery();
-
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, usid);
+            ResultSet rs = stmt.executeQuery();
 
             while(rs.next()) {
                 count = rs.getInt("COUNT(ID)");
                 System.out.println(count);
             }
             checkLess20 = count < 20;
-            rs.close();
 
-        } catch(SQLException se) {
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();

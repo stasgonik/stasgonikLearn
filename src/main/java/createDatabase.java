@@ -48,14 +48,12 @@ public class createDatabase {
 
             stmt.close();
             conn.close();
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();

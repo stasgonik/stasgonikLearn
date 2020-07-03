@@ -6,7 +6,7 @@ public class validators {
         private final Pattern pattern;
 
         private static final String NAME_PATTERN =
-                "^[_A-Za-z-\\+]+$";
+                "^[_A-Za-z-+]+$";
         public NameValidator() {
             pattern = Pattern.compile(NAME_PATTERN);
         }
@@ -20,7 +20,7 @@ public class validators {
         private final Pattern pattern;
 
         private static final String NUMBER_PATTERN =
-                "^[_,.0-9\\+]+$";
+                "^[_,.0-9+]+$";
         public NumberValidator() {
             pattern = Pattern.compile(NUMBER_PATTERN);
         }
@@ -34,7 +34,7 @@ public class validators {
         private final Pattern pattern;
 
         private static final String LOGIN_PATTERN =
-                "^[_A-Za-z0-9\\+]+$";
+                "^[_A-Za-z0-9+]+$";
         public LoginValidator() {
             pattern = Pattern.compile(LOGIN_PATTERN);
         }

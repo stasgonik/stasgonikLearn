@@ -53,8 +53,14 @@ public class login {
                 System.out.println("Enter login:");
                 String temp = sc.nextLine();
                 if (loginValidator.validate(temp)) {
-                    newUser.setLogin(temp);
-                    i++;
+                    if (loginDB.checkLogin(temp)) {
+                        System.out.println("User with this login already exist.");
+                        System.out.println("Please, choose another login.");
+                    }
+                    else {
+                        newUser.setLogin(temp);
+                        i++;
+                    }
                 }
                 else {
                     System.out.println("Incorrect login format. Use only latin letters or numbers!");
@@ -91,7 +97,7 @@ class loginDB {
     }
     static void loginToDB (login newLogin) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try{
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
@@ -100,25 +106,23 @@ class loginDB {
             String sql = "INSERT INTO LOGIN (LOGIN, PASSWORD, USID) " +
                     "VALUES (?, ?, ?)";
 
-            st1 = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(sql);
 
-            st1.setString(1, newLogin.getLogin());
-            st1.setString(2, newLogin.getPassword());
-            st1.setInt(3, newLogin.getUsid());
+            stmt.setString(1, newLogin.getLogin());
+            stmt.setString(2, newLogin.getPassword());
+            stmt.setInt(3, newLogin.getUsid());
 
 
-            st1.execute();
+            stmt.execute();
 
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -129,7 +133,7 @@ class loginDB {
     }
     static boolean checkLoginPassword (String login, String password) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         boolean check = false;
         try{
             Class.forName(constants.JDBC_DRIVER);
@@ -137,10 +141,10 @@ class loginDB {
 
             String sql = "SELECT COUNT(ID) FROM LOGIN WHERE LOGIN=? AND PASSWORD=?";
 
-            st1 = conn.prepareStatement(sql);
-            st1.setString(1, login);
-            st1.setString(2, password);
-            ResultSet rs = st1.executeQuery();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, login);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 int id = rs.getInt("COUNT(ID)");
@@ -148,16 +152,14 @@ class loginDB {
             }
 
             rs.close();
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -169,7 +171,7 @@ class loginDB {
     }
     static boolean checkLogin (String login) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         boolean check = false;
         try{
             Class.forName(constants.JDBC_DRIVER);
@@ -177,10 +179,10 @@ class loginDB {
 
             String sql = "SELECT COUNT(ID) FROM LOGIN WHERE LOGIN=?";
 
-            st1 = conn.prepareStatement(sql);
-            st1.setString(1, login);
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, login);
 
-            ResultSet rs = st1.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 int id = rs.getInt("COUNT(ID)");
@@ -188,16 +190,14 @@ class loginDB {
             }
 
             rs.close();
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -207,9 +207,9 @@ class loginDB {
         }
         return check;
     }
-    static int getID (String login, String password) {
+    static int getID (String login, String password) throws SQLException {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         int usid = 0;
         try{
             Class.forName(constants.JDBC_DRIVER);
@@ -217,28 +217,23 @@ class loginDB {
 
             String sql = "SELECT USID FROM LOGIN WHERE LOGIN=? AND PASSWORD=?";
 
-            st1 = conn.prepareStatement(sql);
-            st1.setString(1, login);
-            st1.setString(1, password);
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, login);
+            stmt.setString(1, password);
 
-            ResultSet rs = st1.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 usid = rs.getInt("USID");
             }
 
             rs.close();
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
-            try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
-            } // nothing we can do
+            if(stmt!=null) stmt.close();
             try {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
@@ -249,24 +244,22 @@ class loginDB {
     }
     static void deleteLogin (int usid) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String delete = "DELETE FROM LOGIN " + "WHERE USID = ?";
-            st1 = conn.prepareStatement(delete);
-            st1.setInt(1, usid);
-            st1.executeUpdate();
+            stmt = conn.prepareStatement(delete);
+            stmt.setInt(1, usid);
+            stmt.executeUpdate();
 
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -277,28 +270,26 @@ class loginDB {
     }
     static void updatePassword (int usid, String password) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try{
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE LOGIN " + "SET PASSWORD=? WHERE USID=?";
 
-            st1 = conn.prepareStatement(sql);
-            st1.setString(1, password);
-            st1.setInt(2, usid);
-            st1.executeUpdate();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, password);
+            stmt.setInt(2, usid);
+            stmt.executeUpdate();
 
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();

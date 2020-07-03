@@ -79,7 +79,7 @@ enum subtype {
 class operationDB {
     static void operationToDB_2acc(operation newOperation, int acidFrom, int acidTo) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
@@ -88,30 +88,28 @@ class operationDB {
                     " CURRENCY_VALUE, CRID, OPERATION_TIME) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 
-            st1 = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(sql);
 
-            st1.setInt(1, acidFrom);
-            st1.setInt(2, acidTo);
-            st1.setString(3, newOperation.getType().name());
-            st1.setString(4, newOperation.getSubtype().name());
-            st1.setDouble(5, newOperation.getSum());
-            st1.setString(6, newOperation.getOperationCurrency().getName());
-            st1.setDouble(7, newOperation.getOperationCurrency().getValue());
-            st1.setInt(8, currencyDB.currencyGetID(newOperation.getOperationCurrency()));
-            st1.setTimestamp(9, Timestamp.valueOf(newOperation.getDateTime()));
+            stmt.setInt(1, acidFrom);
+            stmt.setInt(2, acidTo);
+            stmt.setString(3, newOperation.getType().name());
+            stmt.setString(4, newOperation.getSubtype().name());
+            stmt.setDouble(5, newOperation.getSum());
+            stmt.setString(6, newOperation.getOperationCurrency().getName());
+            stmt.setDouble(7, newOperation.getOperationCurrency().getValue());
+            stmt.setInt(8, currencyDB.currencyGetID(newOperation.getOperationCurrency()));
+            stmt.setTimestamp(9, Timestamp.valueOf(newOperation.getDateTime()));
 
-            st1.execute();
+            stmt.execute();
 
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch (SQLException se) {
+        } catch (Exception se) {
             se.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if (st1 != null) st1.close();
-            } catch (SQLException se2) {
+                if (stmt != null) stmt.close();
+            } catch (SQLException ignored) {
             } // nothing we can do
             try {
                 if (conn != null) conn.close();
@@ -122,7 +120,7 @@ class operationDB {
     }
     static void operationToDB_From(operation newOperation, int acidFrom) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
@@ -131,29 +129,27 @@ class operationDB {
                     " CURRENCY_VALUE, CRID, OPERATION_TIME) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
 
-            st1 = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(sql);
 
-            st1.setInt(1, acidFrom);
-            st1.setString(2, newOperation.getType().name());
-            st1.setString(3, newOperation.getSubtype().name());
-            st1.setDouble(4, newOperation.getSum());
-            st1.setString(5, newOperation.getOperationCurrency().getName());
-            st1.setDouble(6, newOperation.getOperationCurrency().getValue());
-            st1.setInt(7, currencyDB.currencyGetID(newOperation.getOperationCurrency()));
-            st1.setTimestamp(8, Timestamp.valueOf(newOperation.getDateTime()));
+            stmt.setInt(1, acidFrom);
+            stmt.setString(2, newOperation.getType().name());
+            stmt.setString(3, newOperation.getSubtype().name());
+            stmt.setDouble(4, newOperation.getSum());
+            stmt.setString(5, newOperation.getOperationCurrency().getName());
+            stmt.setDouble(6, newOperation.getOperationCurrency().getValue());
+            stmt.setInt(7, currencyDB.currencyGetID(newOperation.getOperationCurrency()));
+            stmt.setTimestamp(8, Timestamp.valueOf(newOperation.getDateTime()));
 
-            st1.execute();
+            stmt.execute();
 
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch (SQLException se) {
+        } catch (Exception se) {
             se.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if (st1 != null) st1.close();
-            } catch (SQLException se2) {
+                if (stmt != null) stmt.close();
+            } catch (SQLException ignored) {
             } // nothing we can do
             try {
                 if (conn != null) conn.close();
@@ -164,7 +160,7 @@ class operationDB {
     }
     static void operationToDB_To(operation newOperation, int acidTo) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
@@ -173,29 +169,27 @@ class operationDB {
                     " CURRENCY_VALUE, CRID, OPERATION_TIME) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
 
-            st1 = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(sql);
 
-            st1.setInt(1, acidTo);
-            st1.setString(2, newOperation.getType().name());
-            st1.setString(3, newOperation.getSubtype().name());
-            st1.setDouble(4, newOperation.getSum());
-            st1.setString(5, newOperation.getOperationCurrency().getName());
-            st1.setDouble(6, newOperation.getOperationCurrency().getValue());
-            st1.setInt(7, currencyDB.currencyGetID(newOperation.getOperationCurrency()));
-            st1.setTimestamp(8, Timestamp.valueOf(newOperation.getDateTime()));
+            stmt.setInt(1, acidTo);
+            stmt.setString(2, newOperation.getType().name());
+            stmt.setString(3, newOperation.getSubtype().name());
+            stmt.setDouble(4, newOperation.getSum());
+            stmt.setString(5, newOperation.getOperationCurrency().getName());
+            stmt.setDouble(6, newOperation.getOperationCurrency().getValue());
+            stmt.setInt(7, currencyDB.currencyGetID(newOperation.getOperationCurrency()));
+            stmt.setTimestamp(8, Timestamp.valueOf(newOperation.getDateTime()));
 
-            st1.execute();
+            stmt.execute();
 
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch (SQLException se) {
+        } catch (Exception se) {
             se.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if (st1 != null) st1.close();
-            } catch (SQLException se2) {
+                if (stmt != null) stmt.close();
+            } catch (SQLException ignored) {
             } // nothing we can do
             try {
                 if (conn != null) conn.close();
@@ -241,7 +235,7 @@ class operationDB {
                     System.out.println("Sender account: GSI Bank Administration.");
                 }
                 else if (acidFrom == 0) {
-                    System.out.println("");
+                    System.out.println(" ");
                 }
                 else {
                     System.out.print("ID of sender account: " + acidFrom);
@@ -252,7 +246,7 @@ class operationDB {
                     System.out.println("Recipient account: GSI Bank Administration.");
                 }
                 else if (acidTo == 0) {
-                    System.out.println("");
+                    System.out.println(" ");
                 }
                 else {
                     System.out.print("ID of recipient account: " + acidTo);
@@ -262,18 +256,18 @@ class operationDB {
                 System.out.println("Sum of operation : " + sum + " " + currencyName +
                         " ( Currency course " + currencyValue + ") ;" );
                 System.out.println("Operation registered : " + operationTime + ".");
-                System.out.println("");
+                System.out.println(" ");
 
             }
             rs.close();
-        } catch(SQLException se) {
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -319,7 +313,7 @@ class operationDB {
                     System.out.println("Sender account: GSI Bank Administration.");
                 }
                 else if (acidFrom == 0) {
-                    System.out.println("");
+                    System.out.println(" ");
                 }
                 else {
                     System.out.print("ID of sender account: " + acidFrom);
@@ -330,7 +324,7 @@ class operationDB {
                     System.out.println("Recipient account: GSI Bank Administration.");
                 }
                 else if (acidTo == 0) {
-                    System.out.println("");
+                    System.out.println(" ");
                 }
                 else {
                     System.out.print("ID of recipient account: " + acidTo);
@@ -340,18 +334,18 @@ class operationDB {
                 System.out.println("Sum of operation : " + sum + " " + currencyName +
                         " ( Currency course " + currencyValue + ") ;" );
                 System.out.println("Operation registered : " + operationTime + ".");
-                System.out.println("");
+                System.out.println(" ");
 
             }
             rs.close();
-        } catch(SQLException se) {
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -396,7 +390,7 @@ class operationDB {
                     System.out.println("Sender account: GSI Bank Administration.");
                 }
                 else if (acidFrom == 0) {
-                    System.out.println("");
+                    System.out.println(" ");
                 }
                 else {
                     System.out.print("ID of sender account: " + acidFrom);
@@ -407,7 +401,7 @@ class operationDB {
                     System.out.println("Recipient account: GSI Bank Administration.");
                 }
                 else if (acidTo == 0) {
-                    System.out.println("");
+                    System.out.println(" ");
                 }
                 else {
                     System.out.print("ID of recipient account: " + acidTo);
@@ -417,18 +411,18 @@ class operationDB {
                 System.out.println("Sum of operation : " + sum + " " + currencyName +
                         " ( Currency course " + currencyValue + ") ;" );
                 System.out.println("Operation registered : " + operationTime + ".");
-                System.out.println("");
+                System.out.println(" ");
 
             }
             rs.close();
-        } catch(SQLException se) {
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -475,7 +469,7 @@ class operationDB {
                     System.out.println("Sender account: GSI Bank Administration.");
                 }
                 else if (acidFrom == 0) {
-                    System.out.println("");
+                    System.out.println(" ");
                 }
                 else {
                     System.out.print("ID of sender account: " + acidFrom);
@@ -486,7 +480,7 @@ class operationDB {
                     System.out.println("Recipient account: GSI Bank Administration.");
                 }
                 else if (acidTo == 0) {
-                    System.out.println("");
+                    System.out.println(" ");
                 }
                 else {
                     System.out.print("ID of recipient account: " + acidTo);
@@ -496,18 +490,18 @@ class operationDB {
                 System.out.println("Sum of operation : " + sum + " " + currencyName +
                         " ( Currency course " + currencyValue + ") ;" );
                 System.out.println("Operation registered : " + operationTime + ".");
-                System.out.println("");
+                System.out.println(" ");
 
             }
             rs.close();
-        } catch(SQLException se) {
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -553,7 +547,7 @@ class operationDB {
                     System.out.println("Sender account: GSI Bank Administration.");
                 }
                 else if (acidFrom == 0) {
-                    System.out.println("");
+                    System.out.println(" ");
                 }
                 else {
                     System.out.print("ID of sender account: " + acidFrom);
@@ -564,7 +558,7 @@ class operationDB {
                     System.out.println("Recipient account: GSI Bank Administration.");
                 }
                 else if (acidTo == 0) {
-                    System.out.println("");
+                    System.out.println(" ");
                 }
                 else {
                     System.out.print("ID of recipient account: " + acidTo);
@@ -574,18 +568,18 @@ class operationDB {
                 System.out.println("Sum of operation : " + sum + " " + currencyName +
                         " ( Currency course " + currencyValue + ") ;" );
                 System.out.println("Operation registered : " + operationTime + ".");
-                System.out.println("");
+                System.out.println(" ");
 
             }
             rs.close();
-        } catch(SQLException se) {
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -631,7 +625,7 @@ class operationDB {
                     System.out.println("Sender account: GSI Bank Administration.");
                 }
                 else if (acidFrom == 0) {
-                    System.out.println("");
+                    System.out.println(" ");
                 }
                 else {
                     System.out.print("ID of sender account: " + acidFrom);
@@ -642,7 +636,7 @@ class operationDB {
                     System.out.println("Recipient account: GSI Bank Administration.");
                 }
                 else if (acidTo == 0) {
-                    System.out.println("");
+                    System.out.println(" ");
                 }
                 else {
                     System.out.print("ID of recipient account: " + acidTo);
@@ -652,18 +646,18 @@ class operationDB {
                 System.out.println("Sum of operation : " + sum + " " + currencyName +
                         " ( Currency course " + currencyValue + ") ;" );
                 System.out.println("Operation registered : " + operationTime + ".");
-                System.out.println("");
+                System.out.println(" ");
 
             }
             rs.close();
-        } catch(SQLException se) {
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -715,7 +709,8 @@ class operationDB {
                         System.out.println("Sender account: GSI Bank Administration.");
                     }
                     else if (acidFrom == 0) {
-                        System.out.println("");
+                        // do nothing
+                        System.out.println(" ");
                     }
                     else {
                         System.out.print("ID of sender account: " + acidFrom);
@@ -726,7 +721,8 @@ class operationDB {
                         System.out.println("Recipient account: GSI Bank Administration.");
                     }
                     else if (acidTo == 0) {
-                        System.out.println("");
+                        // do nothing
+                        System.out.println(" ");
                     }
                     else {
                         System.out.print("ID of recipient account: " + acidTo);
@@ -736,18 +732,18 @@ class operationDB {
                     System.out.println("Sum of operation : " + sum + " " + currencyName +
                             " ( Currency course " + currencyValue + ") ;" );
                     System.out.println("Operation registered : " + operationTime + ".");
-                    System.out.println("");
+                    System.out.println(" ");
                 }
             }
             rs.close();
-        } catch(SQLException se) {
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -800,7 +796,8 @@ class operationDB {
                         System.out.println("Sender account: GSI Bank Administration.");
                     }
                     else if (acidFrom == 0) {
-                        System.out.println("");
+                        // do nothing
+                        System.out.println(" ");
                     }
                     else {
                         System.out.print("ID of sender account: " + acidFrom);
@@ -811,7 +808,8 @@ class operationDB {
                         System.out.println("Recipient account: GSI Bank Administration.");
                     }
                     else if (acidTo == 0) {
-                        System.out.println("");
+                        // do nothing
+                        System.out.println(" ");
                     }
                     else {
                         System.out.print("ID of recipient account: " + acidTo);
@@ -821,18 +819,18 @@ class operationDB {
                     System.out.println("Sum of operation : " + sum + " " + currencyName +
                             " ( Currency course " + currencyValue + ") ;" );
                     System.out.println("Operation registered : " + operationTime + ".");
-                    System.out.println("");
+                    System.out.println(" ");
                 }
             }
             rs.close();
-        } catch(SQLException se) {
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -883,7 +881,8 @@ class operationDB {
                         System.out.println("Sender account: GSI Bank Administration.");
                     }
                     else if (acidFrom == 0) {
-                        System.out.println("");
+                        // do nothing
+                        System.out.println(" ");
                     }
                     else {
                         System.out.print("ID of sender account: " + acidFrom);
@@ -894,7 +893,8 @@ class operationDB {
                         System.out.println("Recipient account: GSI Bank Administration.");
                     }
                     else if (acidTo == 0) {
-                        System.out.println("");
+                        // do nothing
+                        System.out.println(" ");
                     }
                     else {
                         System.out.print("ID of recipient account: " + acidTo);
@@ -904,18 +904,18 @@ class operationDB {
                     System.out.println("Sum of operation : " + sum + " " + currencyName +
                             " ( Currency course " + currencyValue + ") ;" );
                     System.out.println("Operation registered : " + operationTime + ".");
-                    System.out.println("");
+                    System.out.println(" ");
                 }
             }
             rs.close();
-        } catch(SQLException se) {
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();

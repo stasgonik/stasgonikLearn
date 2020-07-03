@@ -44,6 +44,9 @@ public class application {
                                 if (usid <= 0) {
                                     System.out.println("Restricted operation : Negative or 0 ID.");
                                 }
+                                else if (!accountDB.countAccountCheck(usid)) {
+                                    System.out.println("Restricted operation : This user already have 20 accounts.");
+                                }
                                 else {
                                     m++;
                                 }
@@ -215,8 +218,14 @@ public class application {
                                             System.out.println("Set new phone number:");
                                             String temp = sc.nextLine();
                                             if (phoneValidator.validate(temp)) {
-                                                userDB.updateNumber(usid, temp);
-                                                m++;
+                                                if (userDB.checkNumber(temp)) {
+                                                    System.out.println("We already have this number in database.");
+                                                    System.out.println("Please, use another number for new user.");
+                                                }
+                                                else {
+                                                    userDB.updateNumber(usid, temp);
+                                                    m++;
+                                                }
                                             }
                                             else {
                                                 System.out.println("Incorrect phone number format.");

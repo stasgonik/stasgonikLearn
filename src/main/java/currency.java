@@ -1,5 +1,4 @@
 import org.jetbrains.annotations.NotNull;
-
 import java.sql.*;
 import java.util.*;
 
@@ -129,28 +128,26 @@ public class currency {
 class currencyDB {
     static void currencyUpdateValue(int crid, double newValue) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try{
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE CURRENCY " + "SET VALUE=? WHERE ID=?";
 
-            st1 = conn.prepareStatement(sql);
-            st1.setDouble(1, newValue);
-            st1.setInt(2, crid);
-            st1.executeUpdate();
+            stmt = conn.prepareStatement(sql);
+            stmt.setDouble(1, newValue);
+            stmt.setInt(2, crid);
+            stmt.executeUpdate();
 
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -163,15 +160,15 @@ class currencyDB {
     static currency currencyFromDB (int crid) {
         currency cur = new currency();
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "SELECT NAME, VALUE FROM CURRENCY WHERE ID=?";
-            st1 = conn.prepareStatement(sql);
-            st1.setInt(1, crid);
-            ResultSet rs = st1.executeQuery();
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, crid);
+            ResultSet rs = stmt.executeQuery();
 
             String[] stringsTemp = new String[1];
             double[] doublesTemp = new double[1];
@@ -182,18 +179,18 @@ class currencyDB {
                 double value = rs.getDouble("VALUE");
                 doublesTemp[0] = value;
             }
-            rs.close();
             cur.setName(stringsTemp[0]);
             cur.setValue(doublesTemp[0]);
 
-        } catch(SQLException se) {
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -206,15 +203,15 @@ class currencyDB {
     static int currencyGetID (currency search) {
         int crid = 0;
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "SELECT ID FROM CURRENCY WHERE NAME=?";
-            st1 = conn.prepareStatement(sql);
-            st1.setString(1, search.getName());
-            ResultSet rs = st1.executeQuery();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, search.getName());
+            ResultSet rs = stmt.executeQuery();
 
             int[] intsTemp = new int[1];
 
@@ -222,18 +219,18 @@ class currencyDB {
                 int id = rs.getInt("ID");
                 intsTemp[0] = id;
             }
-            rs.close();
-
             crid = intsTemp[0];
 
-        } catch(SQLException se) {
+            rs.close();
+            stmt.close();
+            conn.close();
+
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -245,30 +242,28 @@ class currencyDB {
     }
     static void currencyToDB (currency newCurrency) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try{
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "INSERT INTO CURRENCY (NAME, VALUE) " + "VALUES (?, ?)";
 
-            st1 = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(sql);
 
-            st1.setString(1, newCurrency.getName());
-            st1.setDouble(2, newCurrency.getValue());
+            stmt.setString(1, newCurrency.getName());
+            stmt.setDouble(2, newCurrency.getValue());
 
-            st1.execute();
+            stmt.execute();
 
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -298,14 +293,14 @@ class currencyDB {
                 System.out.println(", Value of currency: " + value);
             }
             rs.close();
-        } catch(SQLException se) {
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -316,24 +311,24 @@ class currencyDB {
     }
     static void deleteCurrency (int crid) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String delete = "DELETE FROM CURRENCY " + "WHERE ID = ?";
-            st1 = conn.prepareStatement(delete);
-            st1.setInt(1, crid);
-            st1.executeUpdate();
+            stmt = conn.prepareStatement(delete);
+            stmt.setInt(1, crid);
+            stmt.executeUpdate();
 
-        } catch(SQLException se) {
+            stmt.close();
+            conn.close();
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
@@ -344,28 +339,26 @@ class currencyDB {
     }
     static void currencyUpdateName (int crid, String newName) {
         Connection conn = null;
-        PreparedStatement st1 = null;
+        PreparedStatement stmt = null;
         try{
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String sql = "UPDATE CURRENCY " + "SET NAME=? WHERE ID=?";
 
-            st1 = conn.prepareStatement(sql);
-            st1.setString(1, newName);
-            st1.setInt(2, crid);
-            st1.executeUpdate();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, newName);
+            stmt.setInt(2, crid);
+            stmt.executeUpdate();
 
-            st1.close();
+            stmt.close();
             conn.close();
-        } catch(SQLException se) {
+        } catch(Exception se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
         } finally {
             try {
-                if(st1!=null) st1.close();
-            } catch(SQLException se2) {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException ignored) {
             } // nothing we can do
             try {
                 if(conn!=null) conn.close();
