@@ -2,11 +2,15 @@
   <dictionary name="StasPC">
     <words>
       <w>banhammer</w>
+      <w>bgcolor</w>
+      <w>cellpadding</w>
+      <w>cellspacing</w>
       <w>crid</w>
       <w>epam</w>
       <w>gonik</w>
       <w>jdbc</w>
       <w>usid</w>
+      <w>valign</w>
     </words>
   </dictionary>
 </component>

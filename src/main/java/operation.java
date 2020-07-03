@@ -60,6 +60,30 @@ public class operation {
                 dateTime + ", Currency of operation : " + operationCurrency + ", Sum : " + sum +
                 " " + operationCurrency.getName() + ".";
     }
+
+    public static void createOperation (operationType type, subtype subtype, currency operationCurrency,
+                                             double sum, int acidFrom, int acidTo) {
+        operation op = new operation();
+        op.setType(type);
+        op.setSubtype(subtype);
+        op.setOperationCurrency(operationCurrency);
+        op.setSum(sum);
+        if (acidTo != 0 && acidFrom != 0) {
+            operationDB.operationToDB_2acc(op, acidFrom, acidTo);
+        }
+        else if (acidFrom <= 0 && acidTo <= 0) {
+            System.out.println("Unknown operation. Account IDs are not detected.");
+            System.out.println("Operation cannot be registered.");
+        }
+        else if (acidFrom <= 0) {
+            operationDB.operationToDB_To(op, acidTo);
+        }
+        else  {
+            operationDB.operationToDB_From(op, acidFrom);
+        }
+
+
+    }
 }
 
 enum operationType {
