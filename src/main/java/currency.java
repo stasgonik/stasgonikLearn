@@ -1,9 +1,11 @@
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import java.sql.*;
 import java.util.*;
 
 
 public class currency {
+    private static final Logger log = Logger.getLogger(currency.class);
     private String name;
     private double value;
 
@@ -32,6 +34,7 @@ public class currency {
     }
 
     public static void createCurrency() {
+        log.warn("Starting to create new currency.");
         Scanner sc = new Scanner(System.in);
         currency cur = new currency();
         validators.NameValidator nameValidator = new validators.NameValidator();
@@ -47,6 +50,7 @@ public class currency {
                 }
                 else {
                     System.out.println("Incorrect name format. Use only latin letters or {-} !");
+                    log.warn("Incorrect name format set.");
                 }
             }
             while (i==0);
@@ -57,6 +61,7 @@ public class currency {
                     double tempInt = Double.parseDouble (temp);
                     if (tempInt <= 0) {
                         System.out.println("Prohibited negative or 0 value of currency.");
+                        log.warn("Attempt to set below 0 value of currency.");
                     }
                     else {
                         cur.setValue(tempInt);
@@ -65,12 +70,15 @@ public class currency {
                 }
                 else {
                     System.out.println("Incorrect value format. Use only numbers!");
+                    log.warn("Incorrect currency value format set.");
                 }
             }
             while (i==1);
         }
         catch (Exception ex) {
             ex.getMessage();
+            log.error("Exception occurred.");
+            log.error(ex.getMessage(), ex);
         }
         currencyDB.currencyToDB(cur);
     }
@@ -78,6 +86,7 @@ public class currency {
     public static int chooseCurrency() {
         int crid = 0;
         try {
+            log.debug("Choosing currency for action.");
             currencyDB.viewCurrency();
             Scanner sc = new Scanner(System.in);
             validators.NumberValidator numberValidator = new validators.NumberValidator();
@@ -89,6 +98,7 @@ public class currency {
                     crid = Integer.parseInt (temp);
                     if (crid <= 0){
                         System.out.println("There is no currency with negative ID. Please, repeat your set.");
+                        log.warn("Attempt to choose not existing currency.");
                     }
                     else {
                         i++;
@@ -96,12 +106,15 @@ public class currency {
                 }
                 else {
                     System.out.println("Incorrect ID format. Use only numbers!");
+                    log.warn("Incorrect ID format set.");
                 }
             }
             while (i==0);
         }
         catch (Exception ex) {
             ex.getMessage();
+            log.error("Exception occurred.");
+            log.error(ex.getMessage(), ex);
         }
         return crid;
     }
@@ -126,10 +139,12 @@ public class currency {
     }
 }
 class currencyDB {
+    private static final Logger log = Logger.getLogger(currencyDB.class);
     static void currencyUpdateValue(int crid, double newValue) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
+            log.info("Updating value of currency in database. Currency ID is " + crid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -144,6 +159,8 @@ class currencyDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -153,6 +170,8 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -162,6 +181,7 @@ class currencyDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.debug("Retrieving currency from database. Currency ID is " + crid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -187,6 +207,8 @@ class currencyDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -196,6 +218,8 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
         return cur;
@@ -205,6 +229,7 @@ class currencyDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.debug("Retrieving currency ID from database.");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -227,6 +252,8 @@ class currencyDB {
 
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -236,6 +263,8 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
         return crid;
@@ -244,6 +273,7 @@ class currencyDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
+            log.warn("Adding new currency to database.");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -260,6 +290,8 @@ class currencyDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -269,6 +301,8 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -276,6 +310,7 @@ class currencyDB {
         Connection conn = null;
         Statement stmt = null;
         try {
+            log.info("Function to view all currency activated.");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -297,6 +332,8 @@ class currencyDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -306,6 +343,8 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -313,6 +352,7 @@ class currencyDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.warn("Deleting currency from database. Currency ID is " + crid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -325,6 +365,8 @@ class currencyDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -334,6 +376,8 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -341,6 +385,7 @@ class currencyDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
+            log.info("Updating name of currency in database. Currency ID is " + crid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -355,6 +400,8 @@ class currencyDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -364,6 +411,8 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }

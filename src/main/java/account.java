@@ -92,8 +92,10 @@ public class account {
         }
         catch (Exception ex) {
             ex.getMessage();
+            log.error("An exception occurred!");
+            log.error(ex.getMessage(), ex);
         }
-        log.info("Account creation end.");
+        log.debug("Account creation end.");
         return Cr;
     }
     @NotNull
@@ -126,8 +128,10 @@ public class account {
         }
         catch (Exception ex) {
             ex.getMessage();
+            log.error("An exception occurred!");
+            log.error(ex.getMessage(), ex);
         }
-        log.info("Account creation end.");
+        log.debug("Account creation end.");
         return Cr;
     }
 
@@ -144,307 +148,392 @@ public class account {
     }
 
     public static void commission (double com, int acidFrom) {
-        log.info("Registering new commission operations.");
-        account bank = accountDB.accountFromDB(constants.bank);
-        bank.setMoney(bank.getMoney() + com);
-        accountDB.updateMoney(constants.bank , bank.getMoney());
-        operation.createOperation(operationType.Commission, subtype.Withdraw,
-                accountDB.accountFromDB(acidFrom).getAccountCurrency(),
-                com / accountDB.accountFromDB(acidFrom).getAccountCurrency().getValue(),
-                acidFrom, constants.bank);
-        operation.createOperation(operationType.Commission, subtype.Charge, bank.getAccountCurrency(),
-                com, acidFrom, constants.bank);
+        try {
+            log.debug("Registering of new commission operations.");
+            account bank = accountDB.accountFromDB(constants.bank);
+            bank.setMoney(bank.getMoney() + com);
+            accountDB.updateMoney(constants.bank , bank.getMoney());
+            operation.createOperation(operationType.Commission, subtype.Withdraw,
+                    accountDB.accountFromDB(acidFrom).getAccountCurrency(),
+                    com / accountDB.accountFromDB(acidFrom).getAccountCurrency().getValue(),
+                    acidFrom, constants.bank);
+            operation.createOperation(operationType.Commission, subtype.Charge, bank.getAccountCurrency(),
+                    com, acidFrom, constants.bank);
+        }
+        catch (Exception ex) {
+            ex.getMessage();
+            log.error("An exception occurred!");
+            log.error(ex.getMessage(), ex);
+        }
     }
     public static void transferMoney (double transferMoney, int acidFrom, int acidTo) {
-        account transferFrom = accountDB.accountFromDB(acidFrom);
-        account transferTo = accountDB.accountFromDB(acidTo);
-        double transferSum = transferMoney * transferFrom.getAccountCurrency().getValue();
-        double commit = 0;
-        double exchangeCommit = 0;
-        double outMoney = transferSum / transferTo.getAccountCurrency().getValue();
+        try {
+            log.debug("Transfer function start. " +
+                    "Account initiator ID is " + acidFrom + "." +
+                    " Account recipient ID is " + acidTo + ".");
+            account transferFrom = accountDB.accountFromDB(acidFrom);
+            account transferTo = accountDB.accountFromDB(acidTo);
+            double transferSum = transferMoney * transferFrom.getAccountCurrency().getValue();
+            double commit = 0;
+            double exchangeCommit = 0;
+            double outMoney = transferSum / transferTo.getAccountCurrency().getValue();
 
-        if (transferSum < 10000){
-            commit = 1 + transferSum * 0.009;
-            exchangeCommit = 0.5 + transferSum * 0.0045;
-        }
-        else if(transferSum >= 10000 && transferSum < 100000) {
-            commit = 5 + transferSum * 0.007;
-            exchangeCommit = 2.5 + transferSum * 0.0035;
-        }
-        else if(transferSum >= 100000 && transferSum < 500000){
-            commit = 10 + transferSum * 0.005;
-            exchangeCommit = 5 + transferSum * 0.0025;
-        }
-        else if( transferSum >= 500000){
-            commit = 20 + transferSum * 0.004;
-            exchangeCommit = 10 + transferSum * 0.002;
-        }
+            if (transferSum < 10000){
+                commit = 1 + transferSum * 0.009;
+                exchangeCommit = 0.5 + transferSum * 0.0045;
+            }
+            else if(transferSum >= 10000 && transferSum < 100000) {
+                commit = 5 + transferSum * 0.007;
+                exchangeCommit = 2.5 + transferSum * 0.0035;
+            }
+            else if(transferSum >= 100000 && transferSum < 500000){
+                commit = 10 + transferSum * 0.005;
+                exchangeCommit = 5 + transferSum * 0.0025;
+            }
+            else if( transferSum >= 500000){
+                commit = 20 + transferSum * 0.004;
+                exchangeCommit = 10 + transferSum * 0.002;
+            }
 
-        if (accountDB.usidFromDB(acidTo) == accountDB.usidFromDB(acidFrom)) {
-            commit = 0;
-        }
+            if (accountDB.usidFromDB(acidTo) == accountDB.usidFromDB(acidFrom)) {
+                commit = 0;
+            }
 
-        if (currencyDB.currencyGetID(transferFrom.getAccountCurrency()) ==
-                currencyDB.currencyGetID(transferTo.getAccountCurrency())) {
-            exchangeCommit = 0;
-        }
-
-        if (transferFrom.getMoney() < transferMoney + commit / transferFrom.getAccountCurrency().getValue() &&
-        accountDB.usidFromDB(acidFrom) != accountDB.usidFromDB(acidTo)) {
-            System.out.println("Insufficient sum on account.");
-            log.warn("Insufficient sum on account during transfer.");
-        }
-        else if(transferFrom.getMoney() < transferMoney + (commit * exchangeCommit) /
-                transferFrom.getAccountCurrency().getValue() &&
-                currencyDB.currencyGetID(transferFrom.getAccountCurrency()) !=
-                currencyDB.currencyGetID(transferTo.getAccountCurrency()) &&
-                accountDB.usidFromDB(acidFrom) != accountDB.usidFromDB(acidTo)) {
-            System.out.println("Insufficient sum on account.");
-            log.warn("Insufficient sum on account during transfer.");
-        }
-        else if (transferFrom.getMoney() < transferMoney + exchangeCommit /
-                transferFrom.getAccountCurrency().getValue() &&
-                accountDB.usidFromDB(acidFrom) == accountDB.usidFromDB(acidTo) &&
-                currencyDB.currencyGetID(transferFrom.getAccountCurrency()) !=
-                currencyDB.currencyGetID(transferTo.getAccountCurrency())) {
-            System.out.println("Insufficient sum on account.");
-            log.warn("Insufficient sum on account during transfer.");
-        }
-        else if (transferFrom.getMoney() < transferMoney &&
-                accountDB.usidFromDB(acidFrom) == accountDB.usidFromDB(acidTo) &&
-                currencyDB.currencyGetID(transferFrom.getAccountCurrency()) ==
-                currencyDB.currencyGetID(transferTo.getAccountCurrency())) {
-            System.out.println("Insufficient sum on account.");
-            log.warn("Insufficient sum on account during transfer.");
-        }
-        else  if (transferMoney == 0) {
-            System.out.println("Restricted operation : Transfer '0'.");
-            log.warn("Attempt to transfer sum 0.");
-        }
-        else if (transferMoney < 0) {
-            System.out.println("Restricted operation : Transfer negative sum.");
-            log.warn("Attempt to transfer negative sum.");
-        }
-        else if (acidFrom == acidTo) {
-            System.out.println("Restricted operation : Transfer to self.");
-            log.error("Self transfer attempt.");
-        }
-        else if (acidFrom <= 0 || acidTo <= 0) {
-            System.out.println("Restricted operation : Transfer by not existing accounts.");
-            log.error("Transfer attempt by not existing accounts.");
-        }
-        else if (acidTo == constants.bank || acidFrom == constants.bank) {
-            System.out.println("Restricted operation : Administration account involved.");
-            log.error("Transfer attempt with administration account.");
-        }
-
-        else {
-            log.info("Start of transfer operations.");
-            transferFrom.setMoney(transferFrom.getMoney() -
-                    transferMoney - (commit + exchangeCommit) / transferFrom.getAccountCurrency().getValue());
-            operation.createOperation(operationType.Transfer, subtype.Withdraw, transferFrom.getAccountCurrency(),
-                    transferMoney, acidFrom, acidTo);
-
-            if (currencyDB.currencyGetID(transferFrom.getAccountCurrency()) !=
+            if (currencyDB.currencyGetID(transferFrom.getAccountCurrency()) ==
                     currencyDB.currencyGetID(transferTo.getAccountCurrency())) {
-                log.info("Transferring money between accounts with" +
-                        " different currency requires exchange operation.");
-                operation.createOperation(operationType.Exchange, subtype.Withdraw,
-                        transferFrom.getAccountCurrency(), transferMoney, acidFrom, 0);
-                operation.createOperation(operationType.Exchange, subtype.Charge,
-                        transferTo.getAccountCurrency(), outMoney, 0, acidFrom);
-                commission(exchangeCommit, acidFrom);
+                exchangeCommit = 0;
             }
 
-            transferTo.setMoney(transferTo.getMoney() + outMoney);
-            operation.createOperation(operationType.Transfer, subtype.Charge,
-                    transferTo.getAccountCurrency(), outMoney, acidFrom, acidTo);
-
-            if (accountDB.usidFromDB(acidFrom) != accountDB.usidFromDB(acidTo)) {
-                commission(commit, acidFrom);
+            if (transferFrom.getMoney() < transferMoney + commit / transferFrom.getAccountCurrency().getValue() &&
+                    accountDB.usidFromDB(acidFrom) != accountDB.usidFromDB(acidTo)) {
+                System.out.println("Insufficient sum on account.");
+                log.info("Insufficient sum on account during transfer.");
+            }
+            else if(transferFrom.getMoney() < transferMoney + (commit * exchangeCommit) /
+                    transferFrom.getAccountCurrency().getValue() &&
+                    currencyDB.currencyGetID(transferFrom.getAccountCurrency()) !=
+                            currencyDB.currencyGetID(transferTo.getAccountCurrency()) &&
+                    accountDB.usidFromDB(acidFrom) != accountDB.usidFromDB(acidTo)) {
+                System.out.println("Insufficient sum on account.");
+                log.info("Insufficient sum on account during transfer.");
+            }
+            else if (transferFrom.getMoney() < transferMoney + exchangeCommit /
+                    transferFrom.getAccountCurrency().getValue() &&
+                    accountDB.usidFromDB(acidFrom) == accountDB.usidFromDB(acidTo) &&
+                    currencyDB.currencyGetID(transferFrom.getAccountCurrency()) !=
+                            currencyDB.currencyGetID(transferTo.getAccountCurrency())) {
+                System.out.println("Insufficient sum on account.");
+                log.info("Insufficient sum on account during transfer.");
+            }
+            else if (transferFrom.getMoney() < transferMoney &&
+                    accountDB.usidFromDB(acidFrom) == accountDB.usidFromDB(acidTo) &&
+                    currencyDB.currencyGetID(transferFrom.getAccountCurrency()) ==
+                            currencyDB.currencyGetID(transferTo.getAccountCurrency())) {
+                System.out.println("Insufficient sum on account.");
+                log.info("Insufficient sum on account during transfer.");
+            }
+            else  if (transferMoney == 0) {
+                System.out.println("Restricted operation : Transfer '0'.");
+                log.warn("Attempt to transfer sum 0.");
+            }
+            else if (transferMoney < 0) {
+                System.out.println("Restricted operation : Transfer negative sum.");
+                log.warn("Attempt to transfer negative sum.");
+            }
+            else if (acidFrom == acidTo) {
+                System.out.println("Restricted operation : Transfer to self.");
+                log.warn("Self transfer attempt.");
+            }
+            else if (acidFrom <= 0 || acidTo <= 0) {
+                System.out.println("Restricted operation : Transfer by not existing accounts.");
+                log.warn("Transfer attempt by not existing accounts.");
+            }
+            else if (acidTo == constants.bank || acidFrom == constants.bank) {
+                System.out.println("Restricted operation : Administration account involved.");
+                log.warn("Transfer attempt with administration account.");
             }
 
-            accountDB.updateMoney(acidFrom, transferFrom.getMoney());
-            accountDB.updateMoney(acidTo, transferTo.getMoney());
-            log.info("Transfer operations end.");
+            else {
+                log.debug("Registering of new transfer operations.");
+                transferFrom.setMoney(transferFrom.getMoney() -
+                        transferMoney - (commit + exchangeCommit) / transferFrom.getAccountCurrency().getValue());
+                operation.createOperation(operationType.Transfer, subtype.Withdraw, transferFrom.getAccountCurrency(),
+                        transferMoney, acidFrom, acidTo);
+
+                if (currencyDB.currencyGetID(transferFrom.getAccountCurrency()) !=
+                        currencyDB.currencyGetID(transferTo.getAccountCurrency())) {
+                    log.debug("Transferring money between accounts with" +
+                            " different currency.");
+                    log.debug("Registering of new exchange operations.");
+                    operation.createOperation(operationType.Exchange, subtype.Withdraw,
+                            transferFrom.getAccountCurrency(), transferMoney, acidFrom, 0);
+                    operation.createOperation(operationType.Exchange, subtype.Charge,
+                            transferTo.getAccountCurrency(), outMoney, 0, acidFrom);
+                    commission(exchangeCommit, acidFrom);
+                }
+
+                transferTo.setMoney(transferTo.getMoney() + outMoney);
+                operation.createOperation(operationType.Transfer, subtype.Charge,
+                        transferTo.getAccountCurrency(), outMoney, acidFrom, acidTo);
+
+                if (accountDB.usidFromDB(acidFrom) != accountDB.usidFromDB(acidTo)) {
+                    commission(commit, acidFrom);
+                }
+
+                accountDB.updateMoney(acidFrom, transferFrom.getMoney());
+                accountDB.updateMoney(acidTo, transferTo.getMoney());
+                log.debug("Transfer operations end.");
+            }
         }
+        catch (Exception ex) {
+            ex.getMessage();
+            log.error("An exception occurred!");
+            log.error(ex.getMessage(), ex);
+        }
+
     }
     public static void takeCredit (int acid, double credit) {
-        account bank = accountDB.accountFromDB(constants.bank);
-        account credited = accountDB.accountFromDB(acid);
-        double alreadyLoan = credited.loanBase();
-        double newLoan = credit*credited.getAccountCurrency().getValue();
-        if (alreadyLoan > 600000) {
-            System.out.println("Attention user! Your loan to Our bank are already over limit 600000 UAH.");
-            System.out.printf("Your loan on today is %.2f UAH.%n", alreadyLoan);
-            System.out.println("Operation restricted. For more details, please, contact our support line.");
+        try {
+            log.debug("Take credit function start. Credited account ID is " + acid +".");
+            account bank = accountDB.accountFromDB(constants.bank);
+            account credited = accountDB.accountFromDB(acid);
+            double alreadyLoan = credited.loanBase();
+            double newLoan = credit*credited.getAccountCurrency().getValue();
+            if (alreadyLoan > 600000) {
+                System.out.println("Attention user! Your loan to Our bank are already over limit 600000 UAH.");
+                System.out.printf("Your loan on today is %.2f UAH.%n", alreadyLoan);
+                log.info("Credit take attempt with loan higher then 600000.");
+                System.out.println("Operation restricted. For more details, please, contact our support line.");
+            }
+            else if (newLoan > 500000){
+                System.out.println("Attention user! Maximum credit limit in Our internet-bank is 500000 UAH.");
+                log.info("Credit take attempt with over limit 500000.");
+                System.out.println("Operation restricted. For more details, please, contact our support line.");
+            }
+            else if (alreadyLoan + newLoan > 700000) {
+                System.out.println("Attention user! Maximum credit capacity in Our internet-bank is 700000 UAH.");
+                System.out.printf("Your loan on today is %.2f UAH.%n", alreadyLoan);
+                log.info("Credit take attempt with end loan more then 700000.");
+                System.out.println("Operation restricted. For more details, please, contact our support line.");
+            }
+            else if (credit == 0) {
+                System.out.println("Restricted operation : Take '0'credit.");
+                log.warn("Attempt to take credit of sum 0.");
+            }
+            else  if (credit < 0) {
+                System.out.println("Restricted operation : Take credit of negative sum.");
+                log.warn("Attempt to take credit of negative sum.");
+            }
+            else if (acid == constants.bank) {
+                System.out.println("Restricted operation : Administration account involved.");
+                log.warn("Credit attempt with administration account.");
+            }
+            else if (bank.getMoney() < 2000000) {
+                System.out.println("Attention user! Our bank credit line unavailable.");
+                System.out.println("We will contact You when its will be available.");
+                log.error("WARNING! Credit operation was restricted. Bank account need to be recharged!");
+                System.out.println("Operation restricted. For more details, please, contact our support line.");
+            }
+            else  if (acid <= 0) {
+                System.out.println("Restricted operation : Account with negative or 0 ID do not exist.");
+                log.warn("Credit attempt by not existing accounts.");
+            }
+            else {
+                log.debug("Registering of new credit operations.");
+                double percent = 1.08;
+                if (currencyDB.currencyGetID(credited.getAccountCurrency()) == 1) {
+                    percent = 1.17;
+                }
+                double tempLoan = alreadyLoan + (newLoan * percent);
+                double endLoan = tempLoan / credited.getAccountCurrency().getValue();
+                double newMoney = credited.getMoney() + credit;
+                bank.setMoney(bank.getMoney() - newLoan);
+                accountDB.updateMoney(constants.bank, bank.getMoney());
+                operation.createOperation(operationType.Credit,
+                        subtype.Withdraw, bank.getAccountCurrency(), newLoan, constants.bank, acid);
+                accountDB.updateMoney(acid, newMoney);
+                accountDB.updateLoan(acid, endLoan);
+                operation.createOperation(operationType.Credit,
+                        subtype.Charge, credited.getAccountCurrency(), credit, constants.bank, acid);
+                log.debug("Credit operations end.");
+            }
         }
-        else if (newLoan > 500000){
-            System.out.println("Attention user! Maximum credit limit in Our internet-bank is 500000 UAH.");
-            System.out.println("Operation restricted. For more details, please, contact our support line.");
+        catch (Exception ex) {
+            ex.getMessage();
+            log.error("An exception occurred!");
+            log.error(ex.getMessage(), ex);
         }
-        else if (alreadyLoan + newLoan > 700000) {
-            System.out.println("Attention user! Maximum credit capacity in Our internet-bank is 700000 UAH.");
-            System.out.printf("Your loan on today is %.2f UAH.%n", alreadyLoan);
-            System.out.println("Operation restricted. For more details, please, contact our support line.");
-        }
-        else if (acid == constants.bank) {
-            System.out.println("Restricted operation : Administration account involved.");
-        }
-        else if (bank.getMoney() < 2000000) {
-            System.out.println("Attention user! Our bank credit line unavailable.");
-            System.out.println("We will contact You when its will be available.");
-            System.out.println("Operation restricted. For more details, please, contact our support line.");
-        }
-        else  if (acid <= 0) {
-            System.out.println("Restricted operation : Account with negative or 0 ID do not exist.");
-        }
-        else {
-           double percent = 1.08;
-           if (currencyDB.currencyGetID(credited.getAccountCurrency()) == 1) {
-               percent = 1.17;
-           }
-           double tempLoan = alreadyLoan + (newLoan * percent);
-           double endLoan = tempLoan / credited.getAccountCurrency().getValue();
-           double newMoney = credited.getMoney() + credit;
-           bank.setMoney(bank.getMoney() - newLoan);
-           accountDB.updateMoney(constants.bank, bank.getMoney());
-           operation.createOperation(operationType.Credit,
-                   subtype.Withdraw, bank.getAccountCurrency(), newLoan, constants.bank, acid);
-           accountDB.updateMoney(acid, newMoney);
-           accountDB.updateLoan(acid, endLoan);
-           operation.createOperation(operationType.Credit,
-                   subtype.Charge, credited.getAccountCurrency(), credit, constants.bank, acid);
-        }
+
     }
     public static void payCredit (int acid, double payment) {
-        account credited = accountDB.accountFromDB(acid);
-        if (credited.getLoan() <= 0) {
-            System.out.println("Attention user! You don`t have loan in Our bank. Payment not required.");
-            System.out.println("Operation terminated.");
+        try {
+            log.debug("Start of loan repayment function. Credited account ID is " + acid + ".");
+            account credited = accountDB.accountFromDB(acid);
+            if (credited.getLoan() <= 0) {
+                System.out.println("Attention user! You don`t have loan in Our bank. Payment not required.");
+                System.out.println("Operation terminated.");
+                log.info("Attempt to repay for 0 loan sum.");
+            }
+            else  if (payment > credited.getMoney()) {
+                System.out.println("Warning user! Your payment is larger than sum of money on your account.");
+                System.out.println("Operation terminated.");
+                log.warn("Attempt to repay loan with sum larger then sum on account.");
+            }
+            else if(credited.getLoan() < payment) {
+                System.out.println("Warning user! Your payment is larger than sum of Your loan.");
+                log.info("Attempt to make negative loan with large repayment sum.");
+                System.out.println("Surplus money will be transferred back to your account.");
+                double fullPayment = credited.getLoan();
+                double fullToBank = fullPayment * credited.getAccountCurrency().getValue();
+                credited.setLoan(0);
+                credited.setMoney(credited.getMoney() - fullPayment);
+                accountDB.updateLoan(acid, credited.getLoan());
+                accountDB.updateMoney(acid, credited.getMoney());
+                operation.createOperation(operationType.Loan_repayment, subtype.Withdraw,
+                        credited.getAccountCurrency(), fullPayment, acid, constants.bank);
+                account bank = accountDB.accountFromDB(constants.bank);
+                bank.setMoney(bank.getMoney() + fullToBank);
+                accountDB.updateMoney(constants.bank, bank.getMoney());
+                operation.createOperation(operationType.Loan_repayment, subtype.Charge,
+                        bank.getAccountCurrency(), fullToBank, acid, constants.bank);
+            }
+            else if (acid == constants.bank) {
+                System.out.println("Restricted operation : Administration account involved.");
+                log.warn("Loan repayment attempt with administration account.");
+            }
+            else if (acid <= 0) {
+                System.out.println("Restricted operation : Account with negative or 0 ID do not exist.");
+                log.warn("Loan repayment attempt by not existing accounts.");
+            }
+            else {
+                log.debug("Registering of new loan repayment operations..");
+                double toBank = payment * credited.getAccountCurrency().getValue();
+                credited.setMoney(credited.getMoney() - payment);
+                credited.setLoan(credited.getLoan() - payment);
+                accountDB.updateLoan(acid, credited.getLoan());
+                accountDB.updateMoney(acid, credited.getMoney());
+                operation.createOperation(operationType.Loan_repayment, subtype.Withdraw,
+                        credited.getAccountCurrency(),  payment, acid, constants.bank);
+                account bank = accountDB.accountFromDB(constants.bank);
+                bank.setMoney(bank.getMoney() + toBank);
+                accountDB.updateMoney(constants.bank, bank.getMoney());
+                operation.createOperation(operationType.Loan_repayment, subtype.Charge, bank.getAccountCurrency(),
+                        toBank, acid, constants.bank);
+                log.debug("Loan repayment operations end.");
+            }
         }
-        else  if (payment > credited.getMoney()) {
-            System.out.println("Warning user! Your payment is larger than sum of money on your account.");
-            System.out.println("Operation terminated.");
-        }
-        else if(credited.getLoan() < payment) {
-            System.out.println("Warning user! Your payment is larger than sum of Your loan.");
-            System.out.println("Surplus money will be transferred back to your account.");
-            double fullPayment = credited.getLoan();
-            double fullToBank = fullPayment * credited.getAccountCurrency().getValue();
-            credited.setLoan(0);
-            credited.setMoney(credited.getMoney() - fullPayment);
-            accountDB.updateLoan(acid, credited.getLoan());
-            accountDB.updateMoney(acid, credited.getMoney());
-            operation.createOperation(operationType.Loan_repayment, subtype.Withdraw,
-                    credited.getAccountCurrency(), fullPayment, acid, constants.bank);
-            account bank = accountDB.accountFromDB(constants.bank);
-            bank.setMoney(bank.getMoney() + fullToBank);
-            accountDB.updateMoney(constants.bank, bank.getMoney());
-            operation.createOperation(operationType.Loan_repayment, subtype.Charge,
-                    bank.getAccountCurrency(), fullToBank, acid, constants.bank);
-        }
-        else if (acid == constants.bank) {
-            System.out.println("Restricted operation : Administration account involved.");
-        }
-        else if (acid <= 0) {
-            System.out.println("Restricted operation : Account with negative or 0 ID do not exist.");
-        }
-        else {
-            double toBank = payment * credited.getAccountCurrency().getValue();
-            credited.setMoney(credited.getMoney() - payment);
-            credited.setLoan(credited.getLoan() - payment);
-            accountDB.updateLoan(acid, credited.getLoan());
-            accountDB.updateMoney(acid, credited.getMoney());
-            operation.createOperation(operationType.Loan_repayment, subtype.Withdraw,
-                    credited.getAccountCurrency(),  payment, acid, constants.bank);
-            account bank = accountDB.accountFromDB(constants.bank);
-            bank.setMoney(bank.getMoney() + toBank);
-            accountDB.updateMoney(constants.bank, bank.getMoney());
-            operation.createOperation(operationType.Loan_repayment, subtype.Charge, bank.getAccountCurrency(),
-                    toBank, acid, constants.bank);
+        catch (Exception ex) {
+            ex.getMessage();
+            log.error("An exception occurred!");
+            log.error(ex.getMessage(), ex);
         }
     }
     public static void extraction (int acid, double extract) {
-        account sender = accountDB.accountFromDB(acid);
-        double payBase = extract * sender.getAccountCurrency().getValue();
-        double commit = 0;
-        if (payBase < 5000) {
-            commit = payBase * 0.005;
-        }
-        else if (payBase >= 5000 && payBase < 100000) {
-            commit = payBase * 0.003;
-        }
-        else if (payBase >= 100000) {
-            commit = payBase * 0.002;
-        }
-        if (sender.getMoney() < extract + commit / sender.getAccountCurrency().getValue() &&
-                currencyDB.currencyGetID(sender.getAccountCurrency()) == 1) {
-            System.out.println("Warning user! Your extraction sum is larger than sum of money on your account.");
-            System.out.println("Operation terminated.");
-        }
-        else  if (sender.getMoney() < extract + commit * 3 / sender.getAccountCurrency().getValue() &&
-                currencyDB.currencyGetID(sender.getAccountCurrency()) != 1) {
-            System.out.println("Warning user! Your extraction sum is larger than sum of money on your account.");
-            System.out.println("Operation terminated.");
-        }
-        else if (acid == constants.bank) {
-            System.out.println("Restricted operation : Administration account involved.");
-        }
-        else if (acid <= 0) {
-            System.out.println("Restricted operation : Account with negative or 0 ID do not exist.");
-        }
-        else {
-            commission(commit, acid);
-            if (currencyDB.currencyGetID(sender.getAccountCurrency()) != 1) {
-                operation.createOperation(operationType.Exchange,subtype.Withdraw, sender.getAccountCurrency(),
-                        extract, acid, 0);
-                operation.createOperation(operationType.Exchange, subtype.Charge, currencyDB.currencyFromDB(1),
-                        payBase, 0, acid);
-                commission(commit*2, acid);
+        try {
+            log.debug("Starting of extraction function. Account ID is " + acid + ".");
+            account sender = accountDB.accountFromDB(acid);
+            double payBase = extract * sender.getAccountCurrency().getValue();
+            double commit = 0;
+            if (payBase < 5000) {
+                commit = payBase * 0.005;
             }
-            sender.setMoney(sender.getMoney() - extract - commit / sender.getAccountCurrency().getValue());
-            accountDB.updateMoney(acid, sender.getMoney());
-            operation.createOperation(operationType.Output, subtype.Withdraw, currencyDB.currencyFromDB(1),
-                    payBase, acid, 0);
-
+            else if (payBase >= 5000 && payBase < 100000) {
+                commit = payBase * 0.003;
+            }
+            else if (payBase >= 100000) {
+                commit = payBase * 0.002;
+            }
+            if (sender.getMoney() < extract + commit / sender.getAccountCurrency().getValue() &&
+                    currencyDB.currencyGetID(sender.getAccountCurrency()) == 1) {
+                System.out.println("Warning user! Your extraction sum is larger than sum of money on your account.");
+                System.out.println("Operation terminated.");
+                log.warn("Attempt to extract sum larger then sum on account.");
+            }
+            else  if (sender.getMoney() < extract + commit * 3 / sender.getAccountCurrency().getValue() &&
+                    currencyDB.currencyGetID(sender.getAccountCurrency()) != 1) {
+                System.out.println("Warning user! Your extraction sum is larger than sum of money on your account.");
+                System.out.println("Operation terminated.");
+                log.warn("Attempt to extract sum larger then sum on account.");
+            }
+            else if (acid == constants.bank) {
+                System.out.println("Restricted operation : Administration account involved.");
+                log.warn("Extraction attempt with administration account.");
+            }
+            else if (acid <= 0) {
+                System.out.println("Restricted operation : Account with negative or 0 ID do not exist.");
+                log.warn("Extraction attempt by not existing accounts.");
+            }
+            else {
+                log.debug("Registering of new extract operation.");
+                commission(commit, acid);
+                if (currencyDB.currencyGetID(sender.getAccountCurrency()) != 1) {
+                    log.debug("Registering of new exchange operations.");
+                    operation.createOperation(operationType.Exchange,subtype.Withdraw, sender.getAccountCurrency(),
+                            extract, acid, 0);
+                    operation.createOperation(operationType.Exchange, subtype.Charge, currencyDB.currencyFromDB(1),
+                            payBase, 0, acid);
+                    commission(commit*2, acid);
+                }
+                sender.setMoney(sender.getMoney() - extract - commit / sender.getAccountCurrency().getValue());
+                accountDB.updateMoney(acid, sender.getMoney());
+                operation.createOperation(operationType.Output, subtype.Withdraw, currencyDB.currencyFromDB(1),
+                        payBase, acid, 0);
+                log.debug("Extract operation end.");
+            }
         }
+        catch (Exception ex) {
+            ex.getMessage();
+            log.error("An exception occurred!");
+            log.error(ex.getMessage(), ex);
+        }
+
     }
     public static void charging (int acid, double charge) {
-        account recipient = accountDB.accountFromDB(acid);
-        double chargeInCur = charge / recipient.getAccountCurrency().getValue();
-        double commit = 0;
-        if (charge < 5000) {
-            commit = charge * 0.003;
+        try {
+            log.debug("Start of charging function. Account id is " + acid + ".");
+            account recipient = accountDB.accountFromDB(acid);
+            double chargeInCur = charge / recipient.getAccountCurrency().getValue();
+            double commit = 0;
+            if (charge < 5000) {
+                commit = charge * 0.003;
+            }
+            else if (charge >= 5000 && charge < 100000) {
+                commit = charge * 0.002;
+            }
+            else if (charge >= 100000) {
+                commit = charge * 0.001;
+            }
+            if (acid == constants.bank) {
+                log.warn("Charge of administration account detected.");
+            }
+            if (acid <= 0) {
+                System.out.println("Restricted operation : Account with negative or 0 ID do not exist.");
+                log.warn("Charge attempt by not existing accounts.");
+            }
+
+            else {
+                commission(commit, acid);
+                recipient.setMoney(recipient.getMoney() + chargeInCur - commit / recipient.getAccountCurrency().getValue());
+                accountDB.updateMoney(acid, recipient.getMoney());
+                operation.createOperation(operationType.Input, subtype.Charge, recipient.getAccountCurrency(),
+                        chargeInCur, 0, acid);
+            }
         }
-        else if (charge >= 5000 && charge < 100000) {
-            commit = charge * 0.002;
-        }
-        else if (charge >= 100000) {
-            commit = charge * 0.001;
-        }
-        if (acid == constants.bank) {
-            System.out.println("Restricted operation : Administration account involved.");
-        }
-        else if (acid <= 0) {
-            System.out.println("Restricted operation : Account with negative or 0 ID do not exist.");
-        }
-        else {
-            commission(commit, acid);
-            recipient.setMoney(recipient.getMoney() + chargeInCur - commit / recipient.getAccountCurrency().getValue());
-            accountDB.updateMoney(acid, recipient.getMoney());
-            operation.createOperation(operationType.Input, subtype.Charge, recipient.getAccountCurrency(),
-                    chargeInCur, 0, acid);
+        catch (Exception ex) {
+            ex.getMessage();
+            log.error("An exception occurred!");
+            log.error(ex.getMessage(), ex);
         }
     }
-        
 }
 class accountDB {
+    private static final Logger log = Logger.getLogger(accountDB.class);
     static void accountToDB(account newAccount) {
         Connection conn = null;
         PreparedStatement stmt1 = null;
         PreparedStatement stmt2 = null;
         try {
+            log.info("Starting to add new account to database.");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -495,6 +584,8 @@ class accountDB {
             conn.close();
         } catch (Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if (stmt1 != null) stmt1.close();
@@ -505,6 +596,8 @@ class accountDB {
                 if (conn != null) conn.close();
             } catch (SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -514,6 +607,7 @@ class accountDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.debug("Retrieving of account from database. Account ID is " + acid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -546,6 +640,8 @@ class accountDB {
 
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -555,6 +651,8 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
         return search;
@@ -564,6 +662,7 @@ class accountDB {
         PreparedStatement stmt = null;
         int usid = 0;
         try {
+            log.debug("Retrieving user ID from account database. Account ID is " + acid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -586,6 +685,8 @@ class accountDB {
 
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -595,6 +696,8 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
         return usid;
@@ -603,6 +706,7 @@ class accountDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
+            log.debug("Updating value of money in account database. Account ID is " + acid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -617,6 +721,8 @@ class accountDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -626,6 +732,8 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -633,6 +741,7 @@ class accountDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.info("Attempt to delete account. Account ID is " + acid +".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -645,6 +754,8 @@ class accountDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -654,6 +765,8 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -661,6 +774,7 @@ class accountDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
+            log.debug("Updating value of loan in account database. Account ID is " + acid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -675,6 +789,8 @@ class accountDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -684,6 +800,8 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -691,6 +809,7 @@ class accountDB {
         Connection conn = null;
         Statement stmt = null;
         try {
+            log.warn("Viewing all accounts function activated!");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -733,6 +852,8 @@ class accountDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -742,6 +863,8 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -751,6 +874,7 @@ class accountDB {
         PreparedStatement stmt = null;
         int[] acids = new int[20];
         try {
+            log.info("Viewing all accounts of selected user. User ID is " + usid +".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -770,6 +894,8 @@ class accountDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -779,6 +905,8 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
         return acids;
@@ -789,6 +917,7 @@ class accountDB {
         boolean checkLess20 = true;
         int count = 0;
         try {
+
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -802,12 +931,16 @@ class accountDB {
                 System.out.println(count);
             }
             checkLess20 = count < 20;
-
+            if (!checkLess20) {
+                log.warn("User with ID " + usid + " already have 20 accounts.");
+            }
             rs.close();
             stmt.close();
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -817,6 +950,8 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
         return checkLess20;
