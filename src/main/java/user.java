@@ -1,9 +1,11 @@
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Scanner;
 import java.sql.*;
 
 public class user {
+    private static final Logger log = Logger.getLogger(user.class);
     private String firstName;
     private String secondName;
     private String lastName;
@@ -63,6 +65,7 @@ public class user {
 
     @NotNull
     public static user createUser() {
+        log.info("Starting to create new user.");
         Scanner sc = new Scanner(System.in);
         user us = new user();
         validators.NameValidator nameValidator = new validators.NameValidator();
@@ -80,6 +83,7 @@ public class user {
                 }
                 else {
                     System.out.println("Incorrect name format. Use only latin letters or {-} !");
+                    log.warn("Incorrect name format set.");
                 }
             }
             while (i==0);
@@ -92,6 +96,7 @@ public class user {
                 }
                 else {
                     System.out.println("Incorrect name format. Use only latin letters or {-} !");
+                    log.warn("Incorrect name format set.");
                 }
             }
             while (i==1);
@@ -104,6 +109,7 @@ public class user {
                 }
                 else {
                     System.out.println("Incorrect name format. Use only latin letters or {-} !");
+                    log.warn("Incorrect name format set.");
                 }
             }
             while (i==2);
@@ -117,6 +123,7 @@ public class user {
                 }
                 else {
                     System.out.println("Incorrect age format. Use only numbers!");
+                    log.warn("Incorrect age format set.");
                 }
             }
             while (i==3);
@@ -128,6 +135,7 @@ public class user {
                     if (userDB.checkNumber(temp)) {
                         System.out.println("We already have this number in database.");
                         System.out.println("Please, use another number for new user.");
+                        log.warn("Attempt to set phone number, that already in database.");
                     }
                     else {
                         us.setNumber(temp);
@@ -136,12 +144,15 @@ public class user {
                 }
                 else {
                     System.out.println("Incorrect number format. Please, repeat again.");
+                    log.warn("Incorrect phone number format set.");
                 }
             }
             while (i==4);
         }
         catch (Exception ex) {
             ex.getMessage();
+            log.error("Exception occurred.");
+            log.error(ex.getMessage(), ex);
         }
         userDB.userToDB(us);
         int usid = userDB.getUSID(us);
@@ -201,10 +212,13 @@ class userPhoneValidator {
     }
 }*/
 class userDB {
+    private static final Logger log = Logger.getLogger(userDB.class);
     private static boolean intToBoolean(int input) {
         if((input==0)||(input==1)) {
             return input!=0;
-        }else {
+        }else
+            {
+                log.error("Error occurred when intToBoolean function activated. Input > 1.");
             throw new IllegalArgumentException("Входное значение может быть равно только 0 или 1 !");
         }
     }
@@ -212,9 +226,9 @@ class userDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
+            log.info("Adding new user to database.");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
-
 
             String sql = "INSERT INTO USERS (FIRST_NAME, SECOND_NAME, LAST_NAME, AGE, NUMBER) " +
                     "VALUES (?, ?, ?, ?, ?)";
@@ -234,6 +248,8 @@ class userDB {
 
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -243,6 +259,8 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -252,6 +270,7 @@ class userDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.debug("Retrieving user from database. User ID is " + usid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -288,6 +307,8 @@ class userDB {
 
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -297,6 +318,8 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
         return searchUser;
@@ -305,6 +328,7 @@ class userDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
+            log.info("Updating first name of user. User ID is " + usid +".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -319,6 +343,8 @@ class userDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -328,6 +354,8 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -335,6 +363,7 @@ class userDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
+            log.info("Updating second name of user. User ID is " + usid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -350,6 +379,8 @@ class userDB {
 
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -359,6 +390,8 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -366,6 +399,7 @@ class userDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
+            log.info("Updating last name of user. User ID is " + usid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -381,6 +415,8 @@ class userDB {
 
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if (stmt != null) stmt.close();
@@ -390,6 +426,8 @@ class userDB {
                 if (conn != null) conn.close();
             } catch (SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -397,6 +435,7 @@ class userDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
+            log.info("Updating age od user. User ID is " + usid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -412,6 +451,8 @@ class userDB {
 
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             // finally block used to close resources
             try {
@@ -422,6 +463,8 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -429,6 +472,7 @@ class userDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
+            log.info("Updating phone number of user. User ID is " + usid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -444,6 +488,8 @@ class userDB {
 
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if (stmt != null) stmt.close();
@@ -453,6 +499,8 @@ class userDB {
                 if (conn != null) conn.close();
             } catch (SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -460,6 +508,7 @@ class userDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.warn("Deleting user from database. User ID is " + usid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -473,6 +522,8 @@ class userDB {
 
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -482,6 +533,8 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -489,6 +542,7 @@ class userDB {
         Connection conn = null;
         Statement stmt = null;
         try {
+            log.warn("View users function activated.");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -518,6 +572,8 @@ class userDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -527,6 +583,8 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -535,6 +593,7 @@ class userDB {
         PreparedStatement stmt = null;
         int usid = 0;
         try{
+            log.debug("Retrieving user ID from database.");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -562,6 +621,8 @@ class userDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -571,6 +632,8 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
         return usid;
@@ -600,6 +663,8 @@ class userDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -609,6 +674,8 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
         return check;

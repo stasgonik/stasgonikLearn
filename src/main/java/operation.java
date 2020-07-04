@@ -1,7 +1,10 @@
+import org.apache.log4j.Logger;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 
 public class operation {
+    private static final Logger log = Logger.getLogger(operation.class);
     private operationType type;
     private subtype subtype;
     private final LocalDateTime dateTime = LocalDateTime.now();
@@ -74,6 +77,8 @@ public class operation {
         else if (acidFrom <= 0 && acidTo <= 0) {
             System.out.println("Unknown operation. Account IDs are not detected.");
             System.out.println("Operation cannot be registered.");
+            log.warn("Attempt to create operation without or incorrect account IDs.");
+
         }
         else if (acidFrom <= 0) {
             operationDB.operationToDB_To(op, acidTo);
@@ -101,10 +106,12 @@ enum subtype {
 }
 
 class operationDB {
+    private static final Logger log = Logger.getLogger(operationDB.class);
     static void operationToDB_2acc(operation newOperation, int acidFrom, int acidTo) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.debug("Adding new operation to database.");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -130,6 +137,8 @@ class operationDB {
             conn.close();
         } catch (Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if (stmt != null) stmt.close();
@@ -139,6 +148,8 @@ class operationDB {
                 if (conn != null) conn.close();
             } catch (SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -146,6 +157,7 @@ class operationDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.debug("Adding new operation to database.");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -170,6 +182,8 @@ class operationDB {
             conn.close();
         } catch (Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if (stmt != null) stmt.close();
@@ -179,6 +193,8 @@ class operationDB {
                 if (conn != null) conn.close();
             } catch (SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -186,6 +202,7 @@ class operationDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.debug("Adding new operation to database.");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -210,6 +227,8 @@ class operationDB {
             conn.close();
         } catch (Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if (stmt != null) stmt.close();
@@ -219,6 +238,8 @@ class operationDB {
                 if (conn != null) conn.close();
             } catch (SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -226,6 +247,7 @@ class operationDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.warn("VIEW ALL OPERATIONS! Account id is " + acid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -288,6 +310,8 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -297,6 +321,8 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -304,6 +330,7 @@ class operationDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.warn("VIEW ALL SENDER OPERATIONS! Account ID is " + acidFrom + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -366,6 +393,8 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -375,6 +404,8 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -382,6 +413,7 @@ class operationDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.warn("VIEW ALL RECIPIENT OPERATIONS! Account ID is " + acidTo + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -443,6 +475,8 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -452,6 +486,8 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -459,6 +495,7 @@ class operationDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.warn("View all operations of some type function activated. Account ID is " + acid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -522,6 +559,8 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -531,6 +570,8 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -538,6 +579,7 @@ class operationDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.warn("View sender operations of some type function activated. Account ID is " + acidFrom + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -600,6 +642,8 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -609,6 +653,8 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -616,6 +662,7 @@ class operationDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.warn("View recipient operations of some type function activated. Account ID is " + acidTo + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -678,6 +725,8 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -687,6 +736,8 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -694,6 +745,7 @@ class operationDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.info("Viewing all operations for account ID " + acid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -764,6 +816,8 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -773,6 +827,8 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -780,6 +836,7 @@ class operationDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.info("Viewing all sender operations for account ID " + acid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -851,6 +908,8 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -860,6 +919,8 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
@@ -867,6 +928,7 @@ class operationDB {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.info("Viewing all recipient operations for account ID " + acid + ".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
@@ -936,6 +998,8 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
+            log.error("Exception occurred.");
+            log.error(se.getMessage(), se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -945,6 +1009,8 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
+                log.error("Exception occurred.");
+                log.error(se.getMessage(), se);
             }
         }
     }
