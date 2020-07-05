@@ -58,7 +58,7 @@ public class account {
     }
 
     public  double loanBase() {
-        return loan / accountCurrency.getValue();
+        return loan * accountCurrency.getValue();
     }
 
     @NotNull
@@ -138,8 +138,8 @@ public class account {
         return "Master of account: "  + master + ",%n" + "currency of account is " + accountCurrency +
                 ",%n" + "sum of money on account = %10.2f" + " " + accountCurrency.getName() +
                 " ( In " + currencyDB.currencyFromDB(1).getName() +" : %10.2f" +
-                " ),%n" + "your loan is %10.2f" + " " + currencyDB.currencyFromDB(1).getName() +
-                " ( In " + accountCurrency.getName() + " : %10.2f" + " )%n";
+                " ),%n" + "your loan is %10.2f" + " " + accountCurrency.getName() +
+                " ( In " + currencyDB.currencyFromDB(1).getName() + " : %10.2f" + " )%n";
     }
     public void printToConsole() {
         try {
@@ -299,20 +299,20 @@ public class account {
             log.debug("Take credit function start. Credited account ID is " + acid +".");
             account bank = accountDB.accountFromDB(constants.bank);
             account credited = accountDB.accountFromDB(acid);
-            double alreadyLoan = credited.getLoan();
+            double alreadyLoan = credited.getLoan() * credited.getAccountCurrency().getValue();
             double newLoan = credit * credited.getAccountCurrency().getValue();
-            if (alreadyLoan > 600000) {
+            if (alreadyLoan > 900000) {
                 System.out.println("Attention user! Your loan to Our bank are already over limit 600000 UAH.");
                 System.out.printf("Your loan on today is %.2f UAH.%n", alreadyLoan);
                 log.info("Credit take attempt with loan higher then 600000.");
                 System.out.println("Operation restricted. For more details, please, contact our support line.");
             }
-            else if (newLoan > 500000){
+            else if (newLoan > 700000){
                 System.out.println("Attention user! Maximum credit limit in Our internet-bank is 500000 UAH.");
                 log.info("Credit take attempt with over limit 500000.");
                 System.out.println("Operation restricted. For more details, please, contact our support line.");
             }
-            else if (alreadyLoan + newLoan > 700000) {
+            else if (alreadyLoan + newLoan > 1000000) {
                 System.out.println("Attention user! Maximum credit capacity in Our internet-bank is 700000 UAH.");
                 System.out.printf("Your loan on today is %.2f UAH.%n", alreadyLoan);
                 log.info("Credit take attempt with end loan more then 700000.");
@@ -346,7 +346,7 @@ public class account {
                 if (currencyDB.currencyGetID(credited.getAccountCurrency()) == 1) {
                     percent = 1.17;
                 }
-                double endLoan = alreadyLoan + (newLoan * percent);
+                double endLoan = credited.getLoan() + (newLoan * percent) / credited.getAccountCurrency().getValue();
                 double newMoney = credited.getMoney() + credit;
                 bank.setMoney(bank.getMoney() - newLoan);
                 accountDB.updateMoney(constants.bank, bank.getMoney());
@@ -379,12 +379,12 @@ public class account {
                 System.out.println("Operation terminated.");
                 log.warn("Attempt to repay loan with sum larger then sum on account.");
             }
-            else if(credited.loanBase() < payment) {
+            else if(credited.getLoan() < payment) {
                 System.out.println("Warning user! Your payment is larger than sum of Your loan.");
                 log.info("Attempt to make negative loan with large repayment sum.");
                 log.debug("Registering of new loan repayment operations..");
                 System.out.println("Surplus money will be transferred back to your account.");
-                double fullToBank = credited.getLoan();
+                double fullToBank = credited.getLoan() * credited.getAccountCurrency().getValue();
                 double fullPayment = fullToBank / credited.getAccountCurrency().getValue();
                 credited.setLoan(0);
                 credited.setMoney(credited.getMoney() - fullPayment);
@@ -825,7 +825,7 @@ class accountDB {
                 System.out.print("; Age: " + age);
                 System.out.println("; Phone number: " + number);
                 System.out.printf("     Money: %10.2f" , money);
-                System.out.printf("; Loan:  %10.2f %S", loan, currencyDB.currencyFromDB(1).getName());
+                System.out.printf("; Loan:  %10.2f", loan);
                 System.out.print("; Currency name: " + curName);
                 System.out.printf("; Currency value: %6.2f", value);
                 System.out.printf("; Sum in %s: %10.2f%n", currencyDB.currencyFromDB(1).getName() ,sumBase);
