@@ -87,8 +87,7 @@ public class login {
         }
         catch (Exception ex) {
             ex.getMessage();
-            log.error("Exception occurred");
-            log.error(ex.getMessage(), ex);
+            log.error("Exception occurred ", ex);
         }
         newUser.setUsid(usid);
         return newUser;
@@ -132,8 +131,7 @@ class loginDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -143,8 +141,7 @@ class loginDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -173,8 +170,7 @@ class loginDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -184,8 +180,7 @@ class loginDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
         return check;
@@ -215,8 +210,7 @@ class loginDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -226,8 +220,7 @@ class loginDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
         return check;
@@ -258,16 +251,14 @@ class loginDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             if(stmt!=null) stmt.close();
             try {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
         return usid;
@@ -287,8 +278,7 @@ class loginDB {
 
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -298,8 +288,7 @@ class loginDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -322,8 +311,7 @@ class loginDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -333,8 +321,7 @@ class loginDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }

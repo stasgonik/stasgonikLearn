@@ -1,9 +1,11 @@
+import org.apache.log4j.Logger;
+
 import java.util.*;
 
 public class application {
 
     public static void main(String[] args) {
-
+        final Logger log = Logger.getLogger(application.class);
         Scanner sc = new Scanner(System.in);
         int i = 0;
         try {
@@ -99,7 +101,6 @@ public class application {
                         }
                         while (m == 1);
                         currencyDB.currencyUpdateValue(crid, newValue);
-                        currencyDB.viewCurrency();
                         break;
 
                     case "3" :
@@ -277,8 +278,6 @@ public class application {
                         }
                         loginDB.deleteLogin(usidDel);
                         userDB.deleteUser(usidDel);
-                        userDB.viewUsers();
-                        accountDB.viewAccounts();
                         break;
 
                     case "4a" :
@@ -337,7 +336,6 @@ public class application {
                         }
                         while (m == 1);
                         accountDB.deleteAccount(acid);
-                        accountDB.viewAccounts();
                         break;
                     case "5" :
                         System.out.println("List of currencies in DB:");
@@ -422,7 +420,6 @@ public class application {
                             }
                         }
                         while (m == 0);
-                        accountDB.viewAccounts();
                         int acidTo = 0;
                         do {
                             System.out.println("Set id of destination account:");
@@ -467,7 +464,6 @@ public class application {
                         }
                         while (m == 2);
                         account.transferMoney(trMoney, acidFrom, acidTo);
-                        accountDB.viewAccounts();
                         break;
 
                     case "9" :
@@ -586,7 +582,7 @@ public class application {
                         nameValidator = new validators.NameValidator();
                         String newName = "";
                         do {
-                            System.out.println("Set new value for this currency:");
+                            System.out.println("Set new name for this currency:");
                             String temp = sc.nextLine();
                             if (nameValidator.validate(temp)) {
                                 newName = temp ;
@@ -795,7 +791,7 @@ public class application {
                         acid = 0;
                         k = 0;
                         do {
-                        System.out.println("Set account ID for operation view:");
+                        System.out.println("Set account ID for charging:");
                         String temp = sc.nextLine();
                         if (numberValidator.validate(temp)) {
                             acid = Integer.parseInt (temp);
@@ -840,7 +836,7 @@ public class application {
                         acid = 0;
                         k = 0;
                         do {
-                            System.out.println("Set account ID for operation view:");
+                            System.out.println("Set account ID for extraction:");
                             String temp = sc.nextLine();
                             if (numberValidator.validate(temp)) {
                                 acid = Integer.parseInt (temp);
@@ -880,11 +876,6 @@ public class application {
                         account.extraction(acid, sum);
                         break;
 
-                    case "15":
-                        userDB.viewUsers();
-                        System.out.println("CHECK COUNT");
-                        accountDB.countAccountCheck(sc.nextInt());
-                        break;
                     case "1q" :
                         i++;
                         break;
@@ -898,6 +889,7 @@ public class application {
         }
         catch (Exception ex) {
             ex.getMessage();
+            log.error("Exception occurred " , ex);
         }
     }
 }

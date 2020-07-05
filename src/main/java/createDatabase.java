@@ -74,8 +74,7 @@ public class createDatabase {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -85,8 +84,7 @@ public class createDatabase {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }

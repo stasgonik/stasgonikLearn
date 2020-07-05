@@ -66,28 +66,32 @@ public class operation {
 
     public static void createOperation (operationType type, subtype subtype, currency operationCurrency,
                                              double sum, int acidFrom, int acidTo) {
-        operation op = new operation();
-        op.setType(type);
-        op.setSubtype(subtype);
-        op.setOperationCurrency(operationCurrency);
-        op.setSum(sum);
-        if (acidTo != 0 && acidFrom != 0) {
-            operationDB.operationToDB_2acc(op, acidFrom, acidTo);
-        }
-        else if (acidFrom <= 0 && acidTo <= 0) {
-            System.out.println("Unknown operation. Account IDs are not detected.");
-            System.out.println("Operation cannot be registered.");
-            log.warn("Attempt to create operation without or incorrect account IDs.");
+        try {
+            operation op = new operation();
+            op.setType(type);
+            op.setSubtype(subtype);
+            op.setOperationCurrency(operationCurrency);
+            op.setSum(sum);
+            if (acidTo != 0 && acidFrom != 0) {
+                operationDB.operationToDB_2acc(op, acidFrom, acidTo);
+            }
+            else if (acidFrom <= 0 && acidTo <= 0) {
+                System.out.println("Unknown operation. Account IDs are not detected.");
+                System.out.println("Operation cannot be registered.");
+                log.warn("Attempt to create operation without or incorrect account IDs.");
 
+            }
+            else if (acidFrom <= 0) {
+                operationDB.operationToDB_To(op, acidTo);
+            }
+            else  {
+                operationDB.operationToDB_From(op, acidFrom);
+            }
         }
-        else if (acidFrom <= 0) {
-            operationDB.operationToDB_To(op, acidTo);
+        catch (Exception ex) {
+            ex.getMessage();
+            log.error("Exception occurred ", ex);
         }
-        else  {
-            operationDB.operationToDB_From(op, acidFrom);
-        }
-
-
     }
 }
 
@@ -137,8 +141,7 @@ class operationDB {
             conn.close();
         } catch (Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if (stmt != null) stmt.close();
@@ -148,8 +151,7 @@ class operationDB {
                 if (conn != null) conn.close();
             } catch (SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -182,8 +184,7 @@ class operationDB {
             conn.close();
         } catch (Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if (stmt != null) stmt.close();
@@ -193,8 +194,7 @@ class operationDB {
                 if (conn != null) conn.close();
             } catch (SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -227,8 +227,7 @@ class operationDB {
             conn.close();
         } catch (Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if (stmt != null) stmt.close();
@@ -238,8 +237,7 @@ class operationDB {
                 if (conn != null) conn.close();
             } catch (SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -310,8 +308,7 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -321,8 +318,7 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -393,8 +389,7 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -404,8 +399,7 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -475,8 +469,7 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -486,8 +479,7 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -559,8 +551,7 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -570,8 +561,7 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -642,8 +632,7 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -653,8 +642,7 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -725,8 +713,7 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -736,8 +723,7 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -816,8 +802,7 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -827,8 +812,7 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -908,8 +892,7 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -919,8 +902,7 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -998,8 +980,7 @@ class operationDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -1009,8 +990,7 @@ class operationDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }

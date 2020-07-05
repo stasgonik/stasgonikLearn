@@ -58,7 +58,7 @@ public class account {
     }
 
     public  double loanBase() {
-        return loan * accountCurrency.getValue();
+        return loan / accountCurrency.getValue();
     }
 
     @NotNull
@@ -92,8 +92,7 @@ public class account {
         }
         catch (Exception ex) {
             ex.getMessage();
-            log.error("An exception occurred!");
-            log.error(ex.getMessage(), ex);
+            log.error("Exception occurred " , ex);
         }
         log.debug("Account creation end.");
         return Cr;
@@ -128,8 +127,7 @@ public class account {
         }
         catch (Exception ex) {
             ex.getMessage();
-            log.error("An exception occurred!");
-            log.error(ex.getMessage(), ex);
+            log.error("Exception occurred " , ex);
         }
         log.debug("Account creation end.");
         return Cr;
@@ -140,11 +138,17 @@ public class account {
         return "Master of account: "  + master + ",%n" + "currency of account is " + accountCurrency +
                 ",%n" + "sum of money on account = %10.2f" + " " + accountCurrency.getName() +
                 " ( In " + currencyDB.currencyFromDB(1).getName() +" : %10.2f" +
-                " ),%n" + "your loan is %10.2f" + " " + accountCurrency.getName() +
-                " ( In " + currencyDB.currencyFromDB(1).getName() + " : %10.2f" + " )%n";
+                " ),%n" + "your loan is %10.2f" + " " + currencyDB.currencyFromDB(1).getName() +
+                " ( In " + accountCurrency.getName() + " : %10.2f" + " )%n";
     }
     public void printToConsole() {
-        System.out.printf(this.toString(), money, currentSum(), loan, loanBase());
+        try {
+            System.out.printf(this.toString(), money, currentSum(), loan, loanBase());
+        }
+        catch (Exception ex) {
+            ex.getMessage();
+            log.error("Exception occurred " , ex);
+        }
     }
 
     public static void commission (double com, int acidFrom) {
@@ -162,8 +166,7 @@ public class account {
         }
         catch (Exception ex) {
             ex.getMessage();
-            log.error("An exception occurred!");
-            log.error(ex.getMessage(), ex);
+            log.error("Exception occurred " , ex);
         }
     }
     public static void transferMoney (double transferMoney, int acidFrom, int acidTo) {
@@ -287,8 +290,7 @@ public class account {
         }
         catch (Exception ex) {
             ex.getMessage();
-            log.error("An exception occurred!");
-            log.error(ex.getMessage(), ex);
+            log.error("Exception occurred " , ex);
         }
 
     }
@@ -297,8 +299,8 @@ public class account {
             log.debug("Take credit function start. Credited account ID is " + acid +".");
             account bank = accountDB.accountFromDB(constants.bank);
             account credited = accountDB.accountFromDB(acid);
-            double alreadyLoan = credited.loanBase();
-            double newLoan = credit*credited.getAccountCurrency().getValue();
+            double alreadyLoan = credited.getLoan();
+            double newLoan = credit * credited.getAccountCurrency().getValue();
             if (alreadyLoan > 600000) {
                 System.out.println("Attention user! Your loan to Our bank are already over limit 600000 UAH.");
                 System.out.printf("Your loan on today is %.2f UAH.%n", alreadyLoan);
@@ -344,8 +346,7 @@ public class account {
                 if (currencyDB.currencyGetID(credited.getAccountCurrency()) == 1) {
                     percent = 1.17;
                 }
-                double tempLoan = alreadyLoan + (newLoan * percent);
-                double endLoan = tempLoan / credited.getAccountCurrency().getValue();
+                double endLoan = alreadyLoan + (newLoan * percent);
                 double newMoney = credited.getMoney() + credit;
                 bank.setMoney(bank.getMoney() - newLoan);
                 accountDB.updateMoney(constants.bank, bank.getMoney());
@@ -360,8 +361,7 @@ public class account {
         }
         catch (Exception ex) {
             ex.getMessage();
-            log.error("An exception occurred!");
-            log.error(ex.getMessage(), ex);
+            log.error("Exception occurred " , ex);
         }
 
     }
@@ -379,12 +379,13 @@ public class account {
                 System.out.println("Operation terminated.");
                 log.warn("Attempt to repay loan with sum larger then sum on account.");
             }
-            else if(credited.getLoan() < payment) {
+            else if(credited.loanBase() < payment) {
                 System.out.println("Warning user! Your payment is larger than sum of Your loan.");
                 log.info("Attempt to make negative loan with large repayment sum.");
+                log.debug("Registering of new loan repayment operations..");
                 System.out.println("Surplus money will be transferred back to your account.");
-                double fullPayment = credited.getLoan();
-                double fullToBank = fullPayment * credited.getAccountCurrency().getValue();
+                double fullToBank = credited.getLoan();
+                double fullPayment = fullToBank / credited.getAccountCurrency().getValue();
                 credited.setLoan(0);
                 credited.setMoney(credited.getMoney() - fullPayment);
                 accountDB.updateLoan(acid, credited.getLoan());
@@ -409,7 +410,7 @@ public class account {
                 log.debug("Registering of new loan repayment operations..");
                 double toBank = payment * credited.getAccountCurrency().getValue();
                 credited.setMoney(credited.getMoney() - payment);
-                credited.setLoan(credited.getLoan() - payment);
+                credited.setLoan(credited.getLoan() - toBank);
                 accountDB.updateLoan(acid, credited.getLoan());
                 accountDB.updateMoney(acid, credited.getMoney());
                 operation.createOperation(operationType.Loan_repayment, subtype.Withdraw,
@@ -424,8 +425,7 @@ public class account {
         }
         catch (Exception ex) {
             ex.getMessage();
-            log.error("An exception occurred!");
-            log.error(ex.getMessage(), ex);
+            log.error("Exception occurred " , ex);
         }
     }
     public static void extraction (int acid, double extract) {
@@ -483,8 +483,7 @@ public class account {
         }
         catch (Exception ex) {
             ex.getMessage();
-            log.error("An exception occurred!");
-            log.error(ex.getMessage(), ex);
+            log.error("Exception occurred " , ex);
         }
 
     }
@@ -521,8 +520,7 @@ public class account {
         }
         catch (Exception ex) {
             ex.getMessage();
-            log.error("An exception occurred!");
-            log.error(ex.getMessage(), ex);
+            log.error("Exception occurred " , ex);
         }
     }
 }
@@ -584,8 +582,7 @@ class accountDB {
             conn.close();
         } catch (Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred " , se);
         } finally {
             try {
                 if (stmt1 != null) stmt1.close();
@@ -596,8 +593,7 @@ class accountDB {
                 if (conn != null) conn.close();
             } catch (SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred " , se);
             }
         }
     }
@@ -640,8 +636,7 @@ class accountDB {
 
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred " , se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -651,8 +646,7 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred " , se);
             }
         }
         return search;
@@ -685,8 +679,7 @@ class accountDB {
 
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred " , se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -696,8 +689,7 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred " , se);
             }
         }
         return usid;
@@ -721,8 +713,7 @@ class accountDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred " , se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -732,8 +723,7 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred " , se);
             }
         }
     }
@@ -754,8 +744,7 @@ class accountDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred " , se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -765,8 +754,7 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred " , se);
             }
         }
     }
@@ -789,8 +777,7 @@ class accountDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred " , se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -800,8 +787,7 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred " , se);
             }
         }
     }
@@ -839,7 +825,7 @@ class accountDB {
                 System.out.print("; Age: " + age);
                 System.out.println("; Phone number: " + number);
                 System.out.printf("     Money: %10.2f" , money);
-                System.out.printf("; Loan:  %10.2f", loan);
+                System.out.printf("; Loan:  %10.2f %S", loan, currencyDB.currencyFromDB(1).getName());
                 System.out.print("; Currency name: " + curName);
                 System.out.printf("; Currency value: %6.2f", value);
                 System.out.printf("; Sum in %s: %10.2f%n", currencyDB.currencyFromDB(1).getName() ,sumBase);
@@ -852,8 +838,7 @@ class accountDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred " , se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -863,8 +848,7 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred " , se);
             }
         }
     }
@@ -894,8 +878,7 @@ class accountDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred " , se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -905,9 +888,8 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
-            }
+                log.error("Exception occurred " , se);
+        }
         }
         return acids;
     }
@@ -939,8 +921,7 @@ class accountDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred " , se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -950,9 +931,10 @@ class accountDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
+
             }
+
         }
         return checkLess20;
     }

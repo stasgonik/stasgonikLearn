@@ -151,8 +151,7 @@ public class user {
         }
         catch (Exception ex) {
             ex.getMessage();
-            log.error("Exception occurred.");
-            log.error(ex.getMessage(), ex);
+            log.error("Exception occurred ", ex);
         }
         userDB.userToDB(us);
         int usid = userDB.getUSID(us);
@@ -248,8 +247,7 @@ class userDB {
 
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -259,8 +257,7 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -307,8 +304,7 @@ class userDB {
 
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -318,8 +314,7 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
         return searchUser;
@@ -343,8 +338,7 @@ class userDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -354,8 +348,7 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -379,8 +372,7 @@ class userDB {
 
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -390,8 +382,7 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -415,8 +406,7 @@ class userDB {
 
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if (stmt != null) stmt.close();
@@ -426,8 +416,7 @@ class userDB {
                 if (conn != null) conn.close();
             } catch (SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -451,8 +440,7 @@ class userDB {
 
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             // finally block used to close resources
             try {
@@ -463,8 +451,7 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -488,8 +475,7 @@ class userDB {
 
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if (stmt != null) stmt.close();
@@ -499,8 +485,7 @@ class userDB {
                 if (conn != null) conn.close();
             } catch (SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -522,8 +507,7 @@ class userDB {
 
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -533,8 +517,7 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -572,8 +555,7 @@ class userDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -583,8 +565,7 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -621,8 +602,7 @@ class userDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -632,8 +612,7 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
         return usid;
@@ -663,8 +642,7 @@ class userDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -674,8 +652,7 @@ class userDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
         return check;

@@ -77,13 +77,12 @@ public class currency {
         }
         catch (Exception ex) {
             ex.getMessage();
-            log.error("Exception occurred.");
-            log.error(ex.getMessage(), ex);
+            log.error("Exception occurred ", ex);
         }
         currencyDB.currencyToDB(cur);
     }
 
-    public static int chooseCurrency() {
+    public static int chooseCurrency(){
         int crid = 0;
         try {
             log.debug("Choosing currency for action.");
@@ -113,8 +112,7 @@ public class currency {
         }
         catch (Exception ex) {
             ex.getMessage();
-            log.error("Exception occurred.");
-            log.error(ex.getMessage(), ex);
+            log.error("Exception occurred ", ex);
         }
         return crid;
     }
@@ -159,8 +157,7 @@ class currencyDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -170,8 +167,7 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -207,8 +203,7 @@ class currencyDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -218,8 +213,7 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
         return cur;
@@ -252,8 +246,7 @@ class currencyDB {
 
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -263,8 +256,7 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
         return crid;
@@ -290,8 +282,7 @@ class currencyDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -301,8 +292,7 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -332,8 +322,7 @@ class currencyDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -343,8 +332,7 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -365,8 +353,7 @@ class currencyDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -376,8 +363,7 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
@@ -400,8 +386,7 @@ class currencyDB {
             conn.close();
         } catch(Exception se) {
             se.printStackTrace();
-            log.error("Exception occurred.");
-            log.error(se.getMessage(), se);
+            log.error("Exception occurred ", se);
         } finally {
             try {
                 if(stmt!=null) stmt.close();
@@ -411,8 +396,7 @@ class currencyDB {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {
                 se.printStackTrace();
-                log.error("Exception occurred.");
-                log.error(se.getMessage(), se);
+                log.error("Exception occurred ", se);
             }
         }
     }
