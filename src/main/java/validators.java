@@ -34,7 +34,7 @@ public class validators {
         private final Pattern pattern;
 
         private static final String LOGIN_PATTERN =
-                "^[_A-Za-z0-9+]+$";
+                "^[_A-Za-z0-9+]{4,20}$";
         public LoginValidator() {
             pattern = Pattern.compile(LOGIN_PATTERN);
         }

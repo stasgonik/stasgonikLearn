@@ -33,9 +33,17 @@
                                                     <td align="right">
                                                         <form action="login" method="post">
                                                             Login: <input name="login" type="text"
-                                                             style="width:300px; margin: 2px 30px;"/> <br />
+                                                            pattern="^[_A-Za-z0-9+]{4,20}$"
+                                                            oninvalid="this.setCustomValidity
+                                                            ('Must be 4-20 characters or digits')"
+                                                            oninput="this.setCustomValidity('')"
+                                                            style="width:300px; margin: 2px 30px;"/> <br />
                                                             <br />
                                                             Password: <input name="password" type="text"
+                                                            pattern="^[_A-Za-z0-9+]{4,20}$"
+                                                            oninvalid="this.setCustomValidity
+                                                            ('Must be 4-20 characters or digits')"
+                                                            oninput="this.setCustomValidity('')"
                                                              style="width:300px; margin: 2px 30px;"/> <br />
                                                             <br />
                                                             <input type="submit" value="Submit"
