@@ -6,7 +6,7 @@ public class validators {
         private final Pattern pattern;
 
         private static final String NAME_PATTERN =
-                "^[_A-Za-z-+]+$";
+                "^[_A-Za-z-+]{1,30}$";
         public NameValidator() {
             pattern = Pattern.compile(NAME_PATTERN);
         }

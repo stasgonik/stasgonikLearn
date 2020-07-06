@@ -31,7 +31,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td align="right">
-                                                        <form action="login" method="post">
+                                                        <form action="loginToOffice" method="post">
                                                             Login: <input name="login" type="text"
                                                             pattern="^[_A-Za-z0-9+]{4,20}$"
                                                             oninvalid="this.setCustomValidity
