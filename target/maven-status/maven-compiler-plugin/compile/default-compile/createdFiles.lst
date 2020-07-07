@@ -11,6 +11,7 @@ validators.class
 subtype.class
 accountDB.class
 account.class
+RegisterToDB.class
 application.class
 loginDB.class
 login.class
@@ -19,3 +20,4 @@ HelloServlet.class
 operation.class
 userDB.class
 currency.class
+LoginToOffice.class

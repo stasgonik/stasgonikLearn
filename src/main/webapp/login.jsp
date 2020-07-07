@@ -32,14 +32,14 @@
                                                 <tr>
                                                     <td align="right">
                                                         <form action="loginToOffice" method="post">
-                                                            Login: <input name="login" type="text"
+                                                            Login: <input required name="login" type="text"
                                                             pattern="^[_A-Za-z0-9+]{4,20}$"
                                                             oninvalid="this.setCustomValidity
                                                             ('Must be 4-20 characters or digits')"
                                                             oninput="this.setCustomValidity('')"
                                                             style="width:300px; margin: 2px 30px;"/> <br />
                                                             <br />
-                                                            Password: <input name="password" type="text"
+                                                            Password: <input required name="password" type="text"
                                                             pattern="^[_A-Za-z0-9+]{4,20}$"
                                                             oninvalid="this.setCustomValidity
                                                             ('Must be 4-20 characters or digits')"
@@ -50,6 +50,20 @@
                                                              style="margin: 5px 190px"/>
                                                         </form>
                                                     </td>
+                                                </tr>
+                                                <tr>
+                                                <td align="center">
+                                                    <h5>
+                                                    <%
+                                                    String check = request.getParameter("check");
+                                                    if (check != null)
+                                                        {
+                                                        out.println("Invalid login or password used.");
+                                                        out.println("Please, try again.");
+                                                        }
+                                                    %>
+                                                    </h5>
+                                                </td>
                                                 </tr>
                                                 <tr style="background-color: #ffffff;">
                                                     <td>&#160;</td>

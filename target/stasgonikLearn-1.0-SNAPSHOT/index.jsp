@@ -45,16 +45,31 @@
                                         <tr>
                                             <td align="center" width="230px">
                                                 <form action="register.jsp" method="post">
-                                                    <input type="submit" value="Register" style="margin: 10px 20px 5px 20px"/>
+                                                    <input type="submit" value="Register" style="margin: 10px 20px 0px 20px"/>
                                                 </form>
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
                             </tr>
+                            <tr>
+                                <td align="center">
+                                    <h5>
+                                        <%
+                                        String reg = request.getParameter("reg");
+                                        if (reg != null)
+                                            {
+                                            out.println("You are successfully registered to GSI bank.");
+                                            out.println("Please, use your login to enter our bank.");
+                                            }
+                                         %>
+                                    </h5>
+                                </td>
+                            </tr>
                             <tr style="background-color: #ffffff; ">
                                 <td>&#160;</td>
                             </tr>
+
                         </table>
                     </td>
                 </tr>

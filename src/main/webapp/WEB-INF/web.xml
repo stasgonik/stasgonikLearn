@@ -15,5 +15,25 @@
     <url-pattern>/servlet</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>RegisterToDB</servlet-name>
+    <servlet-class>RegisterToDB</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>RegisterToDB</servlet-name>
+    <url-pattern>/registerToDB</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>LoginToOffice</servlet-name>
+    <servlet-class>LoginToOffice</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>LoginToOffice</servlet-name>
+    <url-pattern>/loginToOffice</url-pattern>
+  </servlet-mapping>
+
 
 </web-app>

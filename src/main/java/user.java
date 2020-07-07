@@ -12,10 +12,10 @@ public class user {
     private int age;
     private String number;
 
-    public user(String firstName, String secondName, String familyName, int age, String number) {
+    public user(String firstName, String secondName, String lastName, int age, String number) {
         this.firstName = firstName;
         this.secondName = secondName;
-        this.lastName = familyName;
+        this.lastName = lastName;
         this.age = age;
         this.number = number;
     }

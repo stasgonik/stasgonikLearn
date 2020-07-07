@@ -225,7 +225,7 @@ class loginDB {
         }
         return check;
     }
-    static int getID (String login, String password) throws SQLException {
+    static int getID (String login, String password) {
         Connection conn = null;
         PreparedStatement stmt = null;
         int usid = 0;
@@ -238,7 +238,7 @@ class loginDB {
 
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, login);
-            stmt.setString(1, password);
+            stmt.setString(2, password);
 
             ResultSet rs = stmt.executeQuery();
 
@@ -253,7 +253,12 @@ class loginDB {
             se.printStackTrace();
             log.error("Exception occurred ", se);
         } finally {
-            if(stmt!=null) stmt.close();
+            try {
+                if(stmt!=null) stmt.close();
+            } catch(SQLException se) {
+                se.printStackTrace();
+                log.error("Exception occurred ", se);
+            }
             try {
                 if(conn!=null) conn.close();
             } catch(SQLException se) {

@@ -23,19 +23,21 @@
                                border="0" width="500"
                                cellspacing="0" cellpadding="0" align="center">
 
-                            <tr style="background-color: #ffffff;">
+                            <tr style="background-color: #ffffff; line-height: 5px;">
                                 <td>&#160;</td>
                             </tr>
                             <tr align="center">
+                            <td>
                                 <h2>
                                     Please fill in all fields to register in GSI bank.
                                 </h2>
+                            </td>
                             </tr>
                             <tr>
                                 <td align="left">
                                     <form action="registerToDB" method="post">
                                         Login: must be 4-20 characters or digits <br/>
-                                        <input name="login" type="text"
+                                        <input required name="login" type="text"
                                                       pattern="^[_A-Za-z0-9]{4,20}$"
                                                       oninvalid="this.setCustomValidity
                                                             ('Must be 4-20 characters or digits')"
@@ -43,7 +45,7 @@
                                                       style="width:300px; margin: 5px 0px;"/> <br />
                                         <br />
                                         Password: must be 4-20 characters or digits <br/>
-                                        <input name="password" type="password"
+                                        <input required name="password" type="text"
                                                          pattern="^[_A-Za-z0-9]{4,20}$"
                                                          oninvalid="this.setCustomValidity
                                                             ('Must be 4-20 characters or digits')"
@@ -51,7 +53,7 @@
                                                          style="width:300px; margin: 5px 0px;"/> <br />
                                         <br />
                                         First name: must be 1-30 characters  <br/>
-                                        <input name="first_name" type="text"
+                                        <input required name="first_name" type="text"
                                                pattern="^[_A-Za-z-]{1,30}$"
                                                oninvalid="this.setCustomValidity
                                                             ('Must be 1-30 characters')"
@@ -59,7 +61,7 @@
                                                style="width:300px; margin: 5px 0px;"/> <br />
                                         <br />
                                         Second name: must be 1-30 characters  <br/>
-                                        <input name="second_name" type="text"
+                                        <input required name="second_name" type="text"
                                                pattern="^[_A-Za-z-]{1,30}$"
                                                oninvalid="this.setCustomValidity
                                                             ('Must be 1-30 characters')"
@@ -67,7 +69,7 @@
                                                style="width:300px; margin: 5px 0px;"/> <br />
                                         <br />
                                         Last name: must be 1-30 characters  <br/>
-                                        <input name="last_name" type="text"
+                                        <input required name="last_name" type="text"
                                                pattern="^[_A-Za-z-]{1,30}$"
                                                oninvalid="this.setCustomValidity
                                                             ('Must be 1-30 characters')"
@@ -75,7 +77,7 @@
                                                style="width:300px; margin: 5px 0px;"/> <br />
                                         <br />
                                         Age: <br/>
-                                        <input name="age" type="text"
+                                        <input required name="age" type="text"
                                                pattern="^[_,.0-9]{1,3}$"
                                                oninvalid="this.setCustomValidity
                                                             ('Use only digits')"
@@ -83,7 +85,7 @@
                                                style="width:300px; margin: 5px 0px;"/> <br />
                                         <br />
                                         Phone number: preferable format +38 068 123-4567<br/>
-                                        <input name="number" type="text"
+                                        <input required name="number" type="text"
                                                pattern="^\(?\+[0-9]{1,3}\)? ?-?[0-9]{1,3} ?-?[0-9]{3,5} ?-?[0-9]{4}( ?-?[0-9]{3})?$"
                                                oninvalid="this.setCustomValidity
                                                             ('Unknown number format')"
@@ -98,7 +100,30 @@
                                     </form>
                                 </td>
                             </tr>
-                            <tr style="background-color: #ffffff; ">
+                            <tr>
+                                <td align="center">
+                                    <h4 style="color:red">
+                                    <%
+                                        String login_check = request.getParameter("login_check");
+                                        if (login_check != null)
+                                        {
+                                            out.println("This login is already in database.");
+                                            out.println("Please, use another login.");
+                                        }
+                                    %>
+                                    <br />
+                                    <%
+                                        String number_check = request.getParameter("number_check");
+                                        if (number_check != null)
+                                        {
+                                            out.println("This phone number is already in database.");
+                                            out.println("Please, use another number.");
+                                        }
+                                     %>
+                                    </h4>
+                                </td>
+                            </tr>
+                            <tr style="background-color: #ffffff; line-height: 5px;">
                                 <td>&#160;</td>
                             </tr>
                         </table>
