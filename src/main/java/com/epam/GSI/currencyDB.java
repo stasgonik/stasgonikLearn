@@ -4,10 +4,13 @@ import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
+import java.util.Currency;
 
 public class currencyDB {
+    public currencyDB() {
+    }
     private static final Logger log = Logger.getLogger(currencyDB.class);
-    static void currencyUpdateValue(int crid, double newValue) {
+    public static void currencyUpdateValue(int crid, double newValue) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
@@ -41,7 +44,7 @@ public class currencyDB {
         }
     }
     @NotNull
-    static currency currencyFromDB (int crid) {
+    public static currency currencyFromDB (int crid) {
         currency cur = new currency();
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -87,7 +90,7 @@ public class currencyDB {
         }
         return cur;
     }
-    static int currencyGetID (currency search) {
+    public static int currencyGetID (currency search) {
         int crid = 0;
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -130,7 +133,7 @@ public class currencyDB {
         }
         return crid;
     }
-    static void currencyToDB (currency newCurrency) {
+    public static void currencyToDB (currency newCurrency) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
@@ -165,26 +168,36 @@ public class currencyDB {
             }
         }
     }
-    static void viewCurrency () {
+    public static currency[] viewCurrencies() {
+        int k = 1;
+        currency[] currencies = new currency[k];
         Connection conn = null;
         Statement stmt = null;
         try {
             log.info("Function to view all currency activated.");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL, constants.USER, constants.PASS);
-
             stmt = conn.createStatement();
-            String sql = "SELECT ID, NAME, VALUE FROM CURRENCY";
+            String count = "SELECT COUNT(ID) FROM CURRENCY";
+            ResultSet rsCount = stmt.executeQuery(count);
+
+            while (rsCount.next()) {
+                k = rsCount.getInt("COUNT(ID)");
+            }
+
+            String sql = "SELECT ID, NAME, VALUE FROM CURRENCY ORDER BY ID ASC";
             ResultSet rs = stmt.executeQuery(sql);
+            currencies = new currency[k];
+            int i = 0;
 
             while(rs.next()) {
-                int id  = rs.getInt("ID");
                 String name = rs.getString("NAME");
                 double value = rs.getDouble("VALUE");
 
-                System.out.print("CurrencyID: " + id);
-                System.out.print(", Name: " + name);
-                System.out.println(", Value of currency: " + value);
+                currency c = new currency(name, value);
+                currencies[i] = c;
+                i++;
+
             }
             rs.close();
             stmt.close();
@@ -204,8 +217,9 @@ public class currencyDB {
                 log.error("Exception occurred ", se);
             }
         }
+        return currencies;
     }
-    static void deleteCurrency (int crid) {
+    public static void deleteCurrency (int crid) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -236,7 +250,7 @@ public class currencyDB {
             }
         }
     }
-    static void currencyUpdateName (int crid, String newName) {
+    public static void currencyUpdateName (int crid, String newName) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{

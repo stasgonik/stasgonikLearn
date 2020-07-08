@@ -341,7 +341,7 @@ public class application {
                         break;
                     case "5" :
                         System.out.println("List of currencies in DB:");
-                        currencyDB.viewCurrency();
+                        currencyDB.viewCurrencies();
                         System.out.println("Are you want to create new currency (Y/N)");
                         String choice = sc.nextLine().toLowerCase();
                         if (choice.equals("y") || choice.equals("yes")) {
@@ -357,10 +357,10 @@ public class application {
                         break;
                     case "6" :
                         System.out.println("List of currencies in DB:");
-                        currencyDB.viewCurrency();
+                        currencyDB.viewCurrencies();
                         break;
                     case  "7" :
-                        currencyDB.viewCurrency();
+                        currencyDB.viewCurrencies();
                         System.out.println("Are you sure, that you want to delete currency? (Y/N)");
                         choice = sc.nextLine().toLowerCase();
                         if (choice.equals("y") || choice.equals("yes")) {
@@ -596,7 +596,7 @@ public class application {
                         }
                         while (m==1);
                         currencyDB.currencyUpdateName(crid, newName);
-                        currencyDB.viewCurrency();
+                        currencyDB.viewCurrencies();
                         break;
                     case "12" :
                         numberValidator = new validators.NumberValidator();

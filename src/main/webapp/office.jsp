@@ -6,16 +6,16 @@
 <%@page import="com.epam.GSI.accountDB"%>
 <%@page import="com.epam.GSI.login"%>
 <%@page import="com.epam.GSI.loginDB"%>
-<%@page import="com.epam.GSI.operation"%>
-<%@page import="com.epam.GSI.operationDB"%>
+<%@page import="com.epam.GSI.currency"%>
+<%@page import="com.epam.GSI.currencyDB"%>
+<%@page import="javax.servlet.http.HttpSession"%>
 
 
 <%
     loginDB loginDB = new loginDB();
     String login = request.getParameter("login");
     String password = request.getParameter("password");
-    String usidString = request.getParameter("usid");
-    int usid = Integer.parseInt (usidString);
+    Integer usid = (Integer) session.getAttribute("sID");
     if (loginDB.checkLoginPassword(login, password)) {
         int id = loginDB.getID(login, password);
         if (usid != id) {
@@ -38,11 +38,11 @@
     <tr>
         <td align="center" valign="top" bgcolor="#D3D3D3">
             <table table style="border-collapse: collapse; font-family:Arial; font-size: 14px;
-                         border: solid 2px black; border-radius: 2px;"
+                         border: solid 3px black; border-radius: 2px;"
                    width="600" cellspacing="0" cellpadding="0" bgcolor="#D3D3D3">
 
                 <tr>
-                    <td align="center" valign="top" bgcolor="#ffffff">
+                    <td align="center" valign="top" bgcolor="#ffffff" style="padding: 5px;">
                         <table style="border-collapse: collapse;"
                                border="0" width="540"
                                cellspacing="0" cellpadding="0" align="center">
@@ -54,75 +54,88 @@
                                 <td align="center">
                                     <form action="index.jsp" method="post">
                                         <input type="submit" value="EXIT"
-                                               style="margin: 10px 0px 5px 0px" />
+                                               style="margin: 10px 0px 15px 0px" />
                                     </form>
                                 </td>
                             </tr>
-
                             <tr>
-                                <td>
-                                    <table style="border-collapse: collapse; padding: 5px;" border="0"
-                                           width="300" cellspacing="0" cellpadding="0" align="left">
+                                <td valign="top">
+                                    <table style="border-collapse: collapse; padding: 5px; border-left: solid black 2px;"
+                                     border="0" width="300" cellspacing="0" cellpadding="0" align="left" height="420">
                                            <tr align="center"><td>
-                                                <h3 style="margin: 10px 0px 10px 0px">User Details</h3>
+                                                <h3 style="margin: 10px 0px 10px 5px">User Details</h3>
                                            </td></tr>
                                         <tr>
                                             <td>
-                                                <h4 style="margin: 5px 0px 5px 0px">Last name : <% userDB userDB = new userDB();
+                                                <h4 style="margin: 5px 0px 5px 5px">Last name : <% userDB userDB = new userDB();
                                                             user current = userDB.userFromDB(usid);
                                                             out.println(current.getLastName()); %></h4>
                                                 <form action="changeUser.jsp?change=last" method="post">
                                                     <input type="submit" value="Change last name"
-                                                           style="margin: 5px 0px 5px 0px" />
+                                                           style="margin: 5px 0px 5px 5px" />
                                                 </form>
                                                 <br />
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                <h4 style="margin: 5px 0px 5px 0px">First name :
+                                                <h4 style="margin: 5px 0px 5px 5px">First name :
                                                 <%out.println(current.getFirstName()); %></h4>
                                                 <form action="changeUser.jsp?change=first" method="post">
                                                     <input type="submit" value="Change first name"
-                                                           style="margin: 5px 0px 5px 0px" />
+                                                           style="margin: 5px 0px 5px 5px" />
                                                 </form>
+                                                <br />
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                <h4 style="margin: 5px 0px 5px 0px">Second name :
+                                                <h4 style="margin: 5px 0px 5px 5px">Second name :
                                                 <%out.println(current.getSecondName()); %></h4>
                                                 <form action="changeUser.jsp?change=second" method="post">
                                                     <input type="submit" value="Change second name"
-                                                           style="margin: 5px 0px 5px 0px" />
+                                                           style="margin: 5px 0px 5px 5px" />
                                                 </form>
+                                                <br />
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                <h4 style="margin: 5px 0px 5px 0px">Age :
+                                                <h4 style="margin: 5px 0px 5px 5px">Age :
                                                 <%out.println(current.getAge()); %></h4>
                                                 <form action="changeUser.jsp?change=age" method="post">
                                                     <input type="submit" value="Change age"
-                                                           style="margin: 5px 0px 5px 0px" />
+                                                           style="margin: 5px 0px 5px 5px" />
                                                 </form>
+                                                <br />
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                <h4 style="margin: 5px 0px 5px 0px">Phone number :
+                                                <h4 style="margin: 5px 0px 5px 5px">Phone number :
                                                 <%out.println(current.getNumber()); %></h4>
                                                 <form action="changeUser.jsp?change=number" method="post">
                                                     <input type="submit" value="Change number"
-                                                           style="margin: 10px 0px 5px 0px" />
+                                                           style="margin: 5px 0px 5px 5px" />
                                                 </form>
+                                                <br />
                                             </td>
                                         </tr>
                                     </table>
-                                    <table style="border-collapse: collapse; border-left: solid black 1px; padding: 5px;" border="0" width="180"
-                                           cellspacing="0" cellpadding="0" align="right">
-                                        <tr align="center"><td><h3 style="margin: 10px 0px 10px 0px">Currency courses</h3></td></tr>
-                                        <tr></tr>
+                                    <table style="border-collapse: collapse; border-left: solid black 2px;"
+                                     border="0" width="140"
+                                           cellspacing="0" height="420" cellpadding="0" align="right">
+                                        <tr align="center" valign="top"><td>
+                                        <h3 style="margin: 5px 0px 0px 10px">Currency courses</h3>
+                                        </td></tr>
+                                        <%  currencyDB cDB = new currencyDB();
+                                        currency[] currencies = currencyDB.viewCurrencies();
+                                        for(currency cur: currencies) {
+                                            if (cur.getValue() != 0) {
+out.println("<tr><td align='left'><h5 style='margin-top: 5px; margin-bottom: 5px; margin-left:10px;' width='65'>" + cur.getName() +
+ " : </h5></td><td align='left'><h5 style='margin-top: 5px; margin-bottom: 5px; margin-right: 5px;' width='65'>" + cur.getValue() + "</h5></td></tr>");
+                                            }
+                                            }%>
                                     </table>
                                 </td>
                             </tr>

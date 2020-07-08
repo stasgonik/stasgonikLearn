@@ -1,8 +1,8 @@
 package com.epam.GSI;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class LoginToOffice extends HttpServlet {
@@ -15,7 +15,13 @@ public class LoginToOffice extends HttpServlet {
 
             if (loginDB.checkLoginPassword(login, password)) {
                 int usid = loginDB.getID(login, password);
-                String path = "/office.jsp?login=" + login + "&password=" + password +"&usid=" + usid;
+                String path = "/office.jsp?login=" + login + "&password=" + password;
+                HttpSession session = request.getSession();
+                Integer sID = (Integer) session.getAttribute("sID");
+                if (sID != null) {
+                    session.removeAttribute("sID");
+                }
+                session.setAttribute("sID", usid);
                 response.sendRedirect(path);
             }
 

@@ -1,9 +1,7 @@
 package com.epam.GSI;
 
 import org.apache.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
 
-import java.sql.*;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -90,7 +88,7 @@ public class currency {
         int crid = 0;
         try {
             log.debug("Choosing currency for action.");
-            currencyDB.viewCurrency();
+            currencyDB.viewCurrencies();
             Scanner sc = new Scanner(System.in);
             validators.NumberValidator numberValidator = new validators.NumberValidator();
             int i = 0;
