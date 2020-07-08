@@ -1,5 +1,11 @@
+package com.epam.GSI;
+
 import org.apache.log4j.Logger;
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class createDatabase {
     private static final Logger log = Logger.getLogger(createDatabase.class);

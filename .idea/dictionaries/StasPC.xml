@@ -6,9 +6,11 @@
       <w>cellpadding</w>
       <w>cellspacing</w>
       <w>crid</w>
+      <w>doctype</w>
       <w>epam</w>
       <w>gonik</w>
       <w>jdbc</w>
+      <w>lastname</w>
       <w>mvstore</w>
       <w>oninput</w>
       <w>oninvalid</w>

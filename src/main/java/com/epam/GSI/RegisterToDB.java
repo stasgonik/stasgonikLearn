@@ -1,7 +1,9 @@
-import java.io.IOException;
+package com.epam.GSI;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class RegisterToDB extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)

@@ -1,5 +1,8 @@
+package com.epam.GSI;
+
 import org.apache.log4j.Logger;
-import java.util.*;
+
+import java.util.Scanner;
 
 public class application {
 
