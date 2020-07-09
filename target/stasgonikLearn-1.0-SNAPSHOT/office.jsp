@@ -144,8 +144,42 @@ out.println("<tr><td align='left'><h5 style='margin-top: 5px; margin-bottom: 5px
                             </tr>
                             <tr>
                                 <td align="center">
-                                    <h3>User Accounts:</h3>
+                                    <h3 style="margin: 5px 0px 10px 10px">User Accounts:</h3>
                                 </td>
+                            </tr>
+                            <%
+                                accountDB accountDB = new accountDB();
+                                int[] acids = accountDB.searchUserAccounts(usid);
+                                for (int acid:acids)
+                                {
+                                account ac = accountDB.accountFromDB(acid);
+out.println("<tr><td valign='top'><br/><table style='border-collapse: collapse;' border='0' width='250' cellspacing='0' cellpadding='0' align='left'>" +
+"<tr style='margin-bottom:5px;'><td align='center' >Account ID : " +  acid + "<br style='line-height: 5px;'/>" +
+ "</td></tr><tr style='margin-bottom:5px;'><td align='center' >Account currency : " + ac.getAccountCurrency().getName() +
+"<br style='line-height: 5px;'/></td></tr><tr><td align='center'> <form action='account.jsp?acid=" + acid +
+ "' method='post'> <input type='submit' value='Operations'" +
+" style='margin: 10px 0px 5px 0px;'/></form></td></tr></table>" +
+"<table style='border-collapse: collapse;' border='0' width='250' cellspacing='0' cellpadding='0' align='right'>" +
+ "<tr style='margin-bottom:5px;'><td align='center'>Sum : " +  ac.getMoney() + ac.getAccountCurrency().getName() +
+  "<br style='line-height: 5px;'/></td></tr><tr style='margin-bottom:5px;'><td align='center' >Loan : " +
+ ac.getLoan() + ac.getAccountCurrency().getName() +
+  "<br style='line-height: 5px;'/></td></tr><tr><td align='center'> <form action='operations.jsp?acid=" + acid +
+  "' method='post'> <input type='submit' value='Operation statistics'" +
+ " style='margin: 10px 0px 5px 0px;'/></form></td></tr></table><br/><hr/></td></tr><tr><td>" +
+  "<hr style='line-height: 2px; color: black; border: 1px solid black;'/></td></tr>");
+                                }
+                            %>
+                            <tr style="background-color: #ffffff; ">
+                                <td>&#160;</td>
+                            </tr>
+                            <%
+                                if (accountDB.countAccountCheck(usid)) {
+out.println("<tr><td align='center'><form action='registerAccount.jsp' method='post'> <input type='submit'" +
+ "value='Register new account' style='margin: 10px 0px 5px 0px;'/></form></tr></td>");
+                                }
+                            %>
+                            <tr style="background-color: #ffffff; ">
+                                <td>&#160;</td>
                             </tr>
                         </table>
                     </td>

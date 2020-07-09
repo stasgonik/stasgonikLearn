@@ -1,8 +1,0 @@
-0:0:0:0:0:0:0:1 - - [08/Jul/2020:20:44:53 +0300] "GET / HTTP/1.1" 200 3792 http-bio-8888-exec-2 503
-0:0:0:0:0:0:0:1 - - [08/Jul/2020:20:44:54 +0300] "POST /login.jsp HTTP/1.1" 200 4816 http-bio-8888-exec-3 54
-0:0:0:0:0:0:0:1 - - [08/Jul/2020:20:44:56 +0300] "POST /loginToOffice HTTP/1.1" 302 - http-bio-8888-exec-4 628
-0:0:0:0:0:0:0:1 - - [08/Jul/2020:20:44:57 +0300] "GET /office.jsp?login=stasgonik&password=stasgonik11&usid=48 HTTP/1.1" 200 9311 http-bio-8888-exec-5 931
-0:0:0:0:0:0:0:1 - - [08/Jul/2020:20:44:59 +0300] "POST /index.jsp HTTP/1.1" 200 3792 http-bio-8888-exec-6 1
-0:0:0:0:0:0:0:1 - - [08/Jul/2020:20:44:59 +0300] "POST /login.jsp HTTP/1.1" 200 4816 http-bio-8888-exec-7 1
-0:0:0:0:0:0:0:1 - - [08/Jul/2020:20:45:02 +0300] "POST /loginToOffice HTTP/1.1" 302 - http-bio-8888-exec-8 427
-0:0:0:0:0:0:0:1 - - [08/Jul/2020:20:45:03 +0300] "GET /office.jsp?login=stasgonik&password=stasgonik11&usid=48 HTTP/1.1" 200 9311 http-bio-8888-exec-9 849

@@ -6,8 +6,10 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.*;
 
 public class accountDB {
+    public accountDB() {
+    }
     private static final Logger log = Logger.getLogger(accountDB.class);
-    static void accountToDB(account newAccount) {
+    public static void accountToDB(account newAccount) {
         Connection conn = null;
         PreparedStatement stmt1 = null;
         PreparedStatement stmt2 = null;
@@ -79,7 +81,7 @@ public class accountDB {
         }
     }
     @NotNull
-    static account accountFromDB (int acid) {
+    public static account accountFromDB (int acid) {
         account search = new account();
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -132,7 +134,7 @@ public class accountDB {
         }
         return search;
     }
-    static int usidFromDB (int acid) {
+    public static int usidFromDB (int acid) {
         Connection conn = null;
         PreparedStatement stmt = null;
         int usid = 0;
@@ -175,7 +177,7 @@ public class accountDB {
         }
         return usid;
     }
-    static void updateMoney (int acid, double newMoney) {
+    public static void updateMoney (int acid, double newMoney) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
@@ -208,7 +210,7 @@ public class accountDB {
             }
         }
     }
-    static void deleteAccount (int acid) {
+    public static void deleteAccount (int acid) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -239,7 +241,7 @@ public class accountDB {
             }
         }
     }
-    static void updateLoan (int acid, double newLoan) {
+    public static void updateLoan (int acid, double newLoan) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
@@ -272,7 +274,7 @@ public class accountDB {
             }
         }
     }
-    static void viewAccounts () {
+    public static void viewAccounts () {
         Connection conn = null;
         Statement stmt = null;
         try {
@@ -334,27 +336,41 @@ public class accountDB {
         }
     }
     @NotNull
-    static int[] searchUserAccounts (int usid) {
+    public static int[] searchUserAccounts (int usid) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        int[] acids = new int[20];
+        int k = 1;
+        int[] acids = new int[k];
         try {
             log.info("Viewing all accounts of selected user. User ID is " + usid +".");
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL, constants.USER, constants.PASS);
 
-            String sql = "SELECT ID FROM ACCOUNT WHERE USID=?";
-            stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, usid);
-            ResultSet rs = stmt.executeQuery();
-            int i = 0;
 
-            while(rs.next()) {
-                int acid = rs.getInt("ID");
-                acids[i] = acid;
-                i++;
+            String count = "SELECT COUNT(ID) FROM ACCOUNT WHERE USID=?";
+            stmt = conn.prepareStatement(count);
+            stmt.setInt(1, usid);
+            ResultSet rsCount = stmt.executeQuery();
+
+            while (rsCount.next()) {
+                k = rsCount.getInt("COUNT(ID)");
             }
-            rs.close();
+            acids = new int[k];
+            if (k != 0) {
+                String sql = "SELECT TOP ? ID FROM ACCOUNT WHERE USID=?";
+                stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, k);
+                stmt.setInt(2, usid);
+                ResultSet rs = stmt.executeQuery();
+                int i = 0;
+
+                while(rs.next()) {
+                    int acid = rs.getInt("ID");
+                    acids[i] = acid;
+                    i++;
+                }
+                rs.close();
+            }
             stmt.close();
             conn.close();
         } catch(Exception se) {
@@ -374,7 +390,7 @@ public class accountDB {
         }
         return acids;
     }
-    static boolean countAccountCheck (int usid) {
+    public static boolean countAccountCheck (int usid) {
         Connection conn = null;
         PreparedStatement stmt = null;
         boolean checkLess20 = true;
