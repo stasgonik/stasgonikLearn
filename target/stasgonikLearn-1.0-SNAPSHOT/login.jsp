@@ -56,11 +56,19 @@
                                                     <h5>
                                                     <%
                                                     String check = request.getParameter("check");
-                                                    if (check != null)
-                                                        {
-                                                        out.println("Invalid login or password used.");
-                                                        out.println("Please, try again.");
-                                                        }
+                                                    if (check != null) {
+                                                        if (check.equals("1"))
+                                                         {
+                                                         out.println("Invalid login or password used.");
+                                                         out.println("Please, try again.");
+                                                         }
+
+                                                         else if (check.equals("2"))
+                                                         {
+                                                         out.println("Unauthorised access to office.");
+                                                         out.println("Please, enter office using your login and password.");
+                                                         }
+                                                    }
                                                     %>
                                                     </h5>
                                                 </td>

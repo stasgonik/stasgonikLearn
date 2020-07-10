@@ -5,5 +5,5 @@ public class constants {
     static final String DB_URL = "jdbc:h2:~/test2";
     static final String USER = "sa";
     static final String PASS = "";
-    static final int bank = 42;
+    public static final int bank = 42;
 }

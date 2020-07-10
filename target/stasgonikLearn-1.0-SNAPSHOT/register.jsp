@@ -78,7 +78,7 @@
                                         <br />
                                         Age: <br/>
                                         <input required name="age" type="text"
-                                               pattern="^[_,.0-9]{1,3}$"
+                                               pattern="^[_0-9]{1,3}$"
                                                oninvalid="this.setCustomValidity
                                                             ('Use only digits')"
                                                oninput="this.setCustomValidity('')"

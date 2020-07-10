@@ -3,32 +3,38 @@
         "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+    <display-name>Archetype Created Web Application</display-name>
 
-  <error-page>
-    <exception-type>java.lang.Throwable</exception-type>
-    <location>/error.jsp</location>
-  </error-page>
-
-  <servlet>
-    <servlet-name>RegisterToDB</servlet-name>
-    <servlet-class>com.epam.GSI.RegisterToDB</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>RegisterToDB</servlet-name>
-    <url-pattern>/registerToDB</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>LoginToOffice</servlet-name>
-    <servlet-class>com.epam.GSI.LoginToOffice</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>LoginToOffice</servlet-name>
-    <url-pattern>/loginToOffice</url-pattern>
-  </servlet-mapping>
-
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/error.jsp</location>
+    </error-page>
+    <servlet>
+        <servlet-name>RegisterToDB</servlet-name>
+        <servlet-class>com.epam.GSI.RegisterToDB</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RegisterToDB</servlet-name>
+        <url-pattern>/registerToDB</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>LoginToOffice</servlet-name>
+        <servlet-class>com.epam.GSI.LoginToOffice</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginToOffice</servlet-name>
+        <url-pattern>/loginToOffice</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>changeUser</servlet-name>
+        <servlet-class>com.epam.GSI.changeUserAction</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>changeUser</servlet-name>
+        <url-pattern>/changeUserAction</url-pattern>
+    </servlet-mapping>
 
 </web-app>
+
+
+

@@ -15,7 +15,7 @@ public class LoginToOffice extends HttpServlet {
 
             if (loginDB.checkLoginPassword(login, password)) {
                 int usid = loginDB.getID(login, password);
-                String path = "/office.jsp?login=" + login + "&password=" + password;
+                String path = "/office.jsp";
                 HttpSession session = request.getSession();
                 Integer sID = (Integer) session.getAttribute("sID");
                 if (sID != null) {

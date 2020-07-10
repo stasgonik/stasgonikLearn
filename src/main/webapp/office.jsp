@@ -8,24 +8,17 @@
 <%@page import="com.epam.GSI.loginDB"%>
 <%@page import="com.epam.GSI.currency"%>
 <%@page import="com.epam.GSI.currencyDB"%>
+<%@page import="com.epam.GSI.constants"%>
 <%@page import="javax.servlet.http.HttpSession"%>
 
 
 <%
+    userDB userDB = new userDB();
     loginDB loginDB = new loginDB();
-    String login = request.getParameter("login");
-    String password = request.getParameter("password");
     Integer usid = (Integer) session.getAttribute("sID");
-    if (loginDB.checkLoginPassword(login, password)) {
-        int id = loginDB.getID(login, password);
-        if (usid != id) {
-            String path = "/login.jsp?check=1";
-            response.sendRedirect(path);
-        }
-    }
-    else {
-        String path = "/login.jsp?check=1";
-        response.sendRedirect(path);
+    if (usid == null) {
+         String path = "/login.jsp?check=2";
+         response.sendRedirect(path);
     }
 %>
 
@@ -61,15 +54,15 @@
                             <tr>
                                 <td valign="top">
                                     <table style="border-collapse: collapse; padding: 5px; border-left: solid black 2px;"
-                                     border="0" width="300" cellspacing="0" cellpadding="0" align="left" height="420">
+                                     border="0" width="300" cellspacing="0" cellpadding="0" align="left" height="430">
                                            <tr align="center"><td>
                                                 <h3 style="margin: 10px 0px 10px 5px">User Details</h3>
                                            </td></tr>
                                         <tr>
                                             <td>
-                                                <h4 style="margin: 5px 0px 5px 5px">Last name : <% userDB userDB = new userDB();
-                                                            user current = userDB.userFromDB(usid);
-                                                            out.println(current.getLastName()); %></h4>
+                                                <h4 style="margin: 5px 0px 5px 5px">Last name :
+                                                <% user current = userDB.userFromDB(usid);
+                                                out.println(current.getLastName()); %></h4>
                                                 <form action="changeUser.jsp?change=last" method="post">
                                                     <input type="submit" value="Change last name"
                                                            style="margin: 5px 0px 5px 5px" />
@@ -80,7 +73,7 @@
                                         <tr>
                                             <td>
                                                 <h4 style="margin: 5px 0px 5px 5px">First name :
-                                                <%out.println(current.getFirstName()); %></h4>
+                                                <%  out.println(current.getFirstName()); %></h4>
                                                 <form action="changeUser.jsp?change=first" method="post">
                                                     <input type="submit" value="Change first name"
                                                            style="margin: 5px 0px 5px 5px" />
@@ -114,9 +107,9 @@
                                             <td>
                                                 <h4 style="margin: 5px 0px 5px 5px">Phone number :
                                                 <%out.println(current.getNumber()); %></h4>
-                                                <form action="changeUser.jsp?change=number" method="post">
-                                                    <input type="submit" value="Change number"
-                                                           style="margin: 5px 0px 5px 5px" />
+                                                <form action="deleteUser.jsp" method="post">
+                                                    <input type="submit" value="Delete user"
+                                                           style="margin: 20px 0px 5px 200px" />
                                                 </form>
                                                 <br />
                                             </td>
@@ -124,7 +117,7 @@
                                     </table>
                                     <table style="border-collapse: collapse; border-left: solid black 2px;"
                                      border="0" width="140"
-                                           cellspacing="0" height="420" cellpadding="0" align="right">
+                                           cellspacing="0" height="430" cellpadding="0" align="right">
                                         <tr align="center" valign="top"><td>
                                         <h3 style="margin: 5px 0px 0px 10px">Currency courses</h3>
                                         </td></tr>
@@ -173,7 +166,7 @@ out.println("<tr><td valign='top'><br/><table style='border-collapse: collapse;'
                                 <td>&#160;</td>
                             </tr>
                             <%
-                                if (accountDB.countAccountCheck(usid)) {
+                                if (accountDB.countAccountCheck(usid) && usid != constants.bank) {
 out.println("<tr><td align='center'><form action='registerAccount.jsp' method='post'> <input type='submit'" +
  "value='Register new account' style='margin: 10px 0px 5px 0px;'/></form></tr></td>");
                                 }

@@ -37,6 +37,7 @@ com\epam\GSI\constants.class
 com\epam\GSI\validators$NameValidator.class
 com\epam\GSI\validators.class
 accountDB.class
+com\epam\GSI\changeUserAction.class
 application.class
 login.class
 com\epam\GSI\accountDB.class
