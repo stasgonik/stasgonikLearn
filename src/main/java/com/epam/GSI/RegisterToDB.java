@@ -19,15 +19,15 @@ public class RegisterToDB extends HttpServlet {
             int age = Integer.parseInt (ageString);
             String number = request.getParameter("number");
             if (userDB.checkNumber(number)) {
-                String path = "/register.jsp?number_check=1";
+                String path = "/registerUser.jsp?number_check=1";
                 response.sendRedirect(path);
             }
             else if (loginDB.checkLogin(login)) {
-                String path = "/register.jsp?login_check=1";
+                String path = "/registerUser.jsp?login_check=1";
                 response.sendRedirect(path);
             }
             else if (loginDB.checkLogin(login) && userDB.checkNumber(number)) {
-                String path = "/register.jsp?login_check=1&number_check=1";
+                String path = "/registerUser.jsp?login_check=1&number_check=1";
                 response.sendRedirect(path);
             }
             else {

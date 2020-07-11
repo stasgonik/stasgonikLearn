@@ -44,7 +44,7 @@
                                            cellspacing="0" cellpadding="0" align="right">
                                         <tr>
                                             <td align="center" width="230px">
-                                                <form action="register.jsp" method="post">
+                                                <form action="registerUser.jsp" method="post">
                                                     <input type="submit" value="Register" style="margin: 10px 20px 0px 20px"/>
                                                 </form>
                                             </td>

@@ -1,3 +1,5 @@
+<%@page import="java.lang.Object, java.util.Objects"%>
+
 <html>
     <body bgcolor="#D3D3D3">
         <table style="border-collapse: collapse;" border="0" width="100%" cellspacing="0" cellpadding="0">
@@ -56,7 +58,7 @@
                                                     <h5>
                                                     <%
                                                     String check = request.getParameter("check");
-                                                    if (check != null) {
+                                                    if (!Objects.equals(check, null)) {
                                                         if (check.equals("1"))
                                                          {
                                                          out.println("Invalid login or password used.");

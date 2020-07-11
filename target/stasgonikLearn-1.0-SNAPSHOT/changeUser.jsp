@@ -1,7 +1,8 @@
+<%@page import="java.lang.Object, java.util.Objects"%>
 <%
     Integer usid = (Integer) session.getAttribute("sID");
     String change = request.getParameter("change");
-    if (usid == null || (!change.equals("first") && !change.equals("last") &&
+    if (Objects.equals(usid, null) || (!change.equals("first") && !change.equals("last") &&
      !change.equals("second") && !change.equals("age"))) {
          String path = "/office.jsp";
          response.sendRedirect(path);

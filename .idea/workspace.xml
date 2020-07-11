@@ -46,14 +46,7 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\JAVA\GSIBANK\stasgonikLearn\src" />
-    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.epam.GSI" />
       <recent name="" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
@@ -62,6 +55,13 @@
       <recent name="E:\JAVA\GSIBANK\stasgonikLearn\src\main\webapp\classes" />
       <recent name="E:\JAVA\GSIBANK\stasgonikLearn\src\main\java\com\epam\GSI" />
       <recent name="E:\JAVA\GSIBANK\stasgonikLearn\src\main\resources" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.epam.GSI" />
+      <recent name="" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\JAVA\GSIBANK\stasgonikLearn\src" />
     </key>
   </component>
   <component name="RunManager" selected="Maven.TomCat">
@@ -209,22 +209,22 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="719" y="212" key="FileChooserDialogImpl/0.0.1920.1050@0.0.1920.1050" timestamp="1593634997559" />
-    <state width="1340" height="278" key="GridCell.Tab.0.bottom" timestamp="1594378075784">
+    <state width="1340" height="278" key="GridCell.Tab.0.bottom" timestamp="1594464918228">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1340" height="278" key="GridCell.Tab.0.bottom/0.0.1920.1050@0.0.1920.1050" timestamp="1594378075784" />
-    <state width="1340" height="278" key="GridCell.Tab.0.center" timestamp="1594378075783">
+    <state width="1340" height="278" key="GridCell.Tab.0.bottom/0.0.1920.1050@0.0.1920.1050" timestamp="1594464918228" />
+    <state width="1340" height="278" key="GridCell.Tab.0.center" timestamp="1594464918228">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1340" height="278" key="GridCell.Tab.0.center/0.0.1920.1050@0.0.1920.1050" timestamp="1594378075783" />
-    <state width="1340" height="278" key="GridCell.Tab.0.left" timestamp="1594378075783">
+    <state width="1340" height="278" key="GridCell.Tab.0.center/0.0.1920.1050@0.0.1920.1050" timestamp="1594464918228" />
+    <state width="1340" height="278" key="GridCell.Tab.0.left" timestamp="1594464918228">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1340" height="278" key="GridCell.Tab.0.left/0.0.1920.1050@0.0.1920.1050" timestamp="1594378075783" />
-    <state width="1340" height="278" key="GridCell.Tab.0.right" timestamp="1594378075783">
+    <state width="1340" height="278" key="GridCell.Tab.0.left/0.0.1920.1050@0.0.1920.1050" timestamp="1594464918228" />
+    <state width="1340" height="278" key="GridCell.Tab.0.right" timestamp="1594464918228">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1340" height="278" key="GridCell.Tab.0.right/0.0.1920.1050@0.0.1920.1050" timestamp="1594378075783" />
+    <state width="1340" height="278" key="GridCell.Tab.0.right/0.0.1920.1050@0.0.1920.1050" timestamp="1594464918228" />
     <state width="1340" height="318" key="GridCell.Tab.1.bottom" timestamp="1593638805664">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
@@ -269,9 +269,9 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="611" y="259" key="run.anything.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1594203986156" />
-    <state x="674" y="240" width="672" height="678" key="search.everywhere.popup" timestamp="1594029707176">
+    <state x="674" y="240" width="672" height="678" key="search.everywhere.popup" timestamp="1594462799512">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state x="674" y="240" width="672" height="678" key="search.everywhere.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1594029707176" />
+    <state x="674" y="240" width="672" height="678" key="search.everywhere.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1594462799512" />
   </component>
 </project>

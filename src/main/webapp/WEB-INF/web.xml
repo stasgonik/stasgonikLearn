@@ -33,6 +33,23 @@
         <servlet-name>changeUser</servlet-name>
         <url-pattern>/changeUserAction</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>deleteUser</servlet-name>
+        <servlet-class>com.epam.GSI.deleteUserAction</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deleteUser</servlet-name>
+        <url-pattern>/deleteUserAction</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>registerAccount</servlet-name>
+        <servlet-class>com.epam.GSI.registerAccountAction</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>registerAccount</servlet-name>
+        <url-pattern>/registerAccountAction</url-pattern>
+    </servlet-mapping>
+
 
 </web-app>
 

@@ -10,13 +10,15 @@
 <%@page import="com.epam.GSI.currencyDB"%>
 <%@page import="com.epam.GSI.constants"%>
 <%@page import="javax.servlet.http.HttpSession"%>
+<%@page import="java.lang.Object, java.util.Objects"%>
+
 
 
 <%
     userDB userDB = new userDB();
     loginDB loginDB = new loginDB();
     Integer usid = (Integer) session.getAttribute("sID");
-    if (usid == null) {
+    if (Objects.equals(usid, null)) {
          String path = "/login.jsp?check=2";
          response.sendRedirect(path);
     }
@@ -109,7 +111,11 @@
                                                 <%out.println(current.getNumber()); %></h4>
                                                 <form action="deleteUser.jsp" method="post">
                                                     <input type="submit" value="Delete user"
-                                                           style="margin: 20px 0px 5px 200px" />
+                                                           style="margin: 20px 0px 5px 200px;
+                                                           <% if(usid == constants.bank){
+                                                            out.println("visibility: hidden;");
+                                                           }%>
+                                                           " />
                                                 </form>
                                                 <br />
                                             </td>
