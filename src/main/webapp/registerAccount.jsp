@@ -77,29 +77,6 @@ out.println("<option value='" + currencyDB.currencyGetID(cur) + "'>" + cur.getNa
                                     </form>
                                 </td>
                             </tr>
-                            <tr>
-                                <td align="center">
-                                    <h4 style="color:red">
-                                    <%
-                                        String login_check = request.getParameter("login_check");
-                                        if (login_check != null)
-                                        {
-                                            out.println("This login is already in database.");
-                                            out.println("Please, use another login.");
-                                        }
-                                    %>
-                                    <br />
-                                    <%
-                                        String number_check = request.getParameter("number_check");
-                                        if (number_check != null)
-                                        {
-                                            out.println("This phone number is already in database.");
-                                            out.println("Please, use another number.");
-                                        }
-                                     %>
-                                    </h4>
-                                </td>
-                            </tr>
                             <tr style="background-color: #ffffff; line-height: 5px;">
                                 <td>&#160;</td>
                             </tr>

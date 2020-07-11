@@ -774,7 +774,6 @@ public class application {
                                         }
                                     }
                                     while (k == 0);
-                                    operationDB.viewOperationsAllFiltered(acid);
                                     break;
                                 case "12q" :
                                     m++;

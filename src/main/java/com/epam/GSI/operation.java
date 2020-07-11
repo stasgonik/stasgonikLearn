@@ -9,7 +9,7 @@ public class operation {
     private static final Logger log = Logger.getLogger(operation.class);
     private operationType type;
     private subtype subtype;
-    private final LocalDateTime dateTime = LocalDateTime.now();
+    private LocalDateTime dateTime = LocalDateTime.now();
     private currency operationCurrency;
     private double sum;
 
@@ -55,6 +55,14 @@ public class operation {
     public operation(operationType type, subtype subtype, currency operationCurrency, double sum) {
         this.type = type;
         this.subtype = subtype;
+        this.operationCurrency = operationCurrency;
+        this.sum = sum;
+    }
+
+    public operation(operationType type, subtype subtype, LocalDateTime dateTime, currency operationCurrency, double sum) {
+        this.type = type;
+        this.subtype = subtype;
+        this.dateTime = dateTime;
         this.operationCurrency = operationCurrency;
         this.sum = sum;
     }
