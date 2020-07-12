@@ -274,7 +274,7 @@ public class accountDB {
             }
         }
     }
-    public static void viewAccounts () {
+    /*public static void viewAccounts () {
         Connection conn = null;
         Statement stmt = null;
         try {
@@ -334,7 +334,7 @@ public class accountDB {
                 log.error("Exception occurred " , se);
             }
         }
-    }
+    }*/
     @NotNull
     public static int[] searchUserAccounts (int usid) {
         Connection conn = null;

@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
-import java.util.Currency;
 
 public class currencyDB {
     public currencyDB() {
@@ -219,7 +218,7 @@ public class currencyDB {
         }
         return currencies;
     }
-    public static void deleteCurrency (int crid) {
+    /*public static void deleteCurrency (int crid) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -282,5 +281,5 @@ public class currencyDB {
                 log.error("Exception occurred ", se);
             }
         }
-    }
+    }*/
 }

@@ -1,11 +1,16 @@
-package com.epam.GSI;
+package com.epam.GSI.servlets;
+
+import com.epam.GSI.login;
+import com.epam.GSI.loginDB;
+import com.epam.GSI.user;
+import com.epam.GSI.userDB;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class RegisterToDB extends HttpServlet {
+public class registerToDB extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws  IOException {
             response.setContentType("text/html");
@@ -34,7 +39,7 @@ public class RegisterToDB extends HttpServlet {
                 user newUser = new user(first_name, second_name, last_name, age, number);
                 userDB.userToDB(newUser);
                 int usid = userDB.getUSID(newUser);
-                login newLogin = new login(login, password, usid);
+                com.epam.GSI.login newLogin = new login(login, password, usid);
                 loginDB.loginToDB(newLogin);
                 String path = "/index.jsp?reg=1";
                 response.sendRedirect(path);

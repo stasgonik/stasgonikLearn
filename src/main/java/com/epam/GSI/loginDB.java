@@ -211,7 +211,7 @@ public class loginDB {
             }
         }
     }
-    public static void updatePassword (int usid, String password) {
+    /*public static void updatePassword (int usid, String password) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
@@ -243,5 +243,5 @@ public class loginDB {
                 log.error("Exception occurred ", se);
             }
         }
-    }
+    }*/
 }

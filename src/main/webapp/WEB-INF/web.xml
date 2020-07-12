@@ -11,7 +11,7 @@
     </error-page>
     <servlet>
         <servlet-name>RegisterToDB</servlet-name>
-        <servlet-class>com.epam.GSI.RegisterToDB</servlet-class>
+        <servlet-class>com.epam.GSI.servlets.registerToDB</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RegisterToDB</servlet-name>
@@ -19,35 +19,51 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>LoginToOffice</servlet-name>
-        <servlet-class>com.epam.GSI.LoginToOffice</servlet-class>
+        <servlet-class>com.epam.GSI.servlets.loginToOffice</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginToOffice</servlet-name>
         <url-pattern>/loginToOffice</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>changeUser</servlet-name>
-        <servlet-class>com.epam.GSI.changeUserAction</servlet-class>
+        <servlet-name>ChangeUser</servlet-name>
+        <servlet-class>com.epam.GSI.servlets.changeUserAction</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>changeUser</servlet-name>
+        <servlet-name>ChangeUser</servlet-name>
         <url-pattern>/changeUserAction</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>deleteUser</servlet-name>
-        <servlet-class>com.epam.GSI.deleteUserAction</servlet-class>
+        <servlet-name>DeleteUser</servlet-name>
+        <servlet-class>com.epam.GSI.servlets.deleteUserAction</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>deleteUser</servlet-name>
+        <servlet-name>DeleteUser</servlet-name>
         <url-pattern>/deleteUserAction</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>registerAccount</servlet-name>
-        <servlet-class>com.epam.GSI.registerAccountAction</servlet-class>
+        <servlet-name>RegisterAccount</servlet-name>
+        <servlet-class>com.epam.GSI.servlets.registerAccountAction</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>registerAccount</servlet-name>
+        <servlet-name>RegisterAccount</servlet-name>
         <url-pattern>/registerAccountAction</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AccountAction</servlet-name>
+        <servlet-class>com.epam.GSI.servlets.accountAction</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccountAction</servlet-name>
+        <url-pattern>/accountAction</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>changeCourse</servlet-name>
+        <servlet-class>com.epam.GSI.servlets.changeCurCourseAction</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>changeCourse</servlet-name>
+        <url-pattern>/changeCurCourseAction</url-pattern>
     </servlet-mapping>
 
 

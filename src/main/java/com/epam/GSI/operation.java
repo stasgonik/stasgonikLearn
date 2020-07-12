@@ -2,7 +2,6 @@ package com.epam.GSI;
 
 import org.apache.log4j.Logger;
 
-import java.sql.*;
 import java.time.LocalDateTime;
 
 public class operation {

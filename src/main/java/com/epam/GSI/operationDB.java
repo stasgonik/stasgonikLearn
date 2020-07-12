@@ -137,7 +137,7 @@ public class operationDB {
             }
         }
     }
-    static void viewOperationsAll(int acid) {
+    /*static void viewOperationsAll(int acid) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -622,7 +622,7 @@ public class operationDB {
                 log.error("Exception occurred ", se);
             }
         }
-    }
+    }*/
     public static operation[] selectOperations(int acid) {
         int k = 1;
         operation[] operations = new operation[k];
@@ -665,7 +665,6 @@ public class operationDB {
                 currency operationCurrency = new currency(currencyName, currencyValue);
                 LocalDateTime operationTime = rs.getTimestamp("OPERATION_TIME").toLocalDateTime();
                 operations[i] = new operation(type, subType, operationTime, operationCurrency, sum);
-                LocalDateTime operationTim = operations[i].getDateTime();
                 i++;
 
 

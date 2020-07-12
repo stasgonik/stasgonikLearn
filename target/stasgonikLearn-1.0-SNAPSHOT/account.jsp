@@ -5,11 +5,6 @@
 <%@page import="com.epam.GSI.account"%>
 <%@page import="com.epam.GSI.accountDB"%>
 <%@page import="com.epam.GSI.constants"%>
-<%@page import="com.epam.GSI.operation"%>
-<%@page import="com.epam.GSI.operationDB"%>
-<%@page import="com.epam.GSI.operationType"%>
-<%@page import="com.epam.GSI.subtype"%>
-<%@page import="java.time.LocalDateTime;"%>
 
 
 <%
@@ -53,56 +48,39 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                <td align="center"><h3>Choose operation for current account</h3></td>
+                                <td align="center"><h3>Choose operation for current account (ID <%=acid%>)</h3></td>
                                                 </tr>
-                                                <tr style="background-color: #ffffff;">
-                                                    <td>&#160;</td>
-                                                </tr>
-                                                <tr>
-                                                    <td align="center">
-                                <%out.println("<form action='loginToOffice?action=transfer&acid="+ acid +"' method='post'>");%>
-                                                            <input type="submit" value="Transfer"
-                                                             style="margin: 10px 0px"/>
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                                <tr style="background-color: #ffffff;"><td>&#160;</td></tr>
-                                                <tr>
-                                                    <td align="center">
-                                <%out.println("<form action='loginToOffice?action=takeCredit&acid="+ acid +"' method='post'>");%>
-                                                            <input type="submit" value="Take Credit"
-                                                             style="margin: 10px 0px"/>
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                                <tr style="background-color: #ffffff;"><td>&#160;</td></tr>
-                                <tr <% if(ac.getLoan <=0) {out.println("style='display: none;'");}%>>
-                                                    <td align="center">
-                                <%out.println("<form action='loginToOffice?action=repayLoan&acid="+ acid +"' method='post'>");%>
-                                                            <input type="submit" value="Loan Repayment"
-                                                             style="margin: 10px 0px"/>
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                <tr style="background-color: #ffffff;"><td>&#160;</td></tr>
-                                <tr>
-                                                    <td align="center">
-                                <%out.println("<form action='loginToOffice?action=extraction&acid="+ acid +"' method='post'>");%>
-                                                            <input type="submit" value="Extraction"
-                                                             style="margin: 10px 0px"/>
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                                <tr style="background-color: #ffffff;"><td>&#160;</td></tr>
-                                <tr>
-                                                    <td align="center">
-                                <%out.println("<form action='loginToOffice?action=charge&acid="+ acid +"' method='post'>");%>
-                                                            <input type="submit" value="Charge"
-                                                             style="margin: 10px 0px"/>
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                                <tr style="background-color: #ffffff;"><td>&#160;</td></tr>
+
+
+                                                <tr><td align="center">
+                                <%out.println("<form action='accountOperation.jsp?action=transfer&acid="+ acid +"' method='post'>");%>
+                                <input type="submit" value="Transfer" style="margin: 10px 0px"/></form>
+                                </td></tr>
+
+
+                         <tr <% if(acid == constants.bank) {out.println("style='display: none;'");}%>><td align="center">
+                         <%out.println("<form action='accountOperation.jsp?action=takeCredit&acid="+ acid +"' method='post'>");%>
+                                <input type="submit" value="Take Credit"style="margin: 10px 0px"/></form>
+                                </td></tr>
+
+
+                         <tr <% if(ac.getLoan() <=0 || acid == constants.bank) {out.println("style='display: none;'");}%>><td align="center">
+                                <%out.println("<form action='accountOperation.jsp?action=repayLoan&acid="+ acid +"' method='post'>");%>
+                                <input type="submit" value="Loan Repayment" style="margin: 10px 0px"/></form>
+                                </td></tr>
+
+
+                                <tr><td align="center">
+                                <%out.println("<form action='accountOperation.jsp?action=extraction&acid="+ acid +"' method='post'>");%>
+                                <input type="submit" value="Extraction" style="margin: 10px 0px"/></form>
+                                </td></tr>
+
+
+                                <tr><td align="center">
+                                <%out.println("<form action='accountOperation.jsp?action=charge&acid="+ acid +"' method='post'>");%>
+                                <input type="submit" value="Charge" style="margin: 10px 0px"/></form>
+                                </td>
+                                </tr>
                                                 <tr style="background-color: #ffffff;">
                                                     <td>&#160;</td>
                                                 </tr>

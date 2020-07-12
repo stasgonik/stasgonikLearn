@@ -2,8 +2,6 @@ package com.epam.GSI;
 
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-
-import java.sql.*;
 import java.util.Scanner;
 
 

@@ -1,4 +1,6 @@
-package com.epam.GSI;
+package com.epam.GSI.servlets;
+
+import com.epam.GSI.userDB;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

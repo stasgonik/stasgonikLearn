@@ -1,5 +1,9 @@
-package com.epam.GSI;
+package com.epam.GSI.servlets;
 
+import com.epam.GSI.account;
+import com.epam.GSI.accountDB;
+import com.epam.GSI.currencyDB;
+import com.epam.GSI.userDB;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServlet;

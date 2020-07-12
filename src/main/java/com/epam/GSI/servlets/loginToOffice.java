@@ -1,11 +1,13 @@
-package com.epam.GSI;
+package com.epam.GSI.servlets;
+import com.epam.GSI.loginDB;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class LoginToOffice extends HttpServlet {
+public class loginToOffice extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 

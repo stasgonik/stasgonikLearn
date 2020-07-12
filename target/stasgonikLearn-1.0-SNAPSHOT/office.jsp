@@ -113,7 +113,20 @@
                                                     <input type="submit" value="Delete user"
                                                            style="margin: 20px 0px 5px 200px;
                                                            <% if(usid == constants.bank){
-                                                            out.println("visibility: hidden;");
+                                                            out.println("display: none;");
+                                                           }%>
+                                                           " />
+                                                </form>
+                                                <br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <form action="changeCurrencyCourse.jsp" method="post">
+                                                    <input type="submit" value="Change currency courses"
+                                                           style="margin: 20px 0px 5px 100px;
+                                                           <% if(usid != constants.bank){
+                                                            out.println("display: none;");
                                                            }%>
                                                            " />
                                                 </form>

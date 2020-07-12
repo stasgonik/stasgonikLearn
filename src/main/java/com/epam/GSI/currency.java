@@ -35,7 +35,7 @@ public class currency {
     public currency() {
     }
 
-    public static void createCurrency() {
+    /*public static void createCurrency() {
         log.warn("Starting to create new currency.");
         Scanner sc = new Scanner(System.in);
         currency cur = new currency();
@@ -82,7 +82,7 @@ public class currency {
             log.error("Exception occurred ", ex);
         }
         currencyDB.currencyToDB(cur);
-    }
+    }*/
 
     public static int chooseCurrency(){
         int crid = 0;

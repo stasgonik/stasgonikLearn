@@ -5,51 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 
-/*class userValidatorName {
-    private Pattern pattern;
-    private Matcher matcher;
-
-    private static final String NAMES_PATTERN =
-            "^[_A-Za-z-\\+]+$";
-    public userValidatorName() {
-        pattern = Pattern.compile(NAMES_PATTERN);
-    }
-    public boolean validate(final String hex) {
-        matcher = pattern.matcher(hex);
-
-        return matcher.matches();
-    }
-}
-class userNumberValidator {
-    private Pattern pattern;
-    private Matcher matcher;
-
-    private static final String NAMES_PATTERN =
-            "^[_0-9\\+]+$";
-    public userNumberValidator() {
-        pattern = Pattern.compile(NAMES_PATTERN);
-    }
-    public boolean validate(final String hex) {
-        matcher = pattern.matcher(hex);
-
-        return matcher.matches();
-    }
-}
-class userPhoneValidator {
-    private Pattern pattern;
-    private Matcher matcher;
-
-    private static final String NAMES_PATTERN =
-            "^[_0-9\\+}]+$";
-    public userPhoneValidator() {
-        pattern = Pattern.compile(NAMES_PATTERN);
-    }
-    public boolean validate(final String hex) {
-        matcher = pattern.matcher(hex);
-
-        return matcher.matches();
-    }
-}*/
 public class userDB {
     public userDB() {
     }
@@ -298,7 +253,7 @@ public class userDB {
             }
         }
     }
-    public static void updateNumber (int usid, String number) {
+    /*public static void updateNumber (int usid, String number) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
@@ -331,7 +286,7 @@ public class userDB {
                 log.error("Exception occurred ", se);
             }
         }
-    }
+    }*/
     public static void deleteUser (int usid) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -364,7 +319,7 @@ public class userDB {
             }
         }
     }
-    public static void viewUsers () {
+    /*public static void viewUsers () {
         Connection conn = null;
         Statement stmt = null;
         try {
@@ -411,7 +366,7 @@ public class userDB {
                 log.error("Exception occurred ", se);
             }
         }
-    }
+    }*/
     public static int getUSID (user searchUser) {
         Connection conn = null;
         PreparedStatement stmt = null;
