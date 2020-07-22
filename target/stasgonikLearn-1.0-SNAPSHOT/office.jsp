@@ -94,7 +94,7 @@
                                                 <br />
                                             </td>
                                         </tr>
-                                        <tr>
+                                       <%-- <tr>
                                             <td>
                                                 <h4 style="margin: 5px 0px 5px 5px">Age :
                                                 <%out.println(current.getAge()); %></h4>
@@ -105,7 +105,7 @@
                                                 <br />
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr> --%>
                                             <td>
                                                 <h4 style="margin: 5px 0px 5px 5px">Phone number :
                                                 <%out.println(current.getNumber()); %></h4>

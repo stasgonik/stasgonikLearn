@@ -9,17 +9,13 @@ import java.sql.Statement;
 
 public class createDatabase {
     private static final Logger log = Logger.getLogger(createDatabase.class);
-    static final String JDBC_DRIVER = "org.h2.Driver";
-    static final String DB_URL = "jdbc:h2:~/test2";
-    static final String USER = "sa";
-    static final String PASS = "";
-    static void creation() {
+    public static void creation() {
         Connection conn = null;
         Statement stmt = null;
         try {
             log.warn("Creating database!");
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Class.forName(constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
             String[] sqlArray = new String[16];
             String[] logArray = new String[16];

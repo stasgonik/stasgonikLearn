@@ -67,7 +67,7 @@
                                             <%
                                             currency[] currencies = currencyDB.viewCurrencies();
                                             for(currency cur: currencies) {
-                                            if (cur.getValue() != 0) {
+                                            if (cur.getValue() != 0 && currencyDB.currencyGetID(cur) != 1) {
 out.println("<option value='" + currencyDB.currencyGetID(cur) + "'>" + cur.getName() + "</option>");
                                             }}%>
                                            </select></p><br/>

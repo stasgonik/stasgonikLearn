@@ -1,9 +1,4 @@
-0:0:0:0:0:0:0:1 - - [12/Jul/2020:20:13:21 +0300] "GET / HTTP/1.1" 200 3796 http-bio-8888-exec-2 406
-0:0:0:0:0:0:0:1 - - [12/Jul/2020:20:13:22 +0300] "POST /login.jsp HTTP/1.1" 200 4568 http-bio-8888-exec-3 63
-0:0:0:0:0:0:0:1 - - [12/Jul/2020:20:13:26 +0300] "POST /loginToOffice HTTP/1.1" 302 - http-bio-8888-exec-4 639
-0:0:0:0:0:0:0:1 - - [12/Jul/2020:20:13:27 +0300] "GET /office.jsp HTTP/1.1" 200 12029 http-bio-8888-exec-5 1160
-0:0:0:0:0:0:0:1 - - [12/Jul/2020:20:13:31 +0300] "POST /changeCurrencyCourse.jsp HTTP/1.1" 200 3838 http-bio-8888-exec-6 2415
-0:0:0:0:0:0:0:1 - - [12/Jul/2020:20:15:08 +0300] "POST /changeCurrencyCourse.jsp HTTP/1.1" 200 3806 http-bio-8888-exec-8 4292
-0:0:0:0:0:0:0:1 - - [12/Jul/2020:20:15:14 +0300] "POST /changeCurCourseAction HTTP/1.1" 302 - http-bio-8888-exec-10 214
-0:0:0:0:0:0:0:1 - - [12/Jul/2020:20:15:15 +0300] "GET /office.jsp HTTP/1.1" 200 12030 http-bio-8888-exec-10 1063
-0:0:0:0:0:0:0:1 - - [12/Jul/2020:20:15:24 +0300] "POST /index.jsp HTTP/1.1" 200 3796 http-bio-8888-exec-10 1
+0:0:0:0:0:0:0:1 - - [12/Jul/2020:21:24:20 +0300] "GET / HTTP/1.1" 200 3796 http-bio-8888-exec-2 607
+0:0:0:0:0:0:0:1 - - [12/Jul/2020:21:24:22 +0300] "POST /login.jsp HTTP/1.1" 200 4568 http-bio-8888-exec-3 60
+0:0:0:0:0:0:0:1 - - [12/Jul/2020:21:24:26 +0300] "POST /loginToOffice HTTP/1.1" 302 - http-bio-8888-exec-4 622
+0:0:0:0:0:0:0:1 - - [12/Jul/2020:21:24:28 +0300] "GET /office.jsp HTTP/1.1" 200 14954 http-bio-8888-exec-5 1781
