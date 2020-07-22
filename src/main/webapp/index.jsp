@@ -52,9 +52,9 @@
                                     </table>
                                 </td>
                             </tr>
-                            <tr><td align="center>
+                            <tr><td align="center">
                                 <form action="createDatabaseAction" method="post">
-                                <input type="submit" value="Create Database" style="margin: 10px 20px 0px 20px"/>
+                                <input type="submit" value="Create Database" style="margin: 10px 0px 0px 0px"/>
                                 </form>
                             </td></tr>
                             <tr>
@@ -70,7 +70,7 @@
                                         String data = request.getParameter("data");
                                         if (data != null)
                                             {
-                                            out.println("Database ready for work!")
+                                            out.println("Database ready for work!");
                                             }
                                          %>
                                     </h5>

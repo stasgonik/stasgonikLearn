@@ -52,6 +52,11 @@
                                     </table>
                                 </td>
                             </tr>
+                            <tr><td align="center">
+                                <form action="createDatabaseAction" method="post">
+                                <input type="submit" value="Create Database" style="margin: 10px 0px 0px 0px"/>
+                                </form>
+                            </td></tr>
                             <tr>
                                 <td align="center">
                                     <h5>
@@ -61,6 +66,11 @@
                                             {
                                             out.println("You are successfully registered to GSI bank.");
                                             out.println("Please, use your login to enter our bank.");
+                                            }
+                                        String data = request.getParameter("data");
+                                        if (data != null)
+                                            {
+                                            out.println("Database ready for work!");
                                             }
                                          %>
                                     </h5>

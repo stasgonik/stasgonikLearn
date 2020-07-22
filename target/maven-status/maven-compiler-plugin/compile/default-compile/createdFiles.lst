@@ -5,6 +5,7 @@ com\epam\GSI\login.class
 com\epam\GSI\user.class
 com\epam\GSI\validators$LoginValidator.class
 com\epam\GSI\currencyDB.class
+com\epam\GSI\servlets\createDatabaseAction.class
 com\epam\GSI\operation.class
 com\epam\GSI\servlets\accountAction.class
 com\epam\GSI\loginDB.class

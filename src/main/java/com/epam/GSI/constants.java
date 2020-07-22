@@ -3,9 +3,9 @@ package com.epam.GSI;
 
 public class constants {
     static final String JDBC_DRIVER = "org.h2.Driver";
-    static final String DB_URL = "jdbc:h2:~/GSIBank";
+    static final String DB_URL = "jdbc:h2:~/GSI";
     static final String USER = "stasgonik";
-    static final String PASS = "password";
+    static final String PASS = "";
     public static final int bank = 42;
     public static final double extractLess5k = 0.005;
     public static final double extractLess100k = 0.003;
