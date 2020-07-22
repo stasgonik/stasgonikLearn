@@ -58,12 +58,20 @@
         <url-pattern>/accountAction</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>changeCourse</servlet-name>
+        <servlet-name>ChangeCourse</servlet-name>
         <servlet-class>com.epam.GSI.servlets.changeCurCourseAction</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>changeCourse</servlet-name>
+        <servlet-name>ChangeCourse</servlet-name>
         <url-pattern>/changeCurCourseAction</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CreateDatabaseAction</servlet-name>
+        <servlet-class>com.epam.GSI.servlets.createDatabaseAction</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateDatabaseAction</servlet-name>
+        <url-pattern>/createDatabaseAction</url-pattern>
     </servlet-mapping>
 
 
