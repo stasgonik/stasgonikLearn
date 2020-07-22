@@ -17,7 +17,7 @@ public class createDatabase {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL,constants.USER,constants.PASS);
 
-            String[] sqlArray1 = new String[6];
+            String[] sqlArray1 = new String[7];
             String[] logArray1 = new String[6];
             String[] sqlArray2 = new String[9];
             String[] logArray2 = new String[9];
@@ -44,6 +44,7 @@ public class createDatabase {
                     " USERS.SECOND_NAME, USERS.AGE, USERS.NUMBER, MONEY, LOAN, CURRENCY.NAME ,CURRENCY.VALUE," +
                     " (ACCOUNT.MONEY * CURRENCY.VALUE) AS SUM_UAH FROM ACCOUNT JOIN CURRENCY" +
                     " ON ACCOUNT.CRID = CURRENCY.ID JOIN USERS ON ACCOUNT.USID = USERS.ID ";
+            sqlArray1[6] = "SET foreign_key_checks = 0;";
             logArray3[0] = "Creating table OPERATIONS.";
             sqlArray3[0] = "CREATE TABLE OPERATIONS (ID INT PRIMARY KEY AUTO_INCREMENT, ACID_FROM INT," +
                     " ACID_TO INT, TYPE VARCHAR(255), SUBTYPE VARCHAR(255), SUM NUMERIC(12,2)," +
