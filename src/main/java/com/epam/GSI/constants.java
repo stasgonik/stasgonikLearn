@@ -3,7 +3,7 @@ package com.epam.GSI;
 
 public class constants {
     static final String JDBC_DRIVER = "org.h2.Driver";
-    static final String DB_URL = "jdbc:h2:~/GSI";
+    static final String DB_URL = "jdbc:h2:~/GSIv8";
     static final String USER = "stasgonik";
     static final String PASS = "";
     public static final int bank = 42;
@@ -19,6 +19,7 @@ public class constants {
     public static final double transferMore500k = 0.004;
     public static final double creditBaseCurrency = 1.17;
     public static final double creditOtherCurrency = 1.08;
+
     public static String extractLess5String = "0.5";
     public static String extractLess100String = "0.3";
     public static String extractMore100String = "0.2";
@@ -31,4 +32,6 @@ public class constants {
     public static String transferMore500String = "0.4";
     public static String creditBaseString = "17";
     public static String creditOtherString = "8";
+
+
 }

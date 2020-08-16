@@ -67,12 +67,20 @@
                                             <%
                                             currency[] currencies = currencyDB.viewCurrencies();
                                             for(currency cur: currencies) {
-                                            if (cur.getValue() != 0 && currencyDB.currencyGetID(cur) != 1) {
+                    if (cur.getCourse_buy() != 0 && cur.getCourse_sell() != 0 && currencyDB.currencyGetID(cur) != 1) {
 out.println("<option value='" + currencyDB.currencyGetID(cur) + "'>" + cur.getName() + "</option>");
                                             }}%>
-                                           </select></p><br/>
-                                           Course: <br/>
-                                        <input required name="curCourse" type="text"
+                                            </select></p><br/>
+                                            Buy course: <br/>
+                                        <input required name="course_buy" type="text"
+                                               pattern="^[_.0-9]{1,8}$"
+                                               oninvalid="this.setCustomValidity
+                                                            ('Use only digits and .')"
+                                               oninput="this.setCustomValidity('')"
+                                               style="width:200px; margin: 5px 0px;"/> <br />
+                                        <br />
+                                            Sell course: <br/>
+                                        <input required name="course_sell" type="text"
                                                pattern="^[_.0-9]{1,8}$"
                                                oninvalid="this.setCustomValidity
                                                             ('Use only digits and .')"

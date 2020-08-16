@@ -9,7 +9,8 @@ import java.util.Scanner;
 public class currency {
     private static final Logger log = Logger.getLogger(currency.class);
     private String name;
-    private double value;
+    private double course_buy;
+    private double course_sell;
 
     public String getName() {
         return name;
@@ -19,18 +20,28 @@ public class currency {
         this.name = name;
     }
 
-    public double getValue() {
-        return value;
+    public double getCourse_buy() {
+        return course_buy;
     }
 
-    public void setValue(double value) {
-        this.value = value;
+    public void setCourse_buy(double course_buy) {
+        this.course_buy = course_buy;
     }
 
-    public currency (String name, double value) {
+    public double getCourse_sell() {
+        return course_sell;
+    }
+
+    public void setCourse_sell(double course_sell) {
+        this.course_sell = course_sell;
+    }
+
+    public currency(String name, double course_buy, double course_sell) {
         this.name = name;
-        this.value = value;
+        this.course_buy = course_buy;
+        this.course_sell = course_sell;
     }
+
 
     public currency() {
     }
@@ -121,7 +132,8 @@ public class currency {
 
     @Override
     public String toString() {
-        return  name + " (" + "Value of this currency is " + value + ")";
+        return  name + " (" + "Buy course of this currency is " + course_buy +
+                ", sell course of this currency is " + course_sell + ")";
     }
 
     @Override
@@ -129,13 +141,14 @@ public class currency {
         if (this == o) return true;
         if (!(o instanceof currency)) return false;
         currency currency = (currency) o;
-        return Double.compare(currency.getValue(), getValue()) == 0 &&
-                Objects.equals(getName(), currency.getName());
+        return Double.compare(currency.getCourse_buy(), getCourse_buy()) == 0 &&
+                Double.compare(currency.getCourse_sell(), getCourse_sell()) == 0 &&
+                getName().equals(currency.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getValue());
+        return Objects.hash(getName(), getCourse_buy(), getCourse_sell());
     }
 }
 

@@ -16,7 +16,8 @@ public class operationDB {
             conn = DriverManager.getConnection(constants.DB_URL, constants.USER, constants.PASS);
 
             String sql = "INSERT INTO OPERATIONS (ACID_FROM, ACID_TO, TYPE, SUBTYPE, SUM, CURRENCY_NAME," +
-                    " CURRENCY_VALUE, CRID, OPERATION_TIME) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    " CURRENCY_COURSE_BUY, CURRENCY_COURSE_SELL, CRID, OPERATION_TIME) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 
             stmt = conn.prepareStatement(sql);
@@ -27,9 +28,10 @@ public class operationDB {
             stmt.setString(4, newOperation.getSubtype().name());
             stmt.setDouble(5, newOperation.getSum());
             stmt.setString(6, newOperation.getOperationCurrency().getName());
-            stmt.setDouble(7, newOperation.getOperationCurrency().getValue());
-            stmt.setInt(8, currencyDB.currencyGetID(newOperation.getOperationCurrency()));
-            stmt.setTimestamp(9, Timestamp.valueOf(newOperation.getDateTime()));
+            stmt.setDouble(7, newOperation.getOperationCurrency().getCourse_buy());
+            stmt.setDouble(8, newOperation.getOperationCurrency().getCourse_sell());
+            stmt.setInt(9, currencyDB.currencyGetID(newOperation.getOperationCurrency()));
+            stmt.setTimestamp(10, Timestamp.valueOf(newOperation.getDateTime()));
 
             stmt.execute();
 
@@ -60,7 +62,8 @@ public class operationDB {
             conn = DriverManager.getConnection(constants.DB_URL, constants.USER, constants.PASS);
 
             String sql = "INSERT INTO OPERATIONS (ACID_FROM, TYPE, SUBTYPE, SUM, CURRENCY_NAME," +
-                    " CURRENCY_VALUE, CRID, OPERATION_TIME) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    " CURRENCY_COURSE_BUY, CURRENCY_COURSE_SELL, CRID, OPERATION_TIME) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 
             stmt = conn.prepareStatement(sql);
@@ -70,9 +73,10 @@ public class operationDB {
             stmt.setString(3, newOperation.getSubtype().name());
             stmt.setDouble(4, newOperation.getSum());
             stmt.setString(5, newOperation.getOperationCurrency().getName());
-            stmt.setDouble(6, newOperation.getOperationCurrency().getValue());
-            stmt.setInt(7, currencyDB.currencyGetID(newOperation.getOperationCurrency()));
-            stmt.setTimestamp(8, Timestamp.valueOf(newOperation.getDateTime()));
+            stmt.setDouble(6, newOperation.getOperationCurrency().getCourse_buy());
+            stmt.setDouble(7, newOperation.getOperationCurrency().getCourse_sell());
+            stmt.setInt(8, currencyDB.currencyGetID(newOperation.getOperationCurrency()));
+            stmt.setTimestamp(9, Timestamp.valueOf(newOperation.getDateTime()));
 
             stmt.execute();
 
@@ -103,7 +107,8 @@ public class operationDB {
             conn = DriverManager.getConnection(constants.DB_URL, constants.USER, constants.PASS);
 
             String sql = "INSERT INTO OPERATIONS (ACID_TO, TYPE, SUBTYPE, SUM, CURRENCY_NAME," +
-                    " CURRENCY_VALUE, CRID, OPERATION_TIME) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    " CURRENCY_COURSE_BUY, CURRENCY_COURSE_SELL, CRID, OPERATION_TIME) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 
             stmt = conn.prepareStatement(sql);
@@ -113,9 +118,10 @@ public class operationDB {
             stmt.setString(3, newOperation.getSubtype().name());
             stmt.setDouble(4, newOperation.getSum());
             stmt.setString(5, newOperation.getOperationCurrency().getName());
-            stmt.setDouble(6, newOperation.getOperationCurrency().getValue());
-            stmt.setInt(7, currencyDB.currencyGetID(newOperation.getOperationCurrency()));
-            stmt.setTimestamp(8, Timestamp.valueOf(newOperation.getDateTime()));
+            stmt.setDouble(6, newOperation.getOperationCurrency().getCourse_buy());
+            stmt.setDouble(7, newOperation.getOperationCurrency().getCourse_sell());
+            stmt.setInt(8, currencyDB.currencyGetID(newOperation.getOperationCurrency()));
+            stmt.setTimestamp(9, Timestamp.valueOf(newOperation.getDateTime()));
 
             stmt.execute();
 
@@ -643,7 +649,8 @@ public class operationDB {
             }
             operations = new  operation[k];
             String sql = "SELECT ID, ACID_FROM, ACID_TO, TYPE, SUBTYPE, SUM, CURRENCY_NAME," +
-                    " CURRENCY_VALUE, OPERATION_TIME FROM OPERATIONS WHERE ACID_FROM=? OR ACID_TO=?" +
+                    " CURRENCY_COURSE_BUY, CURRENCY_COURSE_SELL, OPERATION_TIME FROM OPERATIONS" +
+                    " WHERE ACID_FROM=? OR ACID_TO=?" +
                     " ORDER BY OPERATION_TIME DESC, ID DESC";
             stmt = conn.prepareStatement(sql);
 
@@ -661,8 +668,9 @@ public class operationDB {
                 subtype subType = subtype.valueOf(subTypeString);
                 double sum = rs.getDouble("SUM");
                 String currencyName = rs.getString("CURRENCY_NAME");
-                double currencyValue = rs.getDouble("CURRENCY_VALUE");
-                currency operationCurrency = new currency(currencyName, currencyValue);
+                double currency_course_buy = rs.getDouble("CURRENCY_COURSE_BUY");
+                double currency_course_sell = rs.getDouble("CURRENCY_COURSE_SELL");
+                currency operationCurrency = new currency(currencyName, currency_course_buy, currency_course_sell);
                 LocalDateTime operationTime = rs.getTimestamp("OPERATION_TIME").toLocalDateTime();
                 operations[i] = new operation(type, subType, operationTime, operationCurrency, sum);
                 i++;

@@ -1,5 +1,4 @@
 <%@page import="java.lang.Object, java.util.Objects"%>
-<%@page import="com.epam.GSI.currency"%>
 <%@page import="com.epam.GSI.user"%>
 <%@page import="com.epam.GSI.userDB"%>
 <%@page import="com.epam.GSI.account"%>

@@ -21,11 +21,13 @@ public class changeCurCourseAction extends HttpServlet {
             Integer usid = (Integer) session.getAttribute("sID");
             String cridString = request.getParameter("chooseCurrency");
             int crid = Integer.parseInt(cridString);
-            String courseString = request.getParameter("curCourse");
-            double course = Double.parseDouble(courseString);
+            String courseBuyString = request.getParameter("course_buy");
+            double course_buy = Double.parseDouble(courseBuyString);
+            String courseSellString = request.getParameter("course_sell");
+            double course_sell = Double.parseDouble(courseSellString);
             if (!Objects.equals(usid, null) && Objects.equals(usid, constants.bank)) {
                     try {
-                            currencyDB.currencyUpdateValue(crid, course);
+                            currencyDB.currencyUpdateValue(crid, course_buy, course_sell);
                     }
                     catch (Exception ex) {
                             ex.printStackTrace();

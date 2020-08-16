@@ -36,7 +36,7 @@ public class accountAction extends HttpServlet {
 
                     case "extraction":
                         account sender = accountDB.accountFromDB(acidFrom);
-                        double payBase = sum * sender.getAccountCurrency().getValue();
+                        double payBase = sum * sender.getAccountCurrency().getCourse_buy();
                         double commit = 0;
                         if (payBase < 5000) {
                             commit = payBase * constants.extractLess5k;
@@ -50,11 +50,11 @@ public class accountAction extends HttpServlet {
                         if (acidFrom == constants.bank) {
                             commit = 0;
                         }
-                        if (sender.getMoney() < sum + commit / sender.getAccountCurrency().getValue() &&
+                        if (sender.getMoney() < sum + commit / sender.getAccountCurrency().getCourse_buy() &&
                                 currencyDB.currencyGetID(sender.getAccountCurrency()) == 1 && acidFrom != constants.bank) {
                             path = "/accountOperation.jsp?action=extraction&acid=" +acidFrom + "&check=1";
                         }
-                        else  if (sender.getMoney() < sum + commit * 2 / sender.getAccountCurrency().getValue() &&
+                        else  if (sender.getMoney() < sum + commit * 2 / sender.getAccountCurrency().getCourse_buy() &&
                                 currencyDB.currencyGetID(sender.getAccountCurrency()) != 1 && acidFrom != constants.bank) {
                             path = "/accountOperation.jsp?action=extraction&acid=" +acidFrom + "&check=1";
                         }
@@ -73,7 +73,7 @@ public class accountAction extends HttpServlet {
                         account bank = accountDB.accountFromDB(constants.bank);
                         account credited = accountDB.accountFromDB(acidFrom);
                         if (bank.getMoney() < 2000000 ||
-                                bank.getMoney()/credited.getAccountCurrency().getValue() + 500000 < sum) {
+                                bank.getMoney()/credited.getAccountCurrency().getCourse_buy() + 500000 < sum) {
                             path = "/accountOperation.jsp?action=takeCredit&acid=" +acidFrom + "&check=1";
                         }
                         else {
@@ -88,7 +88,7 @@ public class accountAction extends HttpServlet {
                         int acidTo = Integer.parseInt(acidToString);
                         account transferFrom = accountDB.accountFromDB(acidFrom);
                         account transferTo = accountDB.accountFromDB(acidTo);
-                        double transferSum = sum * transferFrom.getAccountCurrency().getValue();
+                        double transferSum = sum * transferFrom.getAccountCurrency().getCourse_buy();
                         commit = 0;
                         double exchangeCommit = 0;
                         if (transferSum < 10000){
@@ -121,7 +121,7 @@ public class accountAction extends HttpServlet {
                             exchangeCommit = 0;
                         }
 
-                        if (transferFrom.getMoney() < sum + commit / transferFrom.getAccountCurrency().getValue() &&
+                        if (transferFrom.getMoney() < sum + commit / transferFrom.getAccountCurrency().getCourse_buy() &&
                                 accountDB.usidFromDB(acidFrom) != accountDB.usidFromDB(acidTo)) {
                             path = "/accountOperation.jsp?action=transfer&acid=" +acidFrom + "&check=2";
 
@@ -130,14 +130,14 @@ public class accountAction extends HttpServlet {
                             path = "/accountOperation.jsp?action=transfer&acid=" +acidFrom + "&check=1";
                         }
                         else if(transferFrom.getMoney() < sum + (commit * exchangeCommit) /
-                                transferFrom.getAccountCurrency().getValue() &&
+                                transferFrom.getAccountCurrency().getCourse_buy() &&
                                 currencyDB.currencyGetID(transferFrom.getAccountCurrency()) !=
                                         currencyDB.currencyGetID(transferTo.getAccountCurrency()) &&
                                 accountDB.usidFromDB(acidFrom) != accountDB.usidFromDB(acidTo)) {
                             path = "/accountOperation.jsp?action=transfer&acid=" +acidFrom + "&check=2";
                         }
                         else if (transferFrom.getMoney() < sum + exchangeCommit /
-                                transferFrom.getAccountCurrency().getValue() &&
+                                transferFrom.getAccountCurrency().getCourse_buy() &&
                                 accountDB.usidFromDB(acidFrom) == accountDB.usidFromDB(acidTo) &&
                                 currencyDB.currencyGetID(transferFrom.getAccountCurrency()) !=
                                         currencyDB.currencyGetID(transferTo.getAccountCurrency())) {

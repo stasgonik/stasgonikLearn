@@ -135,17 +135,26 @@
                                         </tr>
                                     </table>
                                     <table style="border-collapse: collapse; border-left: solid black 2px;"
-                                     border="0" width="140"
+                                     border="0" width="160"
                                            cellspacing="0" height="430" cellpadding="0" align="right">
                                         <tr align="center" valign="top"><td>
-                                        <h3 style="margin: 5px 0px 0px 10px">Currency courses</h3>
+                                        <h3 style="margin: 5px 0px 0px 20px">Currency courses</h3>
+                                        </td></tr>
+                                        <tr valign="top"><td align="left">
+                                        <h5 style='margin-top: 5px; margin-bottom: 5px; margin-left:10px;' width='45'>
+                                        Currency</h5>
+                                        <h5 style='margin-top: 5px; margin-bottom: 5px; margin-right: 5px;' width='45'>
+                                        Buy</h5>
+                                        <h5 style='margin-top: 5px; margin-bottom: 5px; margin-right: 5px;' width='45'>
+                                        Sell</h5>
                                         </td></tr>
                                         <%  currencyDB cDB = new currencyDB();
                                         currency[] currencies = currencyDB.viewCurrencies();
                                         for(currency cur: currencies) {
-                                            if (cur.getValue() != 0) {
-out.println("<tr><td align='left'><h5 style='margin-top: 5px; margin-bottom: 5px; margin-left:10px;' width='65'>" + cur.getName() +
- " : </h5></td><td align='left'><h5 style='margin-top: 5px; margin-bottom: 5px; margin-right: 5px;' width='65'>" + cur.getValue() + "</h5></td></tr>");
+                                            if (cur.getCourse_buy() != 0 && cur.getCourse_sell() != 0) {
+out.println("<tr><td align='left'><h5 style='margin-top: 5px; margin-bottom: 5px; margin-left:10px;' width='45'>" + cur.getName() +
+ " : </h5></td><td align='left'><h5 style='margin-top: 5px; margin-bottom: 5px; margin-right: 5px;' width='45'>" + cur.getCourse_buy() +
+ " </h5></td><td align='left'><h5 style='margin-top: 5px; margin-bottom: 5px; margin-right: 5px;' width='45'>" + cur.getCourse_sell() "</h5></td></tr>");
                                             }
                                             }%>
                                     </table>

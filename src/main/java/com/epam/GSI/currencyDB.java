@@ -9,7 +9,7 @@ public class currencyDB {
     public currencyDB() {
     }
     private static final Logger log = Logger.getLogger(currencyDB.class);
-    public static void currencyUpdateValue(int crid, double newValue) {
+    public static void currencyUpdateValue(int crid, double newValue_buy, double newValue_sell) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
@@ -17,11 +17,12 @@ public class currencyDB {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL, constants.USER, constants.PASS);
 
-            String sql = "UPDATE CURRENCY " + "SET VALUE=? WHERE ID=?";
+            String sql = "UPDATE CURRENCY " + "SET COURSE_BUY=?, COURSE_SELL=? WHERE ID=?";
 
             stmt = conn.prepareStatement(sql);
-            stmt.setDouble(1, newValue);
-            stmt.setInt(2, crid);
+            stmt.setDouble(1, newValue_buy);
+            stmt.setDouble(2, newValue_sell);
+            stmt.setInt(3, crid);
             stmt.executeUpdate();
 
             stmt.close();
@@ -52,22 +53,25 @@ public class currencyDB {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL, constants.USER, constants.PASS);
 
-            String sql = "SELECT NAME, VALUE FROM CURRENCY WHERE ID=?";
+            String sql = "SELECT NAME, COURSE_BUY, COURSE_SELL FROM CURRENCY WHERE ID=?";
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, crid);
             ResultSet rs = stmt.executeQuery();
 
             String[] stringsTemp = new String[1];
-            double[] doublesTemp = new double[1];
+            double[] doublesTemp = new double[2];
 
             while(rs.next()) {
                 String curName = rs.getString("NAME");
                 stringsTemp[0] = curName;
-                double value = rs.getDouble("VALUE");
-                doublesTemp[0] = value;
+                double course_buy = rs.getDouble("COURSE_BUY");
+                doublesTemp[0] = course_buy;
+                double course_sell = rs.getDouble("COURSE_SELL");
+                doublesTemp[1] = course_sell;
             }
             cur.setName(stringsTemp[0]);
-            cur.setValue(doublesTemp[0]);
+            cur.setCourse_buy(doublesTemp[0]);
+            cur.setCourse_sell(doublesTemp[1]);
 
             rs.close();
             stmt.close();
@@ -140,12 +144,13 @@ public class currencyDB {
             Class.forName(constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(constants.DB_URL, constants.USER, constants.PASS);
 
-            String sql = "INSERT INTO CURRENCY (NAME, VALUE) " + "VALUES (?, ?)";
+            String sql = "INSERT INTO CURRENCY (NAME, COURSE_BUY ,COURSE_SELL) " + "VALUES (?, ?, ?)";
 
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, newCurrency.getName());
-            stmt.setDouble(2, newCurrency.getValue());
+            stmt.setDouble(2, newCurrency.getCourse_buy());
+            stmt.setDouble(3, newCurrency.getCourse_sell());
 
             stmt.execute();
 
@@ -184,16 +189,17 @@ public class currencyDB {
                 k = rsCount.getInt("COUNT(ID)");
             }
 
-            String sql = "SELECT ID, NAME, VALUE FROM CURRENCY ORDER BY ID ASC";
+            String sql = "SELECT ID, NAME, COURSE_BUY, COURSE_SELL FROM CURRENCY ORDER BY ID ASC";
             ResultSet rs = stmt.executeQuery(sql);
             currencies = new currency[k];
             int i = 0;
 
             while(rs.next()) {
                 String name = rs.getString("NAME");
-                double value = rs.getDouble("VALUE");
+                double course_buy = rs.getDouble("COURSE_BUY");
+                double course_sell = rs.getDouble("COURSE_SELL");
 
-                currency c = new currency(name, value);
+                currency c = new currency(name, course_buy, course_sell);
                 currencies[i] = c;
                 i++;
 
